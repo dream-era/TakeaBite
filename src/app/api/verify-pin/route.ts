@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * ============================================================
  * MENUQR — STAFF PIN VERIFICATION API ROUTE

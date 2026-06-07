@@ -1,3 +1,5 @@
+'use client'
+export const dynamic = 'force-dynamic';
 /**
  * ============================================================
  * SERVEFLOW — ANALYTICS PAGE COMPONENT
@@ -9,7 +11,6 @@
  * ============================================================
  */
 
-'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * SERVEFLOW — FIXED create-order API route
  * File: src/app/api/create-order/route.ts
