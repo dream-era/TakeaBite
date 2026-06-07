@@ -44,133 +44,105 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // ─────────────────────────────────────────────
-  // PHASE 1 — Set up a mutable response object
-  // We need this because Supabase SSR may need to
-  // SET new auth cookies on the response (token refresh).
-  // We start with a "continue as normal" response and
-  // Supabase will mutate it if it needs to set cookies.
-  // ─────────────────────────────────────────────
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  })
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const { pathname } = request.nextUrl
 
-  // ─────────────────────────────────────────────
-  // PHASE 2 — Create a Supabase client that can
-  // read AND write cookies on this request/response.
-  // This is what allows token refresh to work.
-  // ─────────────────────────────────────────────
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
+    // Safe environment variable validation (Task 5 & 6)
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('[Middleware] CRITICAL: Missing Supabase environment variables')
+      // If environment variables are missing: redirect gracefully, never throw errors
+      if (pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding')) {
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('error', 'missing_env')
+        return NextResponse.redirect(loginUrl)
+      }
+      return NextResponse.next()
+    }
+
+    let response = NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    })
+
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
       cookies: {
-        // Read cookies from the incoming request
         get(name: string) {
           return request.cookies.get(name)?.value
         },
-        // Write cookies to the outgoing response
-        // This is how Supabase refreshes expired tokens
         set(name: string, value: string, options: Record<string, unknown>) {
           request.cookies.set({ name, value, ...(options as object) })
           response = NextResponse.next({ request: { headers: request.headers } })
           response.cookies.set({ name, value, ...(options as object) })
         },
-        // Remove cookies (called on logout)
         remove(name: string, options: Record<string, unknown>) {
           request.cookies.set({ name, value: '', ...(options as object) })
           response = NextResponse.next({ request: { headers: request.headers } })
           response.cookies.set({ name, value: '', ...(options as object) })
         },
       },
+    })
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (pathname.startsWith('/dashboard')) {
+      if (!user || authError) {
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('redirectTo', pathname)
+        return NextResponse.redirect(loginUrl)
+      }
     }
-  )
 
-  // ─────────────────────────────────────────────
-  // PHASE 3 — Get current session
-  //
-  // IMPORTANT: We use getUser() not getSession() here.
-  // getUser() makes a network call to Supabase to verify
-  // the token is still valid server-side.
-  // getSession() only reads the local cookie without
-  // verifying — a security risk for protected pages.
-  // ─────────────────────────────────────────────
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser()
-
-  const { pathname } = request.nextUrl
-
-  // ─────────────────────────────────────────────
-  // PHASE 4 — Route protection rules
-  // ─────────────────────────────────────────────
-
-  // ── RULE 1: Protect owner dashboard ──────────
-  // If user tries to access /dashboard without being
-  // logged in, send them to /login.
-  // We attach the original URL as a `redirectTo` param
-  // so after login they land back where they wanted to go.
-  if (pathname.startsWith('/dashboard')) {
-    if (!user || authError) {
-      const loginUrl = new URL('/login', request.url)
-      loginUrl.searchParams.set('redirectTo', pathname)
-      return NextResponse.redirect(loginUrl)
+    if (pathname.startsWith('/onboarding')) {
+      if (!user || authError) {
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('redirectTo', '/onboarding')
+        return NextResponse.redirect(loginUrl)
+      }
     }
+
+    if (pathname === '/login' && user && !authError) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    if (pathname.startsWith('/dashboard') && user) {
+      const { data: workspace, error: workspaceError } = await supabase
+        .from('workspaces')
+        .select('is_active')
+        .eq('owner_id', user.id)
+        .single()
+        
+      if (workspaceError && workspaceError.code !== 'PGRST116') {
+        console.error('[Middleware] Workspace query error:', workspaceError)
+      }
+
+      if (!workspace && pathname !== '/onboarding') {
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
+
+      if (workspace && !workspace.is_active) {
+        return NextResponse.redirect(new URL('/suspended', request.url))
+      }
+    }
+
+    return response
+  } catch (error) {
+    // Add logging: console.error() for every middleware failure (Task 7)
+    console.error('[Middleware] Invocation Failed:', error)
+    
+    // Graceful redirect on critical failure (Task 6)
+    const { pathname } = request.nextUrl
+    if (pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding')) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    
+    return NextResponse.next()
   }
-
-  // ── RULE 2: Protect onboarding ───────────────
-  // Onboarding is only for authenticated owners setting
-  // up their restaurant for the first time.
-  if (pathname.startsWith('/onboarding')) {
-    if (!user || authError) {
-      const loginUrl = new URL('/login', request.url)
-      loginUrl.searchParams.set('redirectTo', '/onboarding')
-      return NextResponse.redirect(loginUrl)
-    }
-  }
-
-  // ── RULE 3: Redirect logged-in users from /login ─
-  // If an already-authenticated owner visits /login,
-  // send them straight to their dashboard.
-  // Prevents double-login confusion.
-  if (pathname === '/login' && user && !authError) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
-  }
-
-  // ── RULE 4: Block inactive workspaces ──────
-  // If somehow an inactive owner's token is still valid,
-  // we check their account status here.
-  // This runs only on dashboard routes for performance.
-  if (pathname.startsWith('/dashboard') && user) {
-    const { data: workspace } = await supabase
-      .from('workspaces')
-      .select('is_active')
-      .eq('owner_id', user.id)
-      .single()
-
-    // If owner has no workspace yet, send to onboarding
-    if (!workspace && pathname !== '/onboarding') {
-      return NextResponse.redirect(new URL('/onboarding', request.url))
-    }
-
-    // If workspace is inactive, send to a blocked page
-    if (workspace && !workspace.is_active) {
-      return NextResponse.redirect(new URL('/suspended', request.url))
-    }
-  }
-
-  // ── RULE 5: All other routes pass through ────
-  // This covers:
-  //   /               → landing page (public)
-  //   /order/*        → customer QR ordering (public)
-  //   /kitchen/*      → staff dashboards (PIN auth in layout)
-  //   /api/*          → API routes (auth handled per-route)
-  //   /login          → login page (already handled above)
-  //   /suspended      → suspended account page (public)
-  return response
 }
 
 // ─────────────────────────────────────────────
