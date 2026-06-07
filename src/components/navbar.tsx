@@ -21,7 +21,7 @@ const navLinks = [
       { label: "Instant Payments", href: "#features" },
     ],
   },
-  { label: "Pricing", href: "/pricing" },
+  { label: "Pricing", href: "/login" },
   {
     label: "Resources",
     hasDropdown: true,
