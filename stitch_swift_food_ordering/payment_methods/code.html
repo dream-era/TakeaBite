@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#ffb3af",
+                      "surface": "#fbf9f9",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "on-surface": "#1b1c1c",
+                      "tertiary-container": "#747676",
+                      "on-primary-fixed-variant": "#930017",
+                      "surface-tint": "#bf0022",
+                      "surface-dim": "#dbdad9",
+                      "background": "#fbf9f9",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#ffb3af",
+                      "on-tertiary-container": "#fefefe",
+                      "surface-variant": "#e3e2e2",
+                      "outline": "#926e6c",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "primary-fixed": "#ffdad7",
+                      "surface-container": "#efeded",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e3e2e2",
+                      "on-surface-variant": "#5d3f3d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "primary": "#bd0021",
+                      "tertiary-fixed": "#e2e2e2",
+                      "surface-bright": "#fbf9f9",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "secondary": "#5f5e5e",
+                      "on-background": "#1b1c1c",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "surface-container-high": "#e9e8e7",
+                      "inverse-on-surface": "#f2f0f0",
+                      "on-primary-container": "#fffeff",
+                      "secondary-container": "#e2dfde",
+                      "surface-container-low": "#f5f3f3",
+                      "on-primary-fixed": "#410005",
+                      "outline-variant": "#e7bdba",
+                      "tertiary": "#5c5d5e",
+                      "on-secondary-container": "#636262",
+                      "on-error": "#ffffff",
+                      "primary-container": "#e61e32",
+                      "inverse-surface": "#303031",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#e5e2e1",
+                      "on-tertiary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#474746"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "card-gutter": "16px",
+                      "element-gap-sm": "8px",
+                      "section-margin": "32px",
+                      "element-gap-md": "16px",
+                      "unit": "4px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "body-md": ["Be Vietnam Pro"],
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "body-lg": ["Be Vietnam Pro"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "price-display": ["Plus Jakarta Sans"],
+                      "label-lg": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                      "label-lg": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "18px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F8F8F8; /* Surface Level 0 as per guidance */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- Top App Bar (Shared Component Strategy) -->
+<header class="bg-background fixed top-0 w-full z-50 flex justify-between items-center px-container-padding py-4">
+<button class="text-primary hover:opacity-80 transition-opacity active:scale-95 duration-150">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md-mobile text-primary tracking-tight">Payment</h1>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional studio headshot of a friendly young urban professional with a warm expression. The lighting is high-key and clean, set against a minimalist white background. This portrait follows a clinical and modern corporate aesthetic, utilizing soft shadows and sharp focus to emphasize a premium food app user persona. The color palette is neutral with natural skin tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKQq_d6aZLGrvdUVVmms6Xu4GQaCw9LoDEGt0Un8gmvVcr1EwHImlBJBm9PBFhxfuM7amLW7EwqXZScTwvWGPTOUDn3zFRbGJ-nHuULx5O1TQnYKtz4wQuXjFWi9Xe-jC1CxFtCyVjsWb9Yd2dAA6dXLTo6rF1SlkaJ0jhv26uhCgH4rmZ-M9ECGIhKmzuSnYRPaxgsLlxWtBjMsr0QrrvGX_84sAIemn1FPRJqFJKsTrzjc7XltomeoxrCVZ44b-dUpvuC-DfdAM"/>
+</div>
+</header>
+<main class="pt-20 pb-32 px-container-padding max-w-md mx-auto">
+<!-- Order Summary Section -->
+<section class="mb-section-margin">
+<h2 class="font-label-lg text-label-lg mb-element-gap-md text-on-surface">Order Summary</h2>
+<div class="bg-surface-container-lowest rounded-xl p-element-gap-md shadow-[0px_4px_20px_rgba(0,0,0,0.04)]">
+<!-- Item 1 -->
+<div class="flex items-center justify-between py-unit border-b border-surface-variant">
+<div class="flex items-center gap-element-gap-md">
+<div class="w-12 h-12 bg-surface-container rounded-lg overflow-hidden flex items-center justify-center">
+<img alt="Spicy Burger" class="w-full h-full object-cover" data-alt="A gourmet spicy beef burger with melting cheese, fresh lettuce, and vibrant red peppers, isolated on a clinical white background. The photography is high-contrast and appetizing, focusing on textures of the seared meat and fresh vegetables. The lighting is bright and modern, emphasizing the rich reds and golden browns of the food." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAq0IjjAOauATMOJ9N9TbXnaX92o4QGebCS1oEzcWZbB7PP3oTMmsOxPYaab74nX7plbzrZJyDa4SzJeSfIhs1anM7dEcfx04Hl74nSQcCtMvkiXl4H1mspkOWJ0YU1NCreDkHHZwMgKHCtuOFcFpcRuKMWAzT2KrGA4j0TesHX6qj9M-qTk1iGf7StliSxM9ZNRZPL1Khyc-IRirhgCP3eTmsPpcE9SCxgTXt2ENsNlgnE8n05XVmdtmb2mVS19-FOxOCswD109uk"/>
+</div>
+<div>
+<p class="font-label-md text-label-md">Double Spicy Burger</p>
+<p class="font-body-md text-secondary">Qty: 1</p>
+</div>
+</div>
+<p class="font-price-display text-price-display text-primary">$12.50</p>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between py-unit border-b border-surface-variant mt-element-gap-sm">
+<div class="flex items-center gap-element-gap-md">
+<div class="w-12 h-12 bg-surface-container rounded-lg overflow-hidden flex items-center justify-center">
+<img alt="Fries" class="w-full h-full object-cover" data-alt="Golden crispy french fries served in a minimalist white container, isolated on a bright white background. The fries are perfectly seasoned with visible salt crystals and red chili flakes. The image is captured with professional food styling, utilizing high-key lighting to create a clean, energetic, and appetizing visual appeal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI0EoU6KP-QivLgeKkCxc91RmoW_5si9_XBxETVzrSn9Hub-jg7zK6D5Au0wk8BdpIV7TbXm5USqvVqFgLSRIbEyU219MmvTBBJDaCEMoI0HVB5EOLehSuJmb8_U7FnHPbD90C3IKurgTPiyTdlP_BAqb4sRG8lTfLErKne0ZaiQXBTLqmZC-6SdtVUCjKPXiR8d7skIizn2xUN4kwyvsgtpvGxm8QLdc4t8INGXuGa-4_b-xHcvQwEZi3nM3vJ4VzkFqoCxdVr_g"/>
+</div>
+<div>
+<p class="font-label-md text-label-md">Chili Garlic Fries</p>
+<p class="font-body-md text-secondary">Qty: 1</p>
+</div>
+</div>
+<p class="font-price-display text-price-display text-primary">$4.90</p>
+</div>
+<!-- Totals -->
+<div class="mt-element-gap-md pt-element-gap-sm">
+<div class="flex justify-between mb-unit">
+<span class="font-body-md text-secondary">Subtotal</span>
+<span class="font-body-md text-on-surface">$17.40</span>
+</div>
+<div class="flex justify-between mb-unit">
+<span class="font-body-md text-secondary">Delivery Fee</span>
+<span class="font-body-md text-on-surface">$2.50</span>
+</div>
+<div class="flex justify-between mt-element-gap-sm pt-element-gap-sm border-t-2 border-dashed border-surface-variant">
+<span class="font-label-lg text-label-lg text-on-surface">Total</span>
+<span class="font-headline-md text-headline-md-mobile text-primary">$19.90</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Method Section -->
+<section class="mb-section-margin">
+<h2 class="font-label-lg text-label-lg mb-element-gap-md text-on-surface">Payment Method</h2>
+<div class="space-y-element-gap-md">
+<!-- Card Option (Selected) -->
+<label class="relative flex items-center p-element-gap-md bg-surface-container-lowest border-2 border-primary rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] cursor-pointer">
+<input checked="" class="hidden" name="payment" type="radio"/>
+<div class="flex items-center gap-element-gap-md w-full">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">credit_card</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md">Credit / Debit Card</p>
+<p class="font-body-md text-secondary">**** **** **** 4242</p>
+</div>
+<div class="flex gap-2">
+<img alt="Visa" class="h-4 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSVwIyG0_6zp70DUt_zTiAJbBdQTf3g2CNCzU-la0XsCtYJM1gdwZ4ha93GkJgGAmott61rVTuKt5HBTi6dj-zjlSihjZfNtbgYcFVCc0qopZIOGPVcZvkCCgX3hOYDODW0955-lWPxZ6JifumrGBVHVIWaoCxOXcJi3w2XDiKDO7WNHDv-VR4ffOZkzgXXp-68S_VV_iN3Gy6-NOJe-bHowuMY7O3DTc3Eq6WYOp32es3XIClF3K5OqkERNPIt6Xb2LKCot68Xho"/>
+<img alt="Mastercard" class="h-4 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCUPqTgVW8HacXmfYhpVMFts0kDqOMv4ogGw1wTg7x_nBaJZ0m14V0KZ8_ZiDS2kdq8r3-an2UlLZgVndGLM0Zi3tOoIa2rzNDyGkie5_YAhzOVIlekk8048E8AqH_ZaTZ6broqIaMmMN2mh4_YoFz9uq45fmm5x3EV6cy_noR4imdldts9DlV6Go_5ocTB8YjoxskSJ0_QZ0RL8la7_e4dgZWPzA5PnkA-peBSwLuslUwzfI0l5eap7Nmw66d09QVhwV-F1J0WN8"/>
+</div>
+</div>
+<div class="absolute -top-2 -right-2 bg-primary text-on-primary rounded-full p-1 leading-none">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</label>
+<!-- Apple Pay Option -->
+<label class="flex items-center p-element-gap-md bg-surface-container-lowest border-2 border-transparent hover:border-surface-variant rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] cursor-pointer transition-colors">
+<input class="hidden" name="payment" type="radio"/>
+<div class="flex items-center gap-element-gap-md w-full">
+<span class="material-symbols-outlined text-secondary">ios</span>
+<div class="flex-1">
+<p class="font-label-md text-label-md">Apple Pay</p>
+</div>
+<span class="material-symbols-outlined text-surface-variant">radio_button_unchecked</span>
+</div>
+</label>
+<!-- Cash on Delivery -->
+<label class="flex items-center p-element-gap-md bg-surface-container-lowest border-2 border-transparent hover:border-surface-variant rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] cursor-pointer transition-colors">
+<input class="hidden" name="payment" type="radio"/>
+<div class="flex items-center gap-element-gap-md w-full">
+<span class="material-symbols-outlined text-secondary">payments</span>
+<div class="flex-1">
+<p class="font-label-md text-label-md">Cash on Delivery</p>
+</div>
+<span class="material-symbols-outlined text-surface-variant">radio_button_unchecked</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Promo Code Input -->
+<section class="mb-section-margin">
+<h2 class="font-label-lg text-label-lg mb-element-gap-sm text-on-surface">Promo Code</h2>
+<div class="flex gap-element-gap-sm">
+<input class="flex-1 bg-surface-container rounded-lg border-none focus:ring-0 focus:border-b-2 focus:border-primary px-4 py-3 font-body-md" placeholder="Enter code" type="text"/>
+<button class="bg-secondary text-on-primary px-6 rounded-lg font-label-md hover:opacity-90 active:scale-95 transition-all">Apply</button>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Payment Action -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/80 backdrop-blur-md rounded-t-xl p-container-padding shadow-[0px_-4px_16px_rgba(0,0,0,0.08)] z-50">
+<div class="max-w-md mx-auto">
+<div class="flex justify-between items-center mb-element-gap-md">
+<div>
+<p class="font-body-md text-secondary">Total Amount</p>
+<p class="font-headline-lg text-headline-lg-mobile text-on-surface">$19.90</p>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-tertiary-fixed-variant">Secure Checkout</p>
+<span class="material-symbols-outlined text-primary text-[20px]">lock</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-headline-md text-headline-md-mobile hover:opacity-90 active:scale-95 transition-all shadow-lg">
+                Pay Now
+            </button>
+</div>
+</div>
+</body></html>

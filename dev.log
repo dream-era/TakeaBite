@@ -1,0 +1,113 @@
+
+> product@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1469ms
+ ○ Compiling / ...
+ ✓ Compiled / in 4.4s (643 modules)
+ GET / 200 in 4560ms
+ ✓ Compiled in 148ms (308 modules)
+ GET / 200 in 39ms
+ ✓ Compiled /login in 270ms (636 modules)
+ ✓ Compiled /signup in 154ms (648 modules)
+ ✓ Compiled in 179ms (320 modules)
+ ✓ Compiled in 125ms (648 modules)
+ ✓ Compiled in 204ms (664 modules)
+ ✓ Compiled in 124ms (321 modules)
+ ✓ Compiled in 994ms (664 modules)
+ ✓ Compiled in 143ms (321 modules)
+ ✓ Compiled in 1122ms (650 modules)
+ ✓ Compiled in 108ms (321 modules)
+ ✓ Compiled /_not-found in 473ms (653 modules)
+ GET / 404 in 569ms
+ ✓ Compiled in 262ms (321 modules)
+ ✓ Compiled /_not-found in 195ms (653 modules)
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1106ms (880 modules)
+ GET / 404 in 1438ms
+ ✓ Compiled in 562ms (875 modules)
+ ✓ Compiled in 167ms (506 modules)
+ ✓ Compiled in 169ms (506 modules)
+ ✓ Compiled in 437ms (875 modules)
+ ✓ Compiled in 219ms (506 modules)
+ ✓ Compiled in 420ms (875 modules)
+ ✓ Compiled in 255ms (506 modules)
+ ✓ Compiled in 455ms (875 modules)
+ ○ Compiling /all-set ...
+ ✓ Compiled /all-set in 503ms (919 modules)
+ GET /all-set 200 in 601ms
+ ✓ Compiled /_not-found in 178ms (922 modules)
+ GET /_next/static/css/app/layout.css?v=1779355181708 404 in 235ms
+ GET /_next/static/chunks/main-app.js?v=1779355181708 404 in 62ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 62ms
+ GET /_next/static/chunks/app/layout.js 404 in 52ms
+ GET /all-set 200 in 60ms
+ GET /_next/static/css/app/layout.css?v=1779355185322 404 in 13ms
+ GET /_next/static/chunks/main-app.js?v=1779355185322 404 in 16ms
+ GET /_next/static/chunks/app/layout.js 404 in 16ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 16ms
+ GET /all-set 200 in 33ms
+ GET /_next/static/css/app/layout.css?v=1779355187271 404 in 14ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 27ms
+ GET /_next/static/chunks/main-app.js?v=1779355187271 404 in 28ms
+ GET /_next/static/chunks/app/layout.js 404 in 26ms
+ GET /all-set 200 in 31ms
+ GET /_next/static/css/app/layout.css?v=1779355187779 404 in 18ms
+ GET /_next/static/chunks/main-app.js?v=1779355187779 404 in 18ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 17ms
+ GET /_next/static/chunks/app/layout.js 404 in 17ms
+ GET /all-set 200 in 37ms
+ GET /_next/static/css/app/layout.css?v=1779355188907 404 in 13ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 19ms
+ GET /_next/static/chunks/app/layout.js 404 in 18ms
+ GET /_next/static/chunks/main-app.js?v=1779355188907 404 in 22ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/goober.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/goober' in /Users/mac1/Documents/startup 1/product/.next/server for build dependencies doesn't lead to expected result '/Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/goober.js', but to 'Error: Can't resolve './vendor-chunks/goober' in '/Users/mac1/Documents/startup 1/product/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/goober (expected /Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/goober.js)
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/.next/server/webpack-runtime.js
+<w>  at file /Users/mac1/Documents/startup 1/product/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/.next/server/app/all-set/page.js
+<w>  at file /Users/mac1/Documents/startup 1/product/.next/server/app/all-set/page.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/require.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/react-hot-toast' in /Users/mac1/Documents/startup 1/product/.next/server for build dependencies doesn't lead to expected result '/Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/react-hot-toast.js', but to 'Error: Can't resolve './vendor-chunks/react-hot-toast' in '/Users/mac1/Documents/startup 1/product/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/react-hot-toast (expected /Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/react-hot-toast.js)
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/.next/server/webpack-runtime.js
+<w>  at file /Users/mac1/Documents/startup 1/product/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/.next/server/app/all-set/page.js
+<w>  at file /Users/mac1/Documents/startup 1/product/.next/server/app/all-set/page.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/require.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/@swc' in /Users/mac1/Documents/startup 1/product/.next/server for build dependencies doesn't lead to expected result '/Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/@swc.js', but to 'Error: Can't resolve './vendor-chunks/@swc' in '/Users/mac1/Documents/startup 1/product/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/@swc (expected /Users/mac1/Documents/startup 1/product/.next/server/vendor-chunks/@swc.js)
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/.next/server/webpack-runtime.js
+<w>  at file /Users/mac1/Documents/startup 1/product/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/.next/server/app/all-set/page.js
+<w>  at file /Users/mac1/Documents/startup 1/product/.next/server/app/all-set/page.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/require.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/utils.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/mac1/Documents/startup 1/product/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js

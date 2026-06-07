@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ServeFlow - Invite Team Members</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#E50914',
+            surface: '#F8F9FA',
+            border: '#E2E8F0'
+          }
+        }
+      }
+    }
+  </script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #F8F9FA;
+      font-family: 'Inter', sans-serif;
+    }
+    .sidebar-active {
+      background-color: #E50914;
+      color: white;
+    }
+    .sidebar-item:hover:not(.sidebar-active) {
+      background-color: #F1F5F9;
+    }
+    .status-badge-pending {
+      color: #F97316;
+      background-color: #FFF7ED;
+    }
+    .status-badge-active {
+      color: #22C55E;
+      background-color: #F0FDF4;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 bg-white border-r border-slate-200 flex flex-col flex-shrink-0" data-purpose="main-sidebar">
+<div class="p-6">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<i class="fas fa-bolt"></i>
+</div>
+<div>
+<h1 class="text-xl font-bold text-slate-900 leading-none">ServeFlow</h1>
+<p class="text-[10px] text-slate-400 mt-1">Smart Business Operating Platform</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-th-large w-5 mr-3"></i> Dashboard
+      </a>
+<a class="sidebar-item flex items-center justify-between px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<span class="flex items-center"><i class="fas fa-shopping-cart w-5 mr-3"></i> Orders</span>
+<span class="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-full">12</span>
+</a>
+<a class="sidebar-item flex items-center justify-between px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<span class="flex items-center"><i class="fas fa-utensils w-5 mr-3"></i> Menu Management</span>
+<i class="fas fa-chevron-down text-[10px]"></i>
+</a>
+<div class="space-y-1">
+<a class="sidebar-active flex items-center px-3 py-2 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-users w-5 mr-3"></i> Staff Management
+        </a>
+<div class="pl-11 space-y-2 mt-2">
+<a class="flex items-center text-sm font-medium text-primary" href="#">
+<span class="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span> Team Members
+          </a>
+<a class="block text-sm text-slate-500 hover:text-slate-700" href="#">Roles &amp; Permissions</a>
+</div>
+</div>
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium mt-4" href="#">
+<i class="fas fa-qrcode w-5 mr-3"></i> QR &amp; Tables
+      </a>
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-credit-card w-5 mr-3"></i> Payments
+      </a>
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-chart-line w-5 mr-3"></i> Analytics
+      </a>
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-user-friends w-5 mr-3"></i> Customers
+      </a>
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-bullhorn w-5 mr-3"></i> Marketing
+      </a>
+<a class="sidebar-item flex items-center justify-between px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<span class="flex items-center"><i class="fas fa-bell w-5 mr-3"></i> Notifications</span>
+<span class="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-full">5</span>
+</a>
+<a class="sidebar-item flex items-center px-3 py-2 text-slate-600 rounded-lg text-sm font-medium" href="#">
+<i class="fas fa-cog w-5 mr-3"></i> Settings
+      </a>
+</nav>
+<!-- Upgrade Card -->
+<div class="p-4 mt-auto">
+<div class="bg-gradient-to-br from-primary to-orange-500 rounded-xl p-4 text-white relative overflow-hidden">
+<i class="fas fa-crown text-yellow-400 mb-2"></i>
+<h3 class="font-bold text-sm">Upgrade Your Plan</h3>
+<p class="text-[10px] opacity-90 mt-1 mb-4 leading-relaxed">Unlock more features and grow your business faster.</p>
+<button class="bg-white text-primary text-[10px] font-bold px-4 py-2 rounded-lg w-full">Upgrade Now</button>
+<!-- Rocket Illustration Placeholder -->
+<img alt="Rocket" class="absolute -bottom-4 -right-4 w-24 opacity-30 pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZM4E6YdXhAnrBVv_L59TsAaSRD7fiEf32dHU5iTG7kNKZYG1RPcl4NXOJLMrT3tV0EhrU9FBApN42dY-NVwFoIEAHlpwstYR3qUEwKArzo0Wr8TurhRWyH-SWP5wBSmYnZoFCUX0uFIMwotj53hu8Gsg70ARq6zWT1AGFPjmx6ysxWWiV49O57HWH9BGUh8r4kPGleFnT_lFtgsReowlWVwNASyPRbLZ5ukJVbPbUHuYD29PhiPSCYOpYySenaj8WerMPNo28YDs"/>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- BEGIN: Top Navigation -->
+<header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8" data-purpose="top-nav">
+<div class="flex items-center gap-4">
+<div class="flex items-center border border-slate-200 rounded-lg px-3 py-2 gap-3 cursor-pointer hover:bg-slate-50">
+<div class="w-8 h-8 rounded-lg overflow-hidden">
+<img alt="Store Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVOjV9_mIggHXai8ueXr2_Bdv8mfD5Y29280nb9aITo0mmqwTiTvO5xYvBpGn1sBT0MHgYtyNxgrf3tdUrmvl4EPvbQWuAHJ5wMNMThxb3TzC-KhZlb_77Pzcl0NG7SopP3Hz0eR5miM_tQKNmEi5wV8kJPEUjlCAvF8GeXfqtW0lCyB85Hrift6jym9N6vZULWprBThDE37_3jWbDsBu9Jh1D4uL6yO_8Qfpjhka3GZpOwYrr2nTlvuie9E3TcmxfPD6vwhnyORI"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-semibold text-slate-900">Mario's Pizza House</span>
+<i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+</div>
+<p class="text-[10px] text-slate-500">Main Branch</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 border-r border-slate-200 pr-6">
+<button class="relative text-slate-400 hover:text-slate-600">
+<i class="fas fa-bell text-xl"></i>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white font-bold">6</span>
+</button>
+<button class="relative text-slate-400 hover:text-slate-600">
+<i class="fas fa-comment-alt text-xl"></i>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white font-bold">3</span>
+</button>
+</div>
+<div class="flex items-center gap-3 cursor-pointer">
+<div class="text-right">
+<p class="text-sm font-semibold text-slate-900">Amit Chauhan</p>
+<p class="text-[10px] text-slate-500">Owner</p>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded-full border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW_MeArxPEHltjztDyaia28hcoubMGQf_d5z9VJoZMeitTLo5KJ8UiBheSFPRT5AkR4vA33OIqU81XsDW-DZfavPUdQdDBA7UCc4Z_votjpqYBgUzQCaRfEXcWLGzypXz7nOtzv7a4OgyMEwNjFWtliu8eu7DptqEmF_57wLoDNI9p8PdnQInMBs3JQdaQnaZrG3IFN6wEOwFDiaMCA0lX8A9rpe1LelG8_GFeIBmJxpzZV0gfAbnYj9X2Uh9h4r8NdZJAOYmU0jg"/>
+<i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+</div>
+</div>
+</header>
+<!-- END: Top Navigation -->
+<!-- BEGIN: Main Content -->
+<div class="flex-1 overflow-y-auto p-8" data-purpose="main-content-area">
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-bold text-slate-900">Invite Team Members</h2>
+<p class="text-slate-500 text-sm mt-1">Invite your team to join and manage your business together.</p>
+</div>
+<button class="flex items-center gap-2 border border-slate-200 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50">
+<i class="far fa-play-circle text-slate-400"></i>
+          How it works?
+        </button>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Invitation Forms -->
+<div class="col-span-12 lg:col-span-5 space-y-8">
+<!-- Send Invite Card -->
+<section class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm" data-purpose="send-invite-card">
+<h3 class="text-lg font-bold text-slate-900 mb-1">Send Invite</h3>
+<p class="text-slate-500 text-xs mb-6">Invite team members to join your business.</p>
+<form class="space-y-6">
+<div>
+<label class="block text-xs font-semibold text-slate-700 mb-2">Email Address <span class="text-primary">*</span></label>
+<div class="relative">
+<input class="w-full border-slate-200 rounded-lg text-sm px-4 py-2.5 focus:ring-primary focus:border-primary" placeholder="Enter email address" type="email"/>
+<i class="fas fa-address-book absolute right-4 top-3 text-slate-400"></i>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-slate-700 mb-2">Role <span class="text-primary">*</span></label>
+<div class="relative">
+<select class="w-full border-slate-200 rounded-lg text-sm px-4 py-2.5 appearance-none focus:ring-primary focus:border-primary">
+<option>Select role</option>
+</select>
+<i class="fas fa-chevron-down absolute right-4 top-3.5 text-slate-400 pointer-events-none text-xs"></i>
+</div>
+</div>
+<div class="bg-blue-50 border border-blue-100 rounded-lg p-4 flex gap-3">
+<i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+<p class="text-xs text-blue-800 leading-relaxed">The invited team member will receive an email with instructions to join your business.</p>
+</div>
+<button class="w-full bg-primary text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-colors" type="button">
+<i class="far fa-envelope"></i>
+                Send Invite
+              </button>
+</form>
+</section>
+<!-- Invite via Link Card -->
+<section class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm" data-purpose="invite-link-card">
+<h3 class="text-lg font-bold text-slate-900 mb-1">Invite via Link</h3>
+<p class="text-slate-500 text-xs mb-6">Share this link to invite anyone to join your team.</p>
+<div class="space-y-4">
+<div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5">
+<span class="text-sm text-slate-600 flex-1 truncate">https://serveflow.com/invite/abc123</span>
+<button class="text-slate-400 hover:text-slate-600 ml-2">
+<i class="far fa-copy"></i>
+</button>
+</div>
+<button class="flex items-center gap-2 border border-slate-200 px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50">
+<i class="fas fa-share-alt"></i>
+                Share Link
+              </button>
+<p class="text-xs text-slate-400">Anyone with this link can request to join your business.</p>
+</div>
+</section>
+</div>
+<!-- Right Column: Members List -->
+<div class="col-span-12 lg:col-span-7">
+<section class="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col h-full shadow-sm" data-purpose="members-list-card">
+<div class="p-6 pb-2">
+<h3 class="text-lg font-bold text-slate-900 mb-1">Invited Members</h3>
+<p class="text-slate-500 text-xs">Manage your invited and existing team members.</p>
+</div>
+<!-- Tabs -->
+<div class="px-6 border-b border-slate-100 flex gap-8">
+<button class="py-4 text-xs font-bold text-primary border-b-2 border-primary">All</button>
+<button class="py-4 text-xs font-semibold text-slate-500 hover:text-slate-700">Pending (2)</button>
+<button class="py-4 text-xs font-semibold text-slate-500 hover:text-slate-700">Active (5)</button>
+</div>
+<!-- Members Table/List -->
+<div class="flex-1">
+<!-- Item 1 -->
+<div class="p-6 border-b border-slate-100 flex items-center hover:bg-slate-50/50">
+<div class="w-12 h-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm mr-4">RK</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-900 truncate">Rahul Kumar</h4>
+<p class="text-[11px] text-slate-500 truncate">rahul.kumar@example.com</p>
+</div>
+<div class="px-6">
+<span class="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2.5 py-1 rounded-md">Server</span>
+</div>
+<div class="flex flex-col items-end gap-1 w-32">
+<div class="flex items-center gap-1.5 status-badge-pending px-2 py-0.5 rounded text-[10px] font-bold">
+<i class="far fa-clock"></i> Pending
+                  </div>
+<span class="text-[10px] text-slate-400">Invited 2h ago</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-ellipsis-v text-xs text-slate-400"></i></button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-external-link-alt text-xs text-slate-400"></i></button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-6 border-b border-slate-100 flex items-center hover:bg-slate-50/50">
+<div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-sm mr-4">PS</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-900 truncate">Priya Sharma</h4>
+<p class="text-[11px] text-slate-500 truncate">priya.sharma@example.com</p>
+</div>
+<div class="px-6">
+<span class="bg-purple-50 text-purple-600 text-[10px] font-bold px-2.5 py-1 rounded-md">Cashier</span>
+</div>
+<div class="flex flex-col items-end gap-1 w-32">
+<div class="flex items-center gap-1.5 status-badge-pending px-2 py-0.5 rounded text-[10px] font-bold">
+<i class="far fa-clock"></i> Pending
+                  </div>
+<span class="text-[10px] text-slate-400">Invited 1d ago</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-ellipsis-v text-xs text-slate-400"></i></button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-external-link-alt text-xs text-slate-400"></i></button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-6 border-b border-slate-100 flex items-center hover:bg-slate-50/50">
+<div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm mr-4">AS</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-900 truncate">Aman Singh</h4>
+<p class="text-[11px] text-slate-500 truncate">aman.singh@example.com</p>
+</div>
+<div class="px-6">
+<span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2.5 py-1 rounded-md">Kitchen Staff</span>
+</div>
+<div class="flex flex-col items-end gap-1 w-32">
+<div class="flex items-center gap-1.5 status-badge-active px-2 py-0.5 rounded text-[10px] font-bold">
+<i class="far fa-check-circle"></i> Active
+                  </div>
+<span class="text-[10px] text-slate-400">Joined 3d ago</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-ellipsis-v text-xs text-slate-400"></i></button>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="p-6 border-b border-slate-100 flex items-center hover:bg-slate-50/50">
+<div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm mr-4">NK</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-900 truncate">Neha Kapoor</h4>
+<p class="text-[11px] text-slate-500 truncate">neha.kapoor@example.com</p>
+</div>
+<div class="px-6">
+<span class="bg-orange-50 text-orange-600 text-[10px] font-bold px-2.5 py-1 rounded-md">Manager</span>
+</div>
+<div class="flex flex-col items-end gap-1 w-32">
+<div class="flex items-center gap-1.5 status-badge-active px-2 py-0.5 rounded text-[10px] font-bold">
+<i class="far fa-check-circle"></i> Active
+                  </div>
+<span class="text-[10px] text-slate-400">Joined 5d ago</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-ellipsis-v text-xs text-slate-400"></i></button>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="p-6 flex items-center hover:bg-slate-50/50">
+<div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm mr-4">VS</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-900 truncate">Vikram Soni</h4>
+<p class="text-[11px] text-slate-500 truncate">vikram.soni@example.com</p>
+</div>
+<div class="px-6">
+<span class="bg-yellow-50 text-yellow-600 text-[10px] font-bold px-2.5 py-1 rounded-md">Delivery Partner</span>
+</div>
+<div class="flex flex-col items-end gap-1 w-32">
+<div class="flex items-center gap-1.5 status-badge-active px-2 py-0.5 rounded text-[10px] font-bold">
+<i class="far fa-check-circle"></i> Active
+                  </div>
+<span class="text-[10px] text-slate-400">Joined 1w ago</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-white"><i class="fas fa-ellipsis-v text-xs text-slate-400"></i></button>
+</div>
+</div>
+</div>
+<!-- Pagination Footer -->
+<div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+<span class="text-xs text-slate-500">Showing 1 to 5 of 7 members</span>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 text-slate-400 hover:bg-white"><i class="fas fa-chevron-left text-[10px]"></i></button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white text-xs font-bold shadow-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 text-slate-600 text-xs hover:bg-white font-medium">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 text-slate-400 hover:bg-white"><i class="fas fa-chevron-right text-[10px]"></i></button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- END: Main Content -->
+</main>
+</body></html>

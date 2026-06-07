@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE SPICYCAB - Food Ordering</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb3af",
+                    "surface": "#fbf9f9",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-surface": "#1b1c1c",
+                    "tertiary-container": "#747676",
+                    "on-primary-fixed-variant": "#930017",
+                    "surface-tint": "#bf0022",
+                    "surface-dim": "#dbdad9",
+                    "background": "#fbf9f9",
+                    "error": "#ba1a1a",
+                    "primary-fixed-dim": "#ffb3af",
+                    "on-tertiary-container": "#fefefe",
+                    "surface-variant": "#e3e2e2",
+                    "outline": "#926e6c",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "primary-fixed": "#ffdad7",
+                    "surface-container": "#efeded",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e3e2e2",
+                    "on-surface-variant": "#5d3f3d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "primary": "#bd0021",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-bright": "#fbf9f9",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "secondary": "#5f5e5e",
+                    "on-background": "#1b1c1c",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-container-high": "#e9e8e7",
+                    "inverse-on-surface": "#f2f0f0",
+                    "on-primary-container": "#fffeff",
+                    "secondary-container": "#e2dfde",
+                    "surface-container-low": "#f5f3f3",
+                    "on-primary-fixed": "#410005",
+                    "outline-variant": "#e7bdba",
+                    "tertiary": "#5c5d5e",
+                    "on-secondary-container": "#636262",
+                    "on-error": "#ffffff",
+                    "primary-container": "#e61e32",
+                    "inverse-surface": "#303031",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#474746"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "card-gutter": "16px",
+                    "element-gap-sm": "8px",
+                    "section-margin": "32px",
+                    "element-gap-md": "16px",
+                    "unit": "4px",
+                    "container-padding": "20px"
+            },
+            "fontFamily": {
+                    "body-md": ["Be Vietnam Pro"],
+                    "headline-xl": ["Plus Jakarta Sans"],
+                    "body-lg": ["Be Vietnam Pro"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "price-display": ["Plus Jakarta Sans"],
+                    "label-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-lg": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "18px", "fontWeight": "600"}],
+                    "headline-md-mobile": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "letterSpacing": "0.1em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-on-surface docked full-width top-0 z-40 sticky">
+<div class="flex justify-between items-center w-full px-container-padding py-4">
+<button class="text-on-surface dark:text-surface hover:opacity-80 transition-opacity Active: scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-on-surface dark:text-surface uppercase">THE SPICYCAB</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-surface-container-high hover:opacity-80 transition-opacity Active: scale-95 transition-transform duration-150">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZW_k_Ci8M0d9UNmrgZLP_pSDAxcU1ZZObUiEx9S5Gb0vAPlp9jMSzAF46H3HfgoJ8g9FCRjVsvh8WUK4q38c2u4j5sp9TQAJ1jRfJUJcq0e1nQN-MCo_TNsEtqFhuPn0McwZZuogZP7agkcF4AjFVRZiWnFHl3UpbDIyE6bAhd9AT3WNyPSizv5G9pUUG7T0ZHIH45u8AnRRvpv9_YxKh5wk1QdC3Ivzru-4ooED6snDh5mMAl9NZ1MReZc8YUGbisJ1T-QoPitg"/>
+</div>
+</div>
+</header>
+<main class="flex-grow pb-24 px-container-padding">
+<!-- Category Chips -->
+<section class="py-element-gap-md overflow-x-auto no-scrollbar -mx-container-padding px-container-padding flex gap-3 mb-4">
+<button class="px-8 py-3 rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-md transition-all active:scale-95">Indian</button>
+<button class="px-8 py-3 rounded-full bg-surface-container-lowest border border-surface-container text-secondary font-label-lg text-label-lg transition-all hover:bg-surface-container-low active:scale-95">Chinese</button>
+<button class="px-8 py-3 rounded-full bg-surface-container-lowest border border-surface-container text-secondary font-label-lg text-label-lg transition-all hover:bg-surface-container-low active:scale-95">Snacks</button>
+<button class="px-8 py-3 rounded-full bg-surface-container-lowest border border-surface-container text-secondary font-label-lg text-label-lg transition-all hover:bg-surface-container-low active:scale-95">Desserts</button>
+</section>
+<!-- Section Title -->
+<div class="mb-element-gap-md">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Popular Menu</h2>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 gap-card-gutter">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative shadow-[0px_4px_20px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow">
+<div class="absolute top-2 right-2 z-10">
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="aspect-square w-full mb-3 flex items-center justify-center">
+<img class="max-w-full max-h-full object-contain" data-alt="A professional studio food photography shot of a gourmet cheeseburger with melting cheddar cheese and fresh lettuce, paired with a portion of golden crispy french fries and a red soda can on a clean white background. High contrast, warm lighting, appetizing aesthetic with rich reds and yellows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCqH8BMIN6qzgpVd21YqtIIVPTihgf8TSjon0QhBpc0u7Jwng1-0wib6wrP1ZZEfEd5PbJiXkcyq293OJdVxXH--W5MkfzgXwZ5RYvk5eB652cK2eBSJAmFCcALANmJrW9FhQxHi6zzfJ6ghItDFyyf2uLD4l0ocxdDXoZ003weaHfB_rx8RRFg8OZsjJayuvwMg8e9-YKiJyyhtvou3ctgCF75qAVfznLvAr67Nu1SJCk47bwpKnEfWXWUM7ScbAk96z7WeLAY_M"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-price-display text-price-display text-on-surface">$12.99</span>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Junk Food, French Fries, Cheeseburger</p>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative shadow-[0px_4px_20px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow">
+<div class="absolute top-2 right-2 z-10">
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="aspect-square w-full mb-3 flex items-center justify-center">
+<img class="max-w-full max-h-full object-contain" data-alt="Studio photography of spicy honey-glazed chicken wings piled high on a white background. The wings are glistening with a thick, savory red sauce with visible chili flakes. The lighting is crisp and bright, emphasizing the crispy texture and the rich crimson red glaze of the honey-apple chicken." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQQqxbOXMDPkvasv2bps5L80gHgHmnQTQiIOL3CdC6NhorI5mnlAQ1eWfu-n7kCsfUTtRNCCEBQEyUXliEI2wsb2I_B9pPtfJca_jkhSc3osNd9vZFKgddyrZUdn-xm8c5Xp08UmH-2Oah6CATvkYp7hM53X_skOmjKfyNJ3iEw1t9Ar4GYmNjh-Zn2HaCGAbhBGWFHoHUTu7Aghi_oXpCCOX2C0f_pWlhQ-SAOKNZN_MMnWZIFOdrHsEFg3GY12KUW-FVgsoeiDM"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-price-display text-price-display text-on-surface">$18.99</span>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Huron Honey-Apple Chicken</p>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative shadow-[0px_4px_20px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow">
+<div class="absolute top-2 right-2 z-10">
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="aspect-square w-full mb-3 flex items-center justify-center">
+<img class="max-w-full max-h-full object-contain" data-alt="A close-up studio shot of a perfectly assembled central gyros wrap with layers of roasted meat, fresh tomatoes, purple cabbage, and cucumbers peering out from a warm pita bread. Isolated on a white background with sharp, clean shadows and vivid natural colors for an energetic food delivery app feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiR5EG5xRb6St0KS4BBtFEVZNZDMcl-xo5MmqfBNuXSuwQZung3uu95FBV8Pmpti8TuAKvaHFtjiFvxBf_jj2yQIJNFMjtXUozFpnrTeE8v5zvg377W6BVehxy_X5YC_HsizZ5B0LlkhODDSsmTaSM1N0XmjqP3dqZkuCAI0DNrPQ5LOntZqSoR91UnDxIjVLqh3pec2Zoanz6I5plcpcLcJzXU7LZQsg9S0y4yJe4Nv6T7BDYMbK5uMvJ1Ch5EaoHC-q4RLJLzAE"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-price-display text-price-display text-on-surface">$14.99</span>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">food, central gyros the best gyros</p>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative shadow-[0px_4px_20px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow">
+<div class="absolute top-2 right-2 z-10">
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="aspect-square w-full mb-3 flex items-center justify-center">
+<img class="max-w-full max-h-full object-contain" data-alt="A neat stack of golden, perfectly salted French fries on a white clinical background. The potatoes have a crisp, light brown exterior and look freshly fried. Minimalist composition with high-key lighting to emphasize cleanliness and speed of delivery in a modern corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4py3R47F-GwYxPXoeFJzhf30qR_1WdW_aIDpy3qysDD5Sq6P_RM-iME-_pju2lrBOYT4aBNXkOhtiZqqeM6rARXSYhCHIzpFag-OGMCmzTFtE0dOlS1R3g7RnnZrWp6ZWskd9s4UzEh_4-sxh1b21t90yQUtBWYWurMIH-3_BG-QKWgnJnF_kTpJrW9WCv9-1cx8KGfzK6JcINUtFStcADw3O8wavL5rjzAq_BED7kApfXBhskkS0Y9Lulcg5GtMx7776MacZrYQ"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-price-display text-price-display text-on-surface">$09.99</span>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">French Fries</p>
+</div>
+</div>
+<!-- Product Card 5 (Repeated for Layout) -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative shadow-[0px_4px_20px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow">
+<div class="absolute top-2 right-2 z-10">
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="aspect-square w-full mb-3 flex items-center justify-center">
+<img class="max-w-full max-h-full object-contain" data-alt="A delicious mediterranean gyros kebab pita sandwich on a white background. The pita is overflowing with freshly grilled meat, crisp vegetables including sliced cucumbers and red onions. The food photography is vibrant, bright, and clinical, following a minimalist corporate aesthetic for food apps." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_jzMGO9iweVrJpjz4jnZFZK3IkpxgAPbdrYdA-VNti-TWR1Ut5lYNaNTvMhpaDhdR_4H5sjFiG5vgWy2g8OMoh_jUz_Pm9zUrUZOvCgPd8ITvPwgbK9spVFbkERCCoLpuYQriz_DckzBVCAVDzwGcQ27xKbD0Q4ePmzd7m-Xyom0cDGZTLUPJgaCOXb-hLbNtJ6c52Y2OUf-yQFa41pTObe4p_jByiuwmoYe5fqYCZpGhtS6xTt_7OA1yKk4vmzRN79n1I2ry_KQ"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-price-display text-price-display text-on-surface">$14.99</span>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">food, central gyros the best gyros</p>
+</div>
+</div>
+<!-- Product Card 6 (Repeated for Layout) -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative shadow-[0px_4px_20px_rgba(0,0,0,0.04)] hover:shadow-lg transition-shadow">
+<div class="absolute top-2 right-2 z-10">
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="aspect-square w-full mb-3 flex items-center justify-center">
+<img class="max-w-full max-h-full object-contain" data-alt="Professional studio shot of a pile of golden-yellow french fries on a white surface. The fries are uniformly cut and have a slight sheen of oil. Lighting is soft yet defined, creating a high-quality food product look that is appetizing and efficient, with a minimalist white backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMTj20BDLoKjd9R21Moxj4II8Xhpcp9SvgtvyCQMzC_otgwblZkgNMUH5-Qbkv5ubg_ZZ9-nSz3-aRRJaPIs3LtZn6pEM0d0FpjEtNxufO2a3YxSYHuOjS6YXsPa-puB1tyBX2ynnF46zoQ9RIHpnPiJKoYhsDbLuFqiXOT9OoTksZDrArqEaoymKrra8Sy801wWh_nXl8iHkgltL5bh5b7SJPVRzuP2pYNjFM5Z6Jpw9oNhRbNf_L06RggsdRWUOGe1HXtQ_R96U"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-price-display text-price-display text-on-surface">$09.99</span>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">French Fries</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface dark:bg-inverse-surface fixed bottom-0 w-full rounded-t-xl z-50 shadow-[0px_-4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md">
+<div class="flex justify-around items-center h-16 w-full px-4">
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold hover:bg-surface-container-low dark:hover:bg-on-tertiary-fixed-variant transition-colors Active: scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-on-tertiary-fixed-variant transition-colors Active: scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-md text-label-md">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-on-tertiary-fixed-variant transition-colors Active: scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-on-tertiary-fixed-variant transition-colors Active: scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,286 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useCartStore } from "@/store/useCartStore";
+import { toast } from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { getRestaurantProfile } from "@/actions/restaurant";
+
+export default function CheckoutPage() {
+  const params = useParams();
+  const router = useRouter();
+  const workspaceId = params.workspaceId as string;
+  const tableId = params.tableId as string | undefined;
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { items: allCartItems, clearCart, orderType } = useCartStore();
+
+  const { data: restaurantData } = useQuery({
+    queryKey: ['restaurant', workspaceId],
+    queryFn: () => getRestaurantProfile(workspaceId).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data as any;
+    }),
+    enabled: !!workspaceId,
+  });
+
+  const paymentEnabled = restaurantData?.payment_enabled || false;
+  const [selectedMethod, setSelectedMethod] = useState<'online' | 'cash'>('cash');
+  
+  useEffect(() => {
+    if (!paymentEnabled && selectedMethod === 'online') {
+      setSelectedMethod('cash');
+    }
+  }, [paymentEnabled, selectedMethod]);
+  
+  const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
+
+  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const tax = subtotal * 0.02; // 2% tax
+  const total = subtotal + tax;
+
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const orderItems = items.map(cartItem => ({
+      menuItemId: cartItem.id,
+      quantity: cartItem.quantity
+    }));
+
+    try {
+      const response = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          restaurantId: workspaceId,
+          ...(tableId ? { tableId } : {}),
+          items: orderItems,
+          paymentMethod: selectedMethod,
+          specialInstructions: "",
+          orderType: orderType,
+        })
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to place order");
+      }
+
+      const { setConfirmedOrderDetails, setPlacedOrderId } = useCartStore.getState();
+      setConfirmedOrderDetails(result.orderDetails);
+      setPlacedOrderId(result.orderId || result.id);
+      
+      if (selectedMethod === 'online' && result.razorpay) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => {
+          const rzp = new (window as any).Razorpay({
+            key: result.razorpay.keyId,
+            amount: result.razorpay.amount,
+            currency: result.razorpay.currency,
+            order_id: result.razorpay.orderId,
+            name: restaurantData?.name || "Restaurant",
+            description: 'Food order',
+            config: {
+              display: {
+                blocks: {
+                  utib: { name: 'Pay via UPI', instruments: [{ method: 'upi', flows: ['collect', 'intent'] }] },
+                  other: { name: 'Other Payment Methods', instruments: [{ method: 'card' }, { method: 'wallet', wallets: ['paytm', 'phonepe'] }, { method: 'netbanking' }] },
+                },
+                sequence: ['block.utib', 'block.other'],
+                preferences: { show_default_blocks: false },
+              },
+            },
+            handler: (response: any) => {
+              clearCart(workspaceId);
+              const nextUrl = tableId 
+                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
+                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}`;
+              router.push(nextUrl);
+            },
+            modal: {
+              ondismiss: () => {
+                toast.error("Payment cancelled");
+              },
+            },
+            theme: { color: '#E8570C' },
+          });
+          rzp.open();
+        };
+        document.body.appendChild(script);
+      } else {
+        toast.success("Order placed successfully");
+        clearCart(workspaceId);
+        const nextUrl = tableId 
+          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
+          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}`;
+        router.push(nextUrl);
+      }
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "An unknown error occurred");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!mounted) return null;
+
+  return (
+    <div className="bg-background font-body-md text-on-background min-h-screen flex flex-col mx-auto max-w-md border-x border-surface-variant relative shadow-2xl">
+      {/* Header */}
+      <header className="bg-background docked full-width top-0 z-40 sticky border-b border-surface-variant">
+        <div className="flex justify-between items-center w-full px-container-padding py-4">
+          <button onClick={() => router.back()} className="text-on-surface hover:opacity-80 transition-opacity active:scale-95 duration-150 flex items-center">
+            <span className="material-symbols-outlined">arrow_back</span>
+          </button>
+          <h1 className="font-headline-md text-headline-md text-on-surface">Checkout</h1>
+          <div className="w-6" />
+        </div>
+      </header>
+
+      <main className="flex-grow pb-32 px-container-padding py-6 space-y-8">
+        
+        {/* Banner */}
+        <div className="bg-surface-container-low rounded-xl p-4 flex items-center justify-between border border-surface-container-high">
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-primary">
+              {orderType === 'dine_in' ? 'restaurant' : 'takeout_dining'}
+            </span>
+            <span className="font-label-md text-on-surface">
+              {orderType === 'dine_in' ? 'Dine In' : 'Takeaway / Counter Pickup'}
+            </span>
+          </div>
+          {orderType === 'dine_in' && tableId && <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableId}</span>}
+        </div>
+
+        <form id="checkout-form" onSubmit={handlePlaceOrder} className="space-y-6">
+          <div>
+            <h2 className="font-headline-md text-on-surface mb-4">Your Details (Optional)</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="font-label-md text-on-surface block mb-2">Name</label>
+                <input 
+                  type="text" 
+                  placeholder="Enter your name" 
+                  className="w-full bg-surface-container-lowest border border-surface-variant rounded-xl p-4 font-body-md text-on-surface placeholder:text-secondary focus:outline-none focus:border-primary transition-colors"
+                />
+              </div>
+              <div>
+                <label className="font-label-md text-on-surface block mb-2">Mobile Number</label>
+                <input 
+                  type="tel" 
+                  placeholder="Enter mobile number" 
+                  className="w-full bg-surface-container-lowest border border-surface-variant rounded-xl p-4 font-body-md text-on-surface placeholder:text-secondary focus:outline-none focus:border-primary transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="h-px w-full dashed-separator my-6"></div>
+
+          <div>
+            <h2 className="font-headline-md text-on-surface mb-4">Payment Method</h2>
+            
+            <label style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '14px 16px', borderRadius: 10,
+              border: selectedMethod === 'cash'
+                ? '2px solid #E8570C' : '1px solid #e5e7eb',
+              cursor: 'pointer', marginBottom: 10,
+              background: selectedMethod === 'cash' ? '#fff7ed' : '#fff',
+            }}>
+              <input type="radio" name="payment" value="cash"
+                checked={selectedMethod === 'cash'}
+                onChange={() => setSelectedMethod('cash')}
+                style={{ accentColor: '#E8570C' }}
+              />
+              <span style={{ fontSize: 20 }}>💵</span>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>Pay at Counter (Cash)</div>
+                <div style={{ fontSize: 11, color: '#6b7280' }}>Pay your server directly</div>
+              </div>
+            </label>
+
+            {paymentEnabled && restaurantData?.razorpay_key_id ? (
+              <label style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '14px 16px', borderRadius: 10,
+                border: selectedMethod === 'online'
+                  ? '2px solid #E8570C' : '1px solid #e5e7eb',
+                cursor: 'pointer', marginBottom: 10,
+                background: selectedMethod === 'online' ? '#fff7ed' : '#fff',
+              }}>
+                <input type="radio" name="payment" value="online"
+                  checked={selectedMethod === 'online'}
+                  onChange={() => setSelectedMethod('online')}
+                  style={{ accentColor: '#E8570C' }}
+                />
+                <span style={{ fontSize: 20 }}>📱</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>Pay Online</div>
+                  <div style={{ fontSize: 11, color: '#6b7280' }}>
+                    UPI, Google Pay, PhonePe, Paytm, Card
+                  </div>
+                </div>
+                {/* Payment app icons */}
+                <div style={{ display: 'flex', gap: 4 }}>
+                  {['G', 'P', 'PT', '💳'].map((icon, i) => (
+                    <div key={i} style={{
+                      width: 28, height: 28, borderRadius: 6,
+                      background: ['#4285F4','#5F259F','#002970','#f3f4f6'][i],
+                      display: 'flex', alignItems: 'center',
+                      justifyContent: 'center', fontSize: 10,
+                      fontWeight: 700, color: i < 3 ? '#fff' : '#374151',
+                    }}>{icon}</div>
+                  ))}
+                </div>
+              </label>
+            ) : (
+              <div style={{
+                padding: '12px 14px', borderRadius: 10,
+                background: '#f9fafb', border: '1px dashed #d1d5db',
+                marginBottom: 10,
+              }}>
+                <div style={{ fontSize: 13, color: '#9ca3af', display: 'flex', gap: 8 }}>
+                  <span>📱</span>
+                  <span>Online payments not available at this shop yet</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </form>
+      </main>
+
+      {/* Sticky Bottom Action */}
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-surface shadow-[0px_-4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md pb-safe">
+        <div className="max-w-md mx-auto p-4 flex items-center gap-4">
+          <div className="flex flex-col flex-1">
+            <span className="font-label-md text-secondary uppercase tracking-wider text-xs">Grand Total</span>
+            <span className="font-headline-md text-on-surface">${total.toFixed(2)}</span>
+          </div>
+          <button 
+            form="checkout-form"
+            type="submit"
+            disabled={isSubmitting}
+            className={`flex-1 flex justify-center items-center h-14 bg-primary text-on-primary font-label-lg rounded-xl shadow-lg transition-all active:scale-[0.98] ${isSubmitting ? 'opacity-80 cursor-wait pointer-events-none' : 'hover:opacity-90'}`}
+          >
+            {isSubmitting ? (
+               <span className="material-symbols-outlined animate-spin">refresh</span>
+            ) : (
+              "Place Order"
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,205 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { CustomerTopBar } from "@/components/customer/CustomerTopBar";
+import { CustomerBottomNav } from "@/components/customer/CustomerBottomNav";
+import { CategoryChips } from "@/components/customer/CategoryChips";
+import { ProductCard } from "@/components/customer/ProductCard";
+import { StickyCartButton } from "@/components/customer/StickyCartButton";
+import { useCartStore } from "@/store/useCartStore";
+import { useQuery } from "@tanstack/react-query";
+import { getMenuItems } from "@/actions/menu";
+import { getRestaurantProfile } from "@/actions/restaurant";
+
+type ShopMenuItem = {
+  id: string;
+  is_available: boolean;
+  display_order: number;
+  category: string | null;
+  name: string;
+  price: number;
+  image_url: string | null;
+  is_veg?: boolean | null;
+  description?: string | null;
+};
+
+export default function UniversalShopPage() {
+  const params = useParams();
+  const workspaceId = params.workspaceId as string;
+  
+  // Wait for client to hydrate to avoid mismatch with persisted Zustand store
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  // Fetch restaurant details
+  const { data: restaurantData, isLoading: isShopLoading } = useQuery({
+    queryKey: ['restaurant', workspaceId],
+    queryFn: () => getRestaurantProfile(workspaceId).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    }),
+    enabled: !!workspaceId,
+  });
+
+  const shop: any = restaurantData;
+
+  // Fetch menu items
+  const { data: menuData, isLoading: isMenuLoading } = useQuery({
+    queryKey: ['menu', workspaceId],
+    queryFn: () => getMenuItems(workspaceId).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    }),
+    enabled: !!workspaceId,
+  });
+
+  const allItems = menuData?.items || [];
+  
+  const menuCategories = menuData?.menuCategories || [];
+  const hiddenCategories = menuCategories.filter((c: any) => !c.is_active).map((c: any) => c.name);
+
+  // Only show available items and exclude hidden categories
+  const menuItems = allItems
+    .filter((item: ShopMenuItem) => item.is_available && !hiddenCategories.includes(item.category || 'Other'))
+    .sort((a: ShopMenuItem, b: ShopMenuItem) => a.display_order - b.display_order);
+
+  // Dynamic Categories (sorted by DB display_order)
+  const activeDbCategories = menuCategories.filter((c: any) => c.is_active).sort((a: any, b: any) => a.display_order - b.display_order).map((c: any) => c.name);
+  const categories = activeDbCategories.length > 0 
+    ? activeDbCategories.filter((c: string) => menuItems.some((i: ShopMenuItem) => i.category === c))
+    : Array.from(new Set(menuItems.map((i: ShopMenuItem) => i.category || 'Other')));
+  
+  const [activeCategory, setActiveCategory] = useState("All");
+  
+  useEffect(() => {
+    if (categories.length > 0 && activeCategory === "All") {
+      setActiveCategory(categories[0]);
+    }
+  }, [categories, activeCategory]);
+  
+  const { items: allCartItems, addItem, updateQuantity } = useCartStore();
+  // Filter for items in this workspace with no tableId
+  const cartItems = allCartItems.filter(i => i.workspaceId === workspaceId && !i.tableId);
+
+  const handleUpdateQuantity = (id: string, delta: number) => {
+    updateQuantity(id, workspaceId, delta);
+  };
+
+  const handleAddToCart = (id: string) => {
+    const item: ShopMenuItem | undefined = menuItems.find((i: ShopMenuItem) => i.id === id);
+    if (!item) return;
+    
+    addItem({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      imageUrl: item.image_url || '',
+      workspaceId,
+      // No tableId for universal shop
+    });
+  };
+
+  const filteredItems = menuItems.filter((item: ShopMenuItem) => 
+    activeCategory === "All" ? true : item.category === activeCategory
+  );
+
+  const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const basePath = `/shop/${workspaceId}`;
+
+  if (!mounted || isShopLoading || isMenuLoading) {
+    return (
+      <div className="bg-background min-h-screen flex flex-col mx-auto max-w-md border-x border-surface-variant relative shadow-2xl p-4">
+        <div className="animate-pulse flex items-center justify-between mb-8 mt-2">
+          <div className="flex gap-3 items-center">
+            <div className="h-12 w-12 bg-surface-variant rounded-full"></div>
+            <div className="h-5 w-32 bg-surface-variant rounded"></div>
+          </div>
+          <div className="h-10 w-10 bg-surface-variant rounded-full"></div>
+        </div>
+        <div className="flex gap-3 mb-8 overflow-hidden">
+          {[1,2,3,4].map(i => <div key={i} className="h-20 w-20 bg-surface-variant rounded-2xl shrink-0 animate-pulse"></div>)}
+        </div>
+        <div className="h-8 w-48 bg-surface-variant rounded mb-6 animate-pulse"></div>
+        <div className="grid grid-cols-2 gap-card-gutter">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="bg-surface-variant h-64 rounded-2xl animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!shop) {
+    return (
+      <div className="bg-background min-h-screen flex items-center justify-center p-6 text-center">
+        <div>
+          <span className="material-symbols-outlined text-[64px] text-error mb-4">storefront</span>
+          <h1 className="text-2xl font-bold text-on-surface mb-2">Shop Not Found</h1>
+          <p className="text-secondary">The link you used might be invalid or the restaurant is no longer active.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-background font-body-md text-on-background min-h-screen flex flex-col mx-auto max-w-md border-x border-surface-variant relative shadow-2xl">
+      <CustomerTopBar shopName={shop.name} shopLogoUrl={shop.logo_url} />
+
+      <main className="flex-grow pb-40 px-container-padding">
+        {categories.length > 0 && (
+          <CategoryChips 
+            categories={categories} 
+            activeCategory={activeCategory} 
+            onSelect={setActiveCategory} 
+          />
+        )}
+
+        <div className="mb-element-gap-md flex justify-between items-end">
+          <h2 className="font-headline-lg text-headline-lg text-on-surface">{activeCategory} Menu</h2>
+          <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md flex items-center gap-1">
+            <span className="material-symbols-outlined text-[14px]">takeout_dining</span>
+            Takeaway / Counter
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-card-gutter">
+          {filteredItems.length > 0 ? (
+            filteredItems.map(item => (
+              <ProductCard 
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                price={item.price}
+                imageUrl={item.image_url}
+                isVeg={item.is_veg}
+                isAvailable={item.is_available}
+                isBestSeller={item.display_order < 3}
+                quantity={cartItems.find(i => i.id === item.id)?.quantity || 0}
+                onAdd={handleAddToCart}
+                onUpdateQuantity={handleUpdateQuantity}
+              />
+            ))
+          ) : (
+            <div className="col-span-2 py-10 text-center text-secondary">
+              No items available in this category.
+            </div>
+          )}
+        </div>
+      </main>
+
+      <StickyCartButton 
+        itemCount={cartCount} 
+        totalPrice={cartTotal} 
+        checkoutUrl={`${basePath}/cart`} 
+      />
+
+      <CustomerBottomNav 
+        workspaceId={workspaceId} 
+        activeTab="home" 
+      />
+    </div>
+  );
+}
