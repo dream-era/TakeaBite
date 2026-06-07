@@ -380,6 +380,30 @@ export default function AnalyticsPage() {
     )
   }
 
+  if (error) {
+    return (
+      <div style={{ padding: '40px 32px', textAlign: 'center' }}>
+        <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827' }}>
+          Analytics temporarily unavailable.
+        </h2>
+        <p style={{ fontSize: 14, color: '#dc2626', maxWidth: 400, margin: '8px auto 24px' }}>
+          {error}
+        </p>
+        <button
+          onClick={loadAnalytics}
+          style={{
+            padding: '10px 24px', background: '#E8570C',
+            color: '#fff', border: 'none', borderRadius: 8,
+            fontSize: 14, fontWeight: 600, cursor: 'pointer',
+          }}
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
+
   return (
     <>
       {/* Shimmer animation */}
@@ -440,19 +464,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* ── ERROR STATE ── */}
-        {error && (
-          <div style={{
-            padding: '12px 16px', background: '#fee2e2',
-            border: '1px solid #fecaca', borderRadius: 10,
-            color: '#dc2626', fontSize: 13, marginBottom: 20,
-          }}>
-            {error} — <button onClick={loadAnalytics} style={{
-              background: 'none', border: 'none',
-              color: '#dc2626', cursor: 'pointer', textDecoration: 'underline',
-            }}>Try again</button>
-          </div>
-        )}
+
 
         {/* ── BUSINESS HEALTH BANNER ── */}
         <div style={{
