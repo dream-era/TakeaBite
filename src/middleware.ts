@@ -50,8 +50,8 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
 
     // Safe environment variable validation (Task 5 & 6)
-    if (!supabaseUrl || !supabaseKey) {
-      console.error('[Middleware] CRITICAL: Missing Supabase environment variables')
+    if (!supabaseUrl || !supabaseKey || !supabaseUrl.startsWith('http')) {
+      console.error('[Middleware] CRITICAL: Missing or invalid Supabase environment variables')
       // If environment variables are missing: redirect gracefully, never throw errors
       if (pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding')) {
         const loginUrl = new URL('/login', request.url)

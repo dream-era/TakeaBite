@@ -9,8 +9,8 @@ export function createServerSupabase() {
   console.log("SUPABASE_URL:", SUPABASE_URL)
   console.log("SUPABASE_ANON_KEY exists:", !!SUPABASE_ANON_KEY)
 
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    throw new Error('Supabase client not initialized: Missing environment variables')
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !SUPABASE_URL.startsWith('http')) {
+    throw new Error('Supabase server client not initialized: Missing or invalid environment variables')
   }
 
   const cookieStore = cookies()

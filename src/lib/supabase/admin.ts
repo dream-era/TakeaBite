@@ -8,8 +8,8 @@ export function createAdminSupabase() {
   console.log("SUPABASE_URL:", SUPABASE_URL)
   console.log("SUPABASE_SERVICE_ROLE_KEY exists:", !!SUPABASE_SERVICE_ROLE_KEY)
 
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error('Supabase client not initialized: Missing environment variables')
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !SUPABASE_URL.startsWith('http')) {
+    throw new Error('Supabase admin client not initialized: Missing or invalid environment variables')
   }
 
   const client = createClient<any>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
