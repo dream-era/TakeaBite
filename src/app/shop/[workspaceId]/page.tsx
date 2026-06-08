@@ -59,9 +59,9 @@ export default function UniversalShopPage() {
   const menuCategories = menuData?.menuCategories || [];
   const hiddenCategories = menuCategories.filter((c: any) => !c.is_active).map((c: any) => c.name);
 
-  // Only show available items and exclude hidden categories
+  // Show all items (including out of stock, which are handled by ProductCard UI) and exclude hidden categories
   const menuItems = allItems
-    .filter((item: ShopMenuItem) => item.is_available && !hiddenCategories.includes(item.category || 'Other'))
+    .filter((item: ShopMenuItem) => !hiddenCategories.includes(item.category || 'Other'))
     .sort((a: ShopMenuItem, b: ShopMenuItem) => a.display_order - b.display_order);
 
   // Dynamic Categories (sorted by DB display_order)
