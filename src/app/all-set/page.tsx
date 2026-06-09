@@ -50,10 +50,7 @@ export default function AllSetPage() {
     { icon: Users, label: "Staff Workspace", href: "/staff-management" },
     { icon: QrCode, label: "QR & Tables", href: "/qr-generation" },
     { icon: CreditCard, label: "Payments", href: "/payments" },
-    { icon: ClipboardList, label: "Live Orders", href: "#", locked: true },
     { icon: BarChart3, label: "Analytics", href: "#", locked: true },
-    { icon: UsersRound, label: "Customers", href: "#", locked: true },
-    { icon: Bell, label: "Notifications", href: "#", locked: true },
     { icon: Settings, label: "Settings", href: "/settings" },
   ];
 

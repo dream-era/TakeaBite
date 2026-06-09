@@ -40,12 +40,9 @@ export default function RolesPermissionsPage() {
       ]
     },
     { icon: QrCode, label: "QR & Tables", href: "/qr-generation" },
-    { icon: CreditCard, label: "Payments", href: "/payments", href: "#" },
-    { icon: ClipboardList, label: "Live Orders", href: "#", locked: true, badge: 12, href: "#", locked: true },
-    { icon: BarChart3, label: "Analytics", href: "#", locked: true, href: "#" },
-    { icon: UsersRound, label: "Customers", href: "#", locked: true, href: "#" },
-    { icon: Bell, label: "Notifications", href: "#", locked: true, badge: 5, href: "#" },
-    { icon: Settings, label: "Settings", href: "/settings", href: "#" },
+    { icon: CreditCard, label: "Payments", href: "/payments" },
+    { icon: BarChart3, label: "Analytics", href: "#", locked: true },
+    { icon: Settings, label: "Settings", href: "/settings" },
   ];
 
   // Permissions Data
