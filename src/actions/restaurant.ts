@@ -65,10 +65,9 @@ import type {
 // Used only in connectRazorpayAccount() to create
 // linked accounts via Razorpay Route API.
 // ─────────────────────────────────────────────
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-})
+// We don't initialize Razorpay at the top level because missing env vars
+// would cause the entire Server Actions module to crash.
+// Instead, it's initialized inside the action that needs it.
 
 // ─────────────────────────────────────────────
 // STANDARD ACTION RESULT TYPE
@@ -431,6 +430,13 @@ export async function connectRazorpayAccount(
     // Route API: POST /v2/accounts
     let razorpayAccount: { id: string }
     try {
+      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        throw new Error('Razorpay keys are missing. Please add them to Vercel.')
+      }
+      const razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET,
+      })
       razorpayAccount = await (razorpay as unknown as {
         accounts: {
           create: (data: Record<string, unknown>) => Promise<{ id: string }>
