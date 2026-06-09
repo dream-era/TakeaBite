@@ -44,6 +44,8 @@ export default function OnboardingPage() {
   const [category, setCategory] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
   const pathname = usePathname();
 
   const sidebarMenuItems = [
@@ -244,21 +246,23 @@ export default function OnboardingPage() {
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-neutral-700">Business Category</label>
                       <div className="relative">
-                        <select
+                        <input
+                          type="text"
                           value={category}
                           onChange={(e) => setCategory(e.target.value)}
-                          className="w-full appearance-none rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/10"
-                        >
-                          <option value="" disabled>Select Category</option>
-                          <option value="Restaurant">Restaurant</option>
-                          <option value="Cafe">Cafe</option>
-                          <option value="Juice Shop">Juice Shop</option>
-                          <option value="Bakery">Bakery</option>
-                          <option value="Retail Store">Retail Store</option>
-                          <option value="Salon">Salon</option>
-                          <option value="Other">Other</option>
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 pointer-events-none" />
+                          list="category-options"
+                          placeholder="Type or select a category"
+                          className="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 transition-colors focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/10"
+                        />
+                        <datalist id="category-options">
+                          <option value="Restaurant" />
+                          <option value="Cafe" />
+                          <option value="Juice Shop" />
+                          <option value="Bakery" />
+                          <option value="Retail Store" />
+                          <option value="Salon" />
+                          <option value="Other" />
+                        </datalist>
                       </div>
                     </div>
                   </div>
@@ -296,26 +300,36 @@ export default function OnboardingPage() {
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-neutral-700">Shop Logo</label>
-                      <div className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 py-6 transition-all hover:border-brand-400 hover:bg-brand-50/50">
+                      <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 py-6 transition-all hover:border-brand-400 hover:bg-brand-50/50">
                         <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
-                          <UploadCloud className="h-5 w-5 text-brand-500" />
+                          {logoFile ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <UploadCloud className="h-5 w-5 text-brand-500" />}
                         </div>
-                        <span className="text-xs font-medium text-neutral-600">Click to upload logo</span>
+                        <span className="text-xs font-medium text-neutral-600 text-center px-4 truncate w-full">
+                          {logoFile ? logoFile.name : "Click to upload logo"}
+                        </span>
                         <span className="text-[10px] text-neutral-400">JPG, PNG (Max 2MB)</span>
-                      </div>
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) setLogoFile(e.target.files[0]);
+                        }} />
+                      </label>
                     </div>
                     <div className="space-y-2">
                       <label className="flex items-center justify-between text-sm font-medium text-neutral-700">
                         <span>Shop Banner</span>
                         <span className="text-xs text-neutral-400 font-normal">Optional</span>
                       </label>
-                      <div className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 py-6 transition-all hover:border-brand-400 hover:bg-brand-50/50">
+                      <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50 py-6 transition-all hover:border-brand-400 hover:bg-brand-50/50">
                         <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
-                          <UploadCloud className="h-5 w-5 text-brand-500" />
+                          {bannerFile ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <UploadCloud className="h-5 w-5 text-brand-500" />}
                         </div>
-                        <span className="text-xs font-medium text-neutral-600">Upload banner image</span>
+                        <span className="text-xs font-medium text-neutral-600 text-center px-4 truncate w-full">
+                          {bannerFile ? bannerFile.name : "Upload banner image"}
+                        </span>
                         <span className="text-[10px] text-neutral-400">1200x400px recommended</span>
-                      </div>
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) setBannerFile(e.target.files[0]);
+                        }} />
+                      </label>
                     </div>
                   </div>
                 </div>

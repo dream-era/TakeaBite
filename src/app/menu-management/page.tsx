@@ -275,7 +275,13 @@ export default function MenuManagementPage() {
           <div className="flex items-center gap-3">
              <div style={{ display: 'flex', gap: 8 }}>
                <button
-                 onClick={() => setShowLibrary(true)}
+                 onClick={() => {
+                   if (!restaurantId) {
+                     toast.error("Please complete your workspace setup in Settings first.");
+                     return;
+                   }
+                   setShowLibrary(true);
+                 }}
                  style={{
                    padding: '10px 18px',
                    background: '#fff',
@@ -808,27 +814,23 @@ export default function MenuManagementPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Category</label>
-                    {menuCategories.length > 0 ? (
-                      <select 
-                        value={formData.category} 
-                        onChange={e => setFormData({...formData, category: e.target.value})} 
-                        className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white"
-                      >
-                        <option value="">Select Category</option>
-                        {menuCategories.map((c: any) => (
-                          <option key={c.id} value={c.name}>{c.name}</option>
-                        ))}
-                      </select>
-                    ) : (
+                    <div className="relative">
                       <input 
                         value={formData.category} 
                         onChange={e => setFormData({...formData, category: e.target.value})} 
                         type="text" 
+                        list="modal-category-options"
                         className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white" 
-                        placeholder="Create a category first..." 
-                        disabled
+                        placeholder="Type or select category..." 
                       />
-                    )}
+                      {menuCategories.length > 0 && (
+                        <datalist id="modal-category-options">
+                          {menuCategories.map((c: any) => (
+                            <option key={c.id} value={c.name} />
+                          ))}
+                        </datalist>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
