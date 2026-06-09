@@ -259,6 +259,11 @@ export async function addMenuItem(
       display_order: nextDisplayOrder,
     }
 
+    // Ensure category exists in menu_categories table to satisfy fk_category constraint
+    await supabase
+      .from('menu_categories')
+      .upsert({ restaurant_id: restaurantId, name: category }, { onConflict: 'restaurant_id,name', ignoreDuplicates: true })
+
     const { data: item, error: insertError } = await supabase
       .from('menu_items')
       .insert(insertRow)
@@ -325,7 +330,7 @@ export async function updateMenuItem(
     const { itemId, ...fields } = parsed.data
 
     // Verify ownership
-    const { owned } = await verifyItemOwnership(itemId, user.id)
+    const { owned, restaurantId } = await verifyItemOwnership(itemId, user.id)
     if (!owned) {
       return { success: false, error: 'Item not found or access denied' }
     }
@@ -346,6 +351,12 @@ export async function updateMenuItem(
 
     if (Object.keys(updates).length === 0) {
       return { success: false, error: 'No changes to save' }
+    }
+
+    if (updates.category && restaurantId) {
+      await supabase
+        .from('menu_categories')
+        .upsert({ restaurant_id: restaurantId, name: updates.category as string }, { onConflict: 'restaurant_id,name', ignoreDuplicates: true })
     }
 
     const { data: item, error: updateError } = await supabase
