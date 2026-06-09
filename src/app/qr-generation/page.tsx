@@ -216,7 +216,7 @@ export default function QRGenerationPage() {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h4 className="font-bold text-lg text-neutral-900">{table.table_name || `Table ${table.table_number}`}</h4>
-                        <p className="text-xs text-neutral-500 font-mono mt-1">/shop/table/{table.id}</p>
+                        <p className="text-xs text-neutral-500 font-mono mt-1">/shop/{restaurantId}/table/{table.id}</p>
                       </div>
                       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm rounded-lg p-1 border border-neutral-100 absolute top-4 right-4">
                         <button className="p-1.5 text-neutral-400 hover:text-brand-600 rounded-md hover:bg-neutral-50"><Edit className="h-3.5 w-3.5" /></button>
@@ -242,15 +242,59 @@ export default function QRGenerationPage() {
                     </div>
                     
                     <div className="grid grid-cols-3 gap-2">
-                      <button className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors">
+                      <button 
+                        onClick={() => {
+                          if (!table.qr_code_url) return;
+                          const link = document.createElement('a');
+                          link.href = table.qr_code_url;
+                          link.download = `Table_${table.table_number}_QR.png`;
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                        className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors"
+                      >
                         <Download className="h-4 w-4" />
                         <span className="text-[10px] font-medium">Save</span>
                       </button>
-                      <button className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors">
+                      <button 
+                        onClick={() => {
+                          if (!table.qr_code_url) return;
+                          const printWindow = window.open('');
+                          if (printWindow) {
+                            printWindow.document.write(`<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;margin:0;"><div style="text-align:center;font-family:sans-serif;"><img src="${table.qr_code_url}" style="max-width:100%;max-height:80vh;" /><h2>${table.table_name || `Table ${table.table_number}`}</h2></div></body></html>`);
+                            printWindow.document.close();
+                            printWindow.focus();
+                            setTimeout(() => { printWindow.print(); }, 500);
+                          }
+                        }}
+                        className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors"
+                      >
                         <Printer className="h-4 w-4" />
                         <span className="text-[10px] font-medium">Print</span>
                       </button>
-                      <button className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors">
+                      <button 
+                        onClick={async () => {
+                          try {
+                            const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+                            const orderUrl = `${appUrl}/shop/${restaurantId}/table/${table.id}`;
+                            if (navigator.share) {
+                              await navigator.share({
+                                title: `${table.table_name || `Table ${table.table_number}`} QR Code`,
+                                text: `Scan to order from ${table.table_name || `Table ${table.table_number}`}`,
+                                url: orderUrl
+                              });
+                            } else {
+                              await navigator.clipboard.writeText(orderUrl);
+                              toast.success("Link copied!");
+                            }
+                          } catch (e) {
+                            console.error(e);
+                          }
+                        }}
+                        className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors"
+                      >
                         <Share className="h-4 w-4" />
                         <span className="text-[10px] font-medium">Share</span>
                       </button>
