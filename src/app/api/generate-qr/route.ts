@@ -47,13 +47,11 @@ interface QRResult {
   type: 'universal' | 'table'
 }
 
-function buildTableOrderUrl(workspaceId: string, tableId: string): string {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://menuqr.in'
+function buildTableOrderUrl(appUrl: string, workspaceId: string, tableId: string): string {
   return `${appUrl}/shop/${workspaceId}/table/${tableId}`
 }
 
-function buildUniversalOrderUrl(workspaceId: string): string {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://menuqr.in'
+function buildUniversalOrderUrl(appUrl: string, workspaceId: string): string {
   return `${appUrl}/shop/${workspaceId}`
 }
 
@@ -91,6 +89,7 @@ async function uploadQRToStorage(
 }
 
 async function processTable(
+  appUrl: string,
   table: {
     id: string
     table_number: number
@@ -99,7 +98,7 @@ async function processTable(
   }
 ): Promise<QRResult> {
   const supabase = createAdminSupabase()
-  const orderUrl = buildTableOrderUrl(table.restaurant_id, table.id)
+  const orderUrl = buildTableOrderUrl(appUrl, table.restaurant_id, table.id)
   const { buffer, base64 } = await generateQRBuffer(orderUrl)
   const qrCodeUrl = await uploadQRToStorage(table.restaurant_id, table.id, buffer)
 
@@ -123,9 +122,9 @@ async function processTable(
   }
 }
 
-async function processUniversal(restaurantId: string): Promise<QRResult> {
+async function processUniversal(appUrl: string, restaurantId: string): Promise<QRResult> {
   const supabase = createAdminSupabase()
-  const orderUrl = buildUniversalOrderUrl(restaurantId)
+  const orderUrl = buildUniversalOrderUrl(appUrl, restaurantId)
   const { buffer, base64 } = await generateQRBuffer(orderUrl)
   const qrCodeUrl = await uploadQRToStorage(restaurantId, 'universal', buffer)
 
@@ -196,9 +195,12 @@ export async function POST(request: Request) {
   const results: QRResult[] = []
   const errors: { id: string; error: string }[] = []
 
+  const url = new URL(request.url)
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || `${url.protocol}//${url.host}`
+
   if (input.mode === 'universal') {
     try {
-      const res = await processUniversal(restaurant.id)
+      const res = await processUniversal(appUrl, restaurant.id)
       results.push(res)
     } catch (err) {
       console.error(`[MenuQR QR] Failed to process universal QR:`, err)
@@ -207,7 +209,7 @@ export async function POST(request: Request) {
   } else if (input.mode === 'bulk') {
     // Generate universal QR first
     try {
-      const res = await processUniversal(restaurant.id)
+      const res = await processUniversal(appUrl, restaurant.id)
       results.push(res)
     } catch (err) {
       console.error(`[MenuQR QR] Failed to process universal QR:`, err)
@@ -224,7 +226,7 @@ export async function POST(request: Request) {
     if (!tablesError && tables) {
       await Promise.allSettled(
         tables.map((table) =>
-          processTable(table).then(
+          processTable(appUrl, table).then(
             (result) => results.push(result),
             (err) => {
               console.error(`[MenuQR QR] Failed to process table ${table.id}:`, err)
@@ -247,7 +249,7 @@ export async function POST(request: Request) {
     }
 
     try {
-      const res = await processTable(table)
+      const res = await processTable(appUrl, table)
       results.push(res)
     } catch (err) {
       console.error(`[MenuQR QR] Failed to process table ${table.id}:`, err)

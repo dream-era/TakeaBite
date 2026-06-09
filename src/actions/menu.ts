@@ -776,6 +776,59 @@ export async function getMenuItems(restaurantId: string): Promise<
 }
 
 // ============================================================
+// ACTION 7.5 — getPublicMenuItems
+// Fetches items for the customer ordering interface.
+// Does NOT require authentication.
+// ============================================================
+export async function getPublicMenuItems(restaurantId: string): Promise<
+  ActionResult<{
+    items: MenuItem[]
+    menuCategories: MenuCategory[]
+  }>
+> {
+  try {
+    const supabase = createAdminSupabase()
+
+    // Fetch active categories
+    const { data: categoriesData } = await supabase
+      .from('menu_categories')
+      .select('*')
+      .eq('restaurant_id', restaurantId)
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
+
+    const menuCategories = (categoriesData ?? []) as MenuCategory[]
+    const activeCategoryNames = menuCategories.map(c => c.name)
+
+    // Fetch available items in active categories
+    const { data: itemsData } = await supabase
+      .from('menu_items')
+      .select('*')
+      .eq('restaurant_id', restaurantId)
+      .eq('is_available', true)
+      .order('display_order', { ascending: true })
+
+    // Filter items to only include those in active categories
+    const allItems = (itemsData ?? []) as MenuItem[]
+    const items = allItems.filter(item => activeCategoryNames.includes(item.category))
+
+    return {
+      success: true,
+      data: {
+        items,
+        menuCategories
+      },
+    }
+  } catch (err) {
+    console.error('[MenuQR] getPublicMenuItems error:', err)
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unexpected error',
+    }
+  }
+}
+
+// ============================================================
 // ACTION 8 — bulkUpdateCategory
 // Renames a category across all items that use it.
 // e.g. "Juices" → "Fresh Juices"

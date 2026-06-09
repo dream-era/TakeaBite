@@ -9,7 +9,7 @@ import { ProductCard } from "@/components/customer/ProductCard";
 import { StickyCartButton } from "@/components/customer/StickyCartButton";
 import { useCartStore } from "@/store/useCartStore";
 import { useQuery } from "@tanstack/react-query";
-import { getMenuItems } from "@/actions/menu";
+import { getPublicMenuItems } from "@/actions/menu";
 import { getRestaurantProfile } from "@/actions/restaurant";
 
 type ShopMenuItem = {
@@ -24,9 +24,10 @@ type ShopMenuItem = {
   description?: string | null;
 };
 
-export default function UniversalShopPage() {
+export default function DigitalMenuPage() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
+  const tableId = "";
   
   // Wait for client to hydrate to avoid mismatch with persisted Zustand store
   const [mounted, setMounted] = useState(false);
@@ -46,8 +47,8 @@ export default function UniversalShopPage() {
 
   // Fetch menu items
   const { data: menuData, isLoading: isMenuLoading } = useQuery({
-    queryKey: ['menu', workspaceId],
-    queryFn: () => getMenuItems(workspaceId).then(res => {
+    queryKey: ['menuPublic', workspaceId],
+    queryFn: () => getPublicMenuItems(workspaceId).then(res => {
       if (!res.success) throw new Error(res.error);
       return res.data;
     }),

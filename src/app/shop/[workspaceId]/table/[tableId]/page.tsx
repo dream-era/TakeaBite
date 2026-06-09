@@ -10,7 +10,7 @@ import { ProductCard } from "@/components/customer/ProductCard";
 import { StickyCartButton } from "@/components/customer/StickyCartButton";
 import { useCartStore } from "@/store/useCartStore";
 import { useQuery } from "@tanstack/react-query";
-import { getMenuItems } from "@/actions/menu";
+import { getPublicMenuItems } from "@/actions/menu";
 import { getRestaurantProfile } from "@/actions/restaurant";
 
 type ShopMenuItem = {
@@ -48,8 +48,8 @@ export default function DigitalMenuPage() {
 
   // Fetch menu items
   const { data: menuData, isLoading: isMenuLoading } = useQuery({
-    queryKey: ['menu', workspaceId],
-    queryFn: () => getMenuItems(workspaceId).then(res => {
+    queryKey: ['menuPublic', workspaceId],
+    queryFn: () => getPublicMenuItems(workspaceId).then(res => {
       if (!res.success) throw new Error(res.error);
       return res.data;
     }),
