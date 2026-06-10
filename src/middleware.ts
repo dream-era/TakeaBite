@@ -111,22 +111,34 @@ export async function middleware(request: NextRequest) {
     }
 
     if (pathname.startsWith('/dashboard') && user) {
-      const { data: workspace, error: workspaceError } = await supabase
-        .from('workspaces')
+      const { data: restaurant, error: restaurantError } = await supabase
+        .from('restaurants')
         .select('is_active')
         .eq('owner_id', user.id)
         .single()
         
-      if (workspaceError && workspaceError.code !== 'PGRST116') {
-        console.error('[Middleware] Workspace query error:', workspaceError)
+      if (restaurantError && restaurantError.code !== 'PGRST116') {
+        console.error('[Middleware] Restaurant query error:', restaurantError)
       }
 
-      if (!workspace && pathname !== '/onboarding') {
+      if (!restaurant && pathname !== '/onboarding') {
         return NextResponse.redirect(new URL('/onboarding', request.url))
       }
 
-      if (workspace && !workspace.is_active) {
+      if (restaurant && !restaurant.is_active) {
         return NextResponse.redirect(new URL('/suspended', request.url))
+      }
+    }
+
+    if (pathname.startsWith('/onboarding') && user) {
+      const { data: restaurant } = await supabase
+        .from('restaurants')
+        .select('id')
+        .eq('owner_id', user.id)
+        .single()
+
+      if (restaurant) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
       }
     }
 
