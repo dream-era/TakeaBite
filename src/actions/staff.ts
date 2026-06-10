@@ -802,19 +802,28 @@ export async function loginStaff(
       return { success: false, error: 'Invalid phone or PIN' }
     }
 
-    // Since phones should be unique per staff, we just take the first match that is active
-    const activeStaff = staffList.find(s => s.status === 'active')
+    // Since a phone number might exist in multiple restaurants, we check PIN against all active matches
+    const activeStaffList = staffList.filter(s => s.status === 'active')
     
-    if (!activeStaff) {
+    if (activeStaffList.length === 0) {
       return { success: false, error: 'Account is deactivated' }
     }
 
     // 2. Verify PIN
-    const isMatch = await bcrypt.compare(pin, activeStaff.pin_hash)
+    let matchedStaff = null;
+    for (const staff of activeStaffList) {
+      const isMatch = await bcrypt.compare(pin, staff.pin_hash)
+      if (isMatch) {
+        matchedStaff = staff;
+        break;
+      }
+    }
     
-    if (!isMatch) {
+    if (!matchedStaff) {
       return { success: false, error: 'Invalid phone or PIN' }
     }
+
+    const activeStaff = matchedStaff;
 
     // 3. Record last login
     recordLastLogin(activeStaff.id)
