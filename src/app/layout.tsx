@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Be_Vietnam_Pro, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "@/components/Providers";
 import "./globals.css";
@@ -7,6 +7,20 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const beVietnamPro = Be_Vietnam_Pro({
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  variable: "--font-be-vietnam-pro",
+  display: "swap",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ["600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
 
@@ -36,7 +50,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${beVietnamPro.variable} ${plusJakartaSans.variable}`}>
+      <head>
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || "https://fonts.googleapis.com"} />
+        <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || "https://fonts.googleapis.com"} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@400,0..1,0,24&display=swap" rel="stylesheet" />
+      </head>
       <body className="font-sans antialiased">
         <Providers>
           {children}

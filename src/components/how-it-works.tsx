@@ -20,9 +20,10 @@ export default function HowItWorks() {
             alt="Effortless Business Digitization — TakeaBite dashboard views across tablet, desktop, and mobile showing menu management, order tracking, and sales reporting"
             width={1920}
             height={960}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             className="h-auto w-full"
             priority
-            quality={90}
+            quality={80}
           />
         </div>
       </div>

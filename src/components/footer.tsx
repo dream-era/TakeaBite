@@ -96,7 +96,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 border-t border-neutral-200 pt-6 text-center">
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-neutral-600">
             © {new Date().getFullYear()} TakeaBite. All rights reserved.
           </p>
         </div>
