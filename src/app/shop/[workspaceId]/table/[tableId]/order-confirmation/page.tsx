@@ -58,7 +58,7 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Receipt Card */}
-        <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden max-w-md mx-auto">
+        <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden max-w-md mx-auto select-none pointer-events-none" style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}>
           {/* Order Meta */}
           <div className="p-6">
             <div className="flex justify-between items-start mb-element-gap-md">
@@ -102,11 +102,11 @@ export default function OrderConfirmationPage() {
                 <span className="font-body-md">Subtotal</span>
                 <span className="font-body-md">${totalAmount.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-secondary">
-                <span className="font-body-md">Tax (5%)</span>
+              <div className="flex justify-between text-secondary select-none">
+                <span className="font-body-md">Tax (2%)</span>
                 <span className="font-body-md">${tax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between items-center pt-2">
+              <div className="flex justify-between items-center pt-2 select-none">
                 <span className="font-headline-md text-on-surface">Grand Total</span>
                 <span className="font-headline-md text-primary">${grandTotal.toFixed(2)}</span>
               </div>
