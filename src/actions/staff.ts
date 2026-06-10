@@ -790,13 +790,13 @@ export async function loginStaff(
       return { success: false, error: 'Invalid email or PIN format' }
     }
 
-    const { phone, pin } = parsed.data
-
-    // 1. Find staff by phone
+    const cleanPhone = phone.trim().replace(/^\\+91|^0/, '').replace(/\\s+/g, '');
+    
+    // 1. Find staff by phone (handle optional +91 prefix)
     const { data: staffList, error } = await supabase
       .from('staff')
-      .select('id, name, role, pin_hash, restaurant_id, status')
-      .eq('phone', phone)
+      .select('id, name, role, pin_hash, restaurant_id, status, phone')
+      .ilike('phone', `%${cleanPhone}%`)
 
     if (error || !staffList || staffList.length === 0) {
       return { success: false, error: 'Invalid phone or PIN' }

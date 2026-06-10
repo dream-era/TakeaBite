@@ -158,7 +158,7 @@ export async function verifyTableOwnership(
     .from('tables')
     .select('id')
     .eq('id', tableId)
-    .eq('workspace_id', workspaceId)
+    .eq('restaurant_id', workspaceId)
     .single()
 
   return !!data
