@@ -616,6 +616,61 @@ export async function deactivateStaff(
 }
 
 // ============================================================
+// ACTION 5.5 — deleteStaff
+// Hard-deletes a staff member.
+// Will fail if there are foreign key constraints (e.g. order items).
+// ============================================================
+export async function deleteStaff(
+  staffId: string
+): Promise<ActionResult<{ deletedId: string }>> {
+  try {
+    const user = await getAuthenticatedOwner()
+    const supabase = createAdminSupabase()
+
+    const { owned } = await verifyStaffOwnership(staffId, user.id)
+    if (!owned) {
+      return { success: false, error: 'Staff member not found or access denied' }
+    }
+
+    const { data: staffMember } = await supabase
+      .from('staff')
+      .select('role')
+      .eq('id', staffId)
+      .single()
+
+    if (staffMember?.role === 'owner') {
+      return {
+        success: false,
+        error: 'Cannot delete owner role staff accounts',
+      }
+    }
+
+    const { error: deleteError } = await supabase
+      .from('staff')
+      .delete()
+      .eq('id', staffId)
+
+    if (deleteError) {
+      console.error('[MenuQR] deleteStaff error:', deleteError)
+      if (deleteError.code === '23503') { // Foreign key violation
+        return { success: false, error: 'Cannot delete staff who have processed orders. Please disable them instead.' }
+      }
+      return { success: false, error: 'Failed to delete staff. Please try again.' }
+    }
+
+    revalidatePath('/dashboard/staff')
+
+    return { success: true, data: { deletedId: staffId } }
+  } catch (err) {
+    console.error('[MenuQR] deleteStaff error:', err)
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unexpected error',
+    }
+  }
+}
+
+// ============================================================
 // ACTION 6 — reactivateStaff
 // Restores a previously deactivated staff member.
 // Checks plan limits before reactivating — if the owner

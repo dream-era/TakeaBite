@@ -7,7 +7,7 @@ import { Users, UserPlus, Settings, Shield, CheckCircle2, XCircle, MoreVertical,
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { useRestaurantId } from "@/store/authStore";
-import { getStaffList, addStaff, deactivateStaff, reactivateStaff, resetStaffPin } from "@/actions/staff";
+import { getStaffList, addStaff, deactivateStaff, reactivateStaff, resetStaffPin, deleteStaff, updateStaff } from "@/actions/staff";
 import { StaffRole } from "@/types/database";
 
 export default function StaffManagementPage() {
@@ -27,6 +27,8 @@ export default function StaffManagementPage() {
 
   const [activeTab, setActiveTab] = useState<'members' | 'roles'>('members');
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingStaffId, setEditingStaffId] = useState<string | null>(null);
   const [inviteSuccess, setInviteSuccess] = useState(false);
   const [generatedLink, setGeneratedLink] = useState("");
   const [generatedPin, setGeneratedPin] = useState("");
@@ -97,10 +99,51 @@ export default function StaffManagementPage() {
     onError: (err: Error) => toast.error(err.message)
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (staffId: string) => {
+      const res = await deleteStaff(staffId);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['staff', restaurantId] });
+      toast.success("Staff deleted successfully");
+      setActiveMenuId(null);
+    },
+    onError: (err: Error) => toast.error(err.message)
+  });
+
+  const editMutation = useMutation({
+    mutationFn: async (data: { staffId: string, name: string, phone: string, email?: string, role: StaffRole }) => {
+      const res = await updateStaff(data);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['staff', restaurantId] });
+      toast.success("Staff updated successfully");
+      setIsEditModalOpen(false);
+      setEditingStaffId(null);
+    },
+    onError: (err: Error) => toast.error(err.message)
+  });
+
   const handleInviteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inviteData.name || !inviteData.phone || !restaurantId) return;
     addMutation.mutate(inviteData);
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingStaffId || !inviteData.name || !inviteData.phone) return;
+    editMutation.mutate({
+      staffId: editingStaffId,
+      name: inviteData.name,
+      phone: inviteData.phone,
+      email: inviteData.email || undefined,
+      role: inviteData.role,
+    });
   };
 
   const handleWhatsAppShare = () => {
@@ -223,7 +266,20 @@ export default function StaffManagementPage() {
                             </button>
                             {activeMenuId === member.id && (
                               <div className="absolute right-6 top-10 w-48 bg-white border border-neutral-200 rounded-xl shadow-lg z-50 py-1 overflow-hidden" onClick={e => e.stopPropagation()}>
-                                <button className="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2">
+                                <button 
+                                  onClick={() => {
+                                    setInviteData({
+                                      name: member.name,
+                                      phone: member.phone || '',
+                                      email: member.email || '',
+                                      role: member.role as StaffRole
+                                    });
+                                    setEditingStaffId(member.id);
+                                    setIsEditModalOpen(true);
+                                    setActiveMenuId(null);
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                                >
                                   <Edit2 className="h-4 w-4" /> Edit Staff
                                 </button>
                                 <button 
@@ -238,7 +294,14 @@ export default function StaffManagementPage() {
                                 >
                                   <Ban className="h-4 w-4" /> {member.status === 'active' ? 'Disable Staff' : 'Enable Staff'}
                                 </button>
-                                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
+                                <button 
+                                  onClick={() => {
+                                    if (confirm("Are you sure you want to delete this staff member?")) {
+                                      deleteMutation.mutate(member.id);
+                                    }
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                >
                                   <Trash2 className="h-4 w-4" /> Delete Staff
                                 </button>
                               </div>
@@ -367,6 +430,48 @@ export default function StaffManagementPage() {
                 </form>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal Placeholder */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-neutral-100 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-neutral-900">Edit Staff Member</h3>
+              <button onClick={() => { setIsEditModalOpen(false); setEditingStaffId(null); }} className="text-neutral-400 hover:text-neutral-600">
+                <XCircle className="h-5 w-5" />
+              </button>
+            </div>
+            <form onSubmit={handleEditSubmit} className="p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Full Name</label>
+                  <input value={inviteData.name} onChange={e => setInviteData({...inviteData, name: e.target.value})} type="text" className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Phone Number</label>
+                  <input value={inviteData.phone} onChange={e => setInviteData({...inviteData, phone: e.target.value})} type="tel" className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Email Address (Optional)</label>
+                  <input value={inviteData.email} onChange={e => setInviteData({...inviteData, email: e.target.value})} type="email" className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Role</label>
+                  <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as StaffRole})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
+                    <option value="cook">Cook</option>
+                    <option value="juice_maker">Juice Maker</option>
+                    <option value="manager">Manager</option>
+                    <option value="cashier">Cashier</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" disabled={editMutation.isPending} className="w-full mt-6 flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-xl transition-colors disabled:opacity-50">
+                <Edit2 className="h-4 w-4" /> {editMutation.isPending ? "Saving..." : "Save Changes"}
+              </button>
+            </form>
           </div>
         </div>
       )}
