@@ -58,6 +58,7 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { createServerSupabase, createAdminSupabase } from '@/lib/supabase'
 import type { Staff, StaffInsert, StaffRole, KitchenSession } from '@/types/database'
+import { getLimit } from '@/config/plans'
 
 // ─────────────────────────────────────────────
 // BCRYPT SALT ROUNDS
@@ -271,7 +272,7 @@ export async function addStaff(
     // Verify restaurant ownership
     const { data: restaurant } = await supabase
       .from('restaurants')
-      .select('id, plan')
+      .select('id, current_plan, sub_status, trial_end_date')
       .eq('id', restaurantId)
       .eq('owner_id', user.id)
       .single()
@@ -281,26 +282,20 @@ export async function addStaff(
     }
 
     // ── PLAN GATE: staff count limit ──────────────
-    // Basic plan: max 3 staff members
-    // Pro plan: max 15 staff members
-    // Enterprise: unlimited
-    const staffLimits: Record<string, number> = {
-      basic: 3,
-      pro: 15,
-      enterprise: 99999,
-    }
-    const maxStaff = staffLimits[restaurant.plan] ?? 3
+    const maxStaff = getLimit(restaurant, 'staffAccounts')
 
-    const { count: currentCount } = await supabase
-      .from('staff')
-      .select('*', { count: 'exact', head: true })
-      .eq('restaurant_id', restaurantId)
-      .eq('is_active', true)
+    if (maxStaff !== Infinity) {
+      const { count: currentCount } = await supabase
+        .from('staff')
+        .select('*', { count: 'exact', head: true })
+        .eq('restaurant_id', restaurantId)
+        .eq('is_active', true)
 
-    if ((currentCount ?? 0) >= maxStaff) {
-      return {
-        success: false,
-        error: `${restaurant.plan.charAt(0).toUpperCase() + restaurant.plan.slice(1)} plan allows max ${maxStaff} staff members. Upgrade to add more.`,
+      if ((currentCount ?? 0) >= maxStaff) {
+        return {
+          success: false,
+          error: `You have reached your staff account limit for your current plan.`,
+        }
       }
     }
 
@@ -703,27 +698,24 @@ export async function reactivateStaff(
     // Check plan limit before reactivating
     const { data: restaurant } = await supabase
       .from('restaurants')
-      .select('plan')
+      .select('current_plan, sub_status, trial_end_date')
       .eq('id', restaurantId)
       .single()
 
-    const staffLimits: Record<string, number> = {
-      basic: 3,
-      pro: 15,
-      enterprise: 99999,
-    }
-    const maxStaff = staffLimits[restaurant?.plan ?? 'basic']
+    const maxStaff = restaurant ? getLimit(restaurant, 'staffAccounts') : 0
 
-    const { count: activeCount } = await supabase
-      .from('staff')
-      .select('*', { count: 'exact', head: true })
-      .eq('restaurant_id', restaurantId)
-      .eq('is_active', true)
+    if (maxStaff !== Infinity) {
+      const { count: activeCount } = await supabase
+        .from('staff')
+        .select('*', { count: 'exact', head: true })
+        .eq('restaurant_id', restaurantId)
+        .eq('is_active', true)
 
-    if ((activeCount ?? 0) >= maxStaff) {
-      return {
-        success: false,
-        error: `Cannot reactivate — at staff limit for ${restaurant?.plan} plan. Upgrade or deactivate another staff member first.`,
+      if ((activeCount ?? 0) >= maxStaff) {
+        return {
+          success: false,
+          error: `You have reached your staff account limit for your current plan.`,
+        }
       }
     }
 

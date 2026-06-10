@@ -1,4 +1,6 @@
 export type RestaurantPlan = 'basic' | 'pro' | 'enterprise'
+export type SubscriptionPlan = 'starter' | 'growth' | 'pro'
+export type SubscriptionStatus = 'trial' | 'active' | 'expired' | 'cancelled'
 export type RestaurantStatus = 'active' | 'inactive' | 'suspended'
 export type OrderStatus =
   | 'pending' | 'confirmed' | 'preparing'
@@ -39,6 +41,12 @@ export interface Restaurant {
   payment_enabled: boolean
   commission_percent: number
   plan: RestaurantPlan
+  current_plan: SubscriptionPlan
+  sub_status: SubscriptionStatus
+  trial_start_date: string | null
+  trial_end_date: string | null
+  billing_start_date: string | null
+  billing_end_date: string | null
   onboarding_complete: boolean
   created_at: string
   updated_at: string

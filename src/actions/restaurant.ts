@@ -55,10 +55,8 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import Razorpay from 'razorpay'
 import { createServerSupabase, createAdminSupabase } from '@/lib/supabase'
-import type {
-  Restaurant,
-  BusinessType,
-} from '@/types/database'
+import type { Restaurant, BusinessType } from '@/types/database'
+import { getLimit, TRIAL_DURATION_DAYS } from '@/config/plans'
 
 // ─────────────────────────────────────────────
 // RAZORPAY INSTANCE
@@ -182,19 +180,23 @@ export async function createRestaurant(
     const { name, type, phone, address, city, description } =
       parsed.data
 
-    // Check owner doesn't already have a restaurant
-    const { data: existing } = await supabase
+    // Check owner's existing workspaces to enforce limits
+    const { data: existingWorkspaces } = await supabase
       .from('restaurants')
-      .select('*')
+      .select('current_plan, sub_status, trial_end_date')
       .eq('owner_id', user.id)
-      .maybeSingle()
 
-    if (existing) {
-      // If they already have a restaurant, just return it so they can proceed
-      // Stringify and parse to ensure Next.js Server Action serialization works properly
-      return {
-        success: true,
-        data: JSON.parse(JSON.stringify(existing)) as Restaurant,
+    if (existingWorkspaces && existingWorkspaces.length > 0) {
+      // Find the highest workspace limit among the owner's restaurants
+      const maxWorkspaces = Math.max(
+        ...existingWorkspaces.map(ws => getLimit(ws, 'workspaces'))
+      );
+
+      if (existingWorkspaces.length >= maxWorkspaces) {
+        return {
+          success: false,
+          error: 'You have reached your workspace limit for your current plan.',
+        }
       }
     }
 
@@ -215,7 +217,10 @@ export async function createRestaurant(
         description: description ?? null,
         is_active: true,
         status: 'active',
-        plan: 'basic',
+        current_plan: 'growth',
+        sub_status: 'trial',
+        trial_start_date: new Date().toISOString(),
+        trial_end_date: new Date(Date.now() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000).toISOString(),
         payment_enabled: false,
         commission_percent: 3.0,
         onboarding_complete: false,

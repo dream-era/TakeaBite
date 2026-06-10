@@ -58,10 +58,12 @@ import { create } from 'zustand'
 import { createBrowserSupabase } from '@/lib/supabase/client'
 import type {
   Restaurant,
-  RestaurantPlan,
+  SubscriptionPlan,
+  SubscriptionStatus,
   RestaurantStatus,
 } from '@/types/database'
 import type { User } from '@supabase/supabase-js'
+import { isTrialExpired, getTrialDaysRemaining, getLimit, hasFeatureAccess } from '@/config/plans'
 
 // ─────────────────────────────────────────────
 // OWNER PROFILE
@@ -84,12 +86,15 @@ export interface OwnerProfile {
 // dashboard components.
 // ─────────────────────────────────────────────
 export interface OwnerPermissions {
-  canUseOnlinePayments: boolean  // payment_enabled = true AND razorpay_account_id set
-  isOnboardingComplete: boolean  // onboarding_complete = true
-  isPro: boolean                 // plan = 'pro' OR 'enterprise'
-  isEnterprise: boolean          // plan = 'enterprise'
-  isSuspended: boolean           // status = 'suspended'
-  canAddMoreItems: boolean       // basic: max 50 items, pro+: unlimited
+  canUseOnlinePayments: boolean
+  isOnboardingComplete: boolean
+  isSuspended: boolean
+  canAddMoreItems: boolean
+  isTrialExpired: boolean
+  trialDaysRemaining: number
+  hasLiveKitchen: boolean
+  hasAdvancedAnalytics: boolean
+  hasCustomDomain: boolean
 }
 
 // ─────────────────────────────────────────────
@@ -148,13 +153,7 @@ function computePermissions(
   restaurant: Restaurant,
   menuItemCount?: number
 ): OwnerPermissions {
-  const isPro =
-    restaurant.plan === 'pro' || restaurant.plan === 'enterprise'
-  const isEnterprise = restaurant.plan === 'enterprise'
-
-  // Basic plan: max 50 menu items
-  // Pro/Enterprise: unlimited (we use 999999 as practical infinity)
-  const maxItems = isPro ? 999999 : 50
+  const maxItems = getLimit(restaurant, 'menuItems')
   const canAddMoreItems = (menuItemCount ?? 0) < maxItems
 
   return {
@@ -162,10 +161,13 @@ function computePermissions(
       restaurant.payment_enabled &&
       !!restaurant.razorpay_account_id,
     isOnboardingComplete: restaurant.onboarding_complete,
-    isPro,
-    isEnterprise,
     isSuspended: restaurant.status === 'suspended',
     canAddMoreItems,
+    isTrialExpired: isTrialExpired(restaurant),
+    trialDaysRemaining: getTrialDaysRemaining(restaurant),
+    hasLiveKitchen: hasFeatureAccess(restaurant, 'hasLiveKitchen'),
+    hasAdvancedAnalytics: hasFeatureAccess(restaurant, 'hasAdvancedAnalytics'),
+    hasCustomDomain: hasFeatureAccess(restaurant, 'hasCustomDomain'),
   }
 }
 
@@ -374,12 +376,12 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
 import { useShallow } from 'zustand/react/shallow'
 
-// Dashboard sidebar — name, logo, plan badge
 export const useRestaurantProfile = () =>
   useAuthStore(useShallow((s) => ({
     name: s.restaurant?.name ?? '',
     logoUrl: s.restaurant?.logo_url ?? null,
-    plan: s.restaurant?.plan as RestaurantPlan | undefined,
+    plan: s.restaurant?.current_plan as SubscriptionPlan | undefined,
+    subStatus: s.restaurant?.sub_status as SubscriptionStatus | undefined,
     slug: s.restaurant?.slug ?? '',
     status: s.restaurant?.status as RestaurantStatus | undefined,
   })))
@@ -408,12 +410,14 @@ export const useAuthReady = () =>
     error: s.initError,
   })))
 
-// Plan-specific gates — used by feature upgrade prompts
 export const usePlan = () =>
   useAuthStore(useShallow((s) => ({
-    plan: s.restaurant?.plan as RestaurantPlan | undefined,
-    isPro: s.permissions?.isPro ?? false,
-    isEnterprise: s.permissions?.isEnterprise ?? false,
+    plan: s.restaurant?.current_plan as SubscriptionPlan | undefined,
+    subStatus: s.restaurant?.sub_status as SubscriptionStatus | undefined,
+    isTrialExpired: s.permissions?.isTrialExpired ?? false,
+    trialDaysRemaining: s.permissions?.trialDaysRemaining ?? 0,
+    hasLiveKitchen: s.permissions?.hasLiveKitchen ?? false,
+    hasAdvancedAnalytics: s.permissions?.hasAdvancedAnalytics ?? false,
     canAddMoreItems: s.permissions?.canAddMoreItems ?? true,
     canUseOnlinePayments: s.permissions?.canUseOnlinePayments ?? false,
   })))

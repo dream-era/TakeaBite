@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { OwnerLayout } from "@/components/layout/OwnerLayout";
 import { CheckCircle2, Star, Zap, Building } from "lucide-react";
+import { usePlan } from "@/store/authStore";
+import { PLAN_PRICING } from "@/config/plans";
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -10,8 +12,9 @@ export default function PricingPage() {
   const plans = [
     {
       name: "Starter",
+      id: "starter",
       icon: Star,
-      price: billingCycle === 'monthly' ? "299" : "2,990",
+      price: billingCycle === 'monthly' ? PLAN_PRICING.starter.price.toString() : (PLAN_PRICING.starter.price * 10).toString(),
       description: "Perfect for small food stalls and cafes starting their digital journey.",
       features: [
         "1 Workspace",
@@ -21,14 +24,14 @@ export default function PricingPage() {
         "Email Support"
       ],
       current: false,
-      buttonText: "Start Free Trial"
+      buttonText: "Subscribe to Starter"
     },
     {
       name: "Growth",
+      id: "growth",
       icon: Zap,
-      price: "0",
-      originalPrice: billingCycle === 'monthly' ? "999" : "9,990",
-      betaFree: true,
+      price: billingCycle === 'monthly' ? PLAN_PRICING.growth.price.toString() : (PLAN_PRICING.growth.price * 10).toString(),
+      betaFree: false,
       description: "Ideal for growing restaurants with multiple staff members.",
       features: [
         "Up to 3 Workspaces",
@@ -37,14 +40,15 @@ export default function PricingPage() {
         "Up to 12 Staff Accounts",
         "Priority Support"
       ],
-      current: true,
-      buttonText: "Current Plan",
+      current: false,
+      buttonText: "Subscribe to Growth",
       popular: true
     },
     {
       name: "Pro",
+      id: "pro",
       icon: Building,
-      price: billingCycle === 'monthly' ? "2,999" : "29,990",
+      price: billingCycle === 'monthly' ? PLAN_PRICING.pro.price.toString() : (PLAN_PRICING.pro.price * 10).toString(),
       description: "For established businesses and multi-chain restaurants.",
       features: [
         "Unlimited Workspaces",
@@ -58,13 +62,26 @@ export default function PricingPage() {
     }
   ];
 
+  const { plan: currentPlan, isTrialExpired, subStatus } = usePlan();
+
   return (
     <OwnerLayout>
       <div className="mx-auto w-full max-w-[1200px] px-8 py-12 pb-24 text-center">
-        <h2 className="text-4xl font-bold text-neutral-900 tracking-tight mb-4">Simple, transparent pricing</h2>
-        <p className="text-neutral-500 max-w-2xl mx-auto mb-10">
-          Choose the plan that best fits your business needs. Upgrade or downgrade at any time.
-        </p>
+        {isTrialExpired && subStatus === 'trial' ? (
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold text-red-600 tracking-tight mb-4">Your 14-Day Growth Trial Has Ended</h2>
+            <p className="text-neutral-500 max-w-2xl mx-auto text-lg font-medium">
+              Choose a plan to continue using TakeaBite.
+            </p>
+          </div>
+        ) : (
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold text-neutral-900 tracking-tight mb-4">Simple, transparent pricing</h2>
+            <p className="text-neutral-500 max-w-2xl mx-auto">
+              Choose the plan that best fits your business needs. Upgrade or downgrade at any time.
+            </p>
+          </div>
+        )}
 
         {/* Billing Toggle */}
         <div className="flex items-center justify-center mb-12">
@@ -133,14 +150,14 @@ export default function PricingPage() {
               
               <button 
                 className={`w-full py-3.5 rounded-xl font-bold text-sm transition-colors ${
-                  plan.current 
+                  plan.id === currentPlan && !isTrialExpired
                     ? 'bg-neutral-100 text-neutral-600 border border-neutral-200 cursor-default' 
                     : plan.popular
                       ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-sm'
                       : 'bg-white border-2 border-neutral-200 hover:border-brand-600 text-neutral-700 hover:text-brand-600'
                 }`}
               >
-                {plan.buttonText}
+                {plan.id === currentPlan && !isTrialExpired ? 'Current Plan' : plan.buttonText}
               </button>
             </div>
           ))}

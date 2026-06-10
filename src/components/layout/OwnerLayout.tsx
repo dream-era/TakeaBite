@@ -22,7 +22,7 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
   const { initialize } = useAuthStore();
   const profile = useRestaurantProfile();
   const owner = useOwnerProfile();
-  const { isPro, isEnterprise } = usePlan();
+  const { plan, subStatus, isTrialExpired, trialDaysRemaining } = usePlan();
 
   useEffect(() => {
     initialize();
@@ -107,11 +107,13 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
               <div className="mb-1 flex items-center gap-2 text-yellow-300">
                 <Flame className="h-4 w-4" />
               </div>
-              <h4 className="mb-2 font-bold text-white leading-tight text-sm">
-                {isEnterprise ? "Enterprise Plan Active" : isPro ? "Pro Plan Active" : "Basic Plan Active"}
+              <h4 className="mb-2 font-bold text-white leading-tight text-sm capitalize">
+                {plan} Plan Active
               </h4>
               <p className="mb-4 text-xs text-brand-100 leading-tight">
-                {isPro || isEnterprise ? "You have full access to all premium features." : "Upgrade to Pro for more features."}
+                {subStatus === 'trial' 
+                  ? `Growth Trial - ${trialDaysRemaining} Days Remaining` 
+                  : (plan === 'pro' || plan === 'growth' ? "You have access to premium features." : "Upgrade to Growth for more features.")}
               </p>
               <Link href="/pricing" className="flex w-full justify-center items-center rounded-full bg-white/20 hover:bg-white/30 py-2.5 text-xs font-bold text-white shadow-sm transition-all">
                 Manage Billing
@@ -125,6 +127,16 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
       <main className="flex flex-1 flex-col overflow-y-auto relative">
         {/* Soft Background Gradient at the top */}
         <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-[#FDF0E1] to-[#F5F5F1] -z-10"></div>
+
+        {/* Global Trial Expiration Banner */}
+        {isTrialExpired && (
+          <div className="bg-red-500 text-white text-center py-2 px-4 text-sm font-medium z-30 sticky top-0">
+            Your free Growth trial has ended. Please subscribe to continue using TakeaBite.
+            <Link href="/pricing" className="ml-3 underline font-bold hover:text-red-100">
+              Upgrade Now
+            </Link>
+          </div>
+        )}
 
         {/* Top Header */}
         <header className="sticky top-0 z-20 flex h-20 shrink-0 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-4 md:px-8 backdrop-blur-md shadow-sm">

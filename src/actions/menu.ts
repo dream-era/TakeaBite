@@ -58,12 +58,12 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { createServerSupabase, createAdminSupabase } from '@/lib/supabase'
 import type { MenuItem, MenuItemInsert, Station, MenuCategory } from '@/types/database'
+import { getLimit } from '@/config/plans'
 
 // ─────────────────────────────────────────────
 // CONSTANTS
 // ─────────────────────────────────────────────
 const ASSETS_BUCKET = 'restaurant-assets'
-const BASIC_PLAN_MAX_ITEMS = 50
 
 // ─────────────────────────────────────────────
 // ACTION RESULT — mirrors restaurant.ts pattern
@@ -125,7 +125,7 @@ async function verifyItemOwnership(
 // ─────────────────────────────────────────────
 // HELPER — Count current items for plan gate
 // Returns how many items the restaurant currently has.
-// Compared against BASIC_PLAN_MAX_ITEMS in addMenuItem.
+// Compared against PLAN_LIMITS in addMenuItem.
 // ─────────────────────────────────────────────
 async function countMenuItems(restaurantId: string): Promise<number> {
   const supabase = createAdminSupabase()
@@ -207,7 +207,7 @@ export async function addMenuItem(
     // Verify this restaurant belongs to the owner
     const { data: restaurant } = await supabase
       .from('restaurants')
-      .select('id, plan, owner_id')
+      .select('id, current_plan, sub_status, trial_end_date, owner_id')
       .eq('id', restaurantId)
       .eq('owner_id', user.id)
       .single()
@@ -217,17 +217,15 @@ export async function addMenuItem(
     }
 
     // ── PLAN GATE ──────────────────────────────
-    // Basic plan: max 50 items. Pro+: unlimited.
-    // Server-side guard — even if frontend bypasses the UI lock.
-    const isPro =
-      restaurant.plan === 'pro' || restaurant.plan === 'enterprise'
+    // Check against configured limits based on plan
+    const maxItems = getLimit(restaurant, 'menuItems');
 
-    if (!isPro) {
+    if (maxItems !== Infinity) {
       const currentCount = await countMenuItems(restaurantId)
-      if (currentCount >= BASIC_PLAN_MAX_ITEMS) {
+      if (currentCount >= maxItems) {
         return {
           success: false,
-          error: `Basic plan limit reached (${BASIC_PLAN_MAX_ITEMS} items). Upgrade to Pro for unlimited items.`,
+          error: `You have reached your menu item limit for your current plan.`,
         }
       }
     }
