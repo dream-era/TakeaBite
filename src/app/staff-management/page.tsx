@@ -33,6 +33,7 @@ export default function StaffManagementPage() {
   const [inviteSuccess, setInviteSuccess] = useState(false);
   const [generatedLink, setGeneratedLink] = useState("");
   const [generatedPin, setGeneratedPin] = useState("");
+  const [generatedPhone, setGeneratedPhone] = useState("");
   
   const [inviteData, setInviteData] = useState({
     name: '',
@@ -61,6 +62,7 @@ export default function StaffManagementPage() {
       
       setGeneratedPin(data.plainPin);
       setGeneratedLink(whatsappMsg);
+      setGeneratedPhone(variables.phone);
       setInviteSuccess(true);
       setInviteData({ name: '', phone: '', email: '', role: 'cook' });
       queryClient.invalidateQueries({ queryKey: ['staff', restaurantId] });
@@ -148,7 +150,8 @@ export default function StaffManagementPage() {
   };
 
   const handleWhatsAppShare = () => {
-    const url = `https://wa.me/?text=${encodeURIComponent(generatedLink)}`;
+    const cleanPhone = generatedPhone.replace(/\D/g, '');
+    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(generatedLink)}`;
     window.open(url, '_blank');
   };
 
