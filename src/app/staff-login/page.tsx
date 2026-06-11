@@ -25,7 +25,7 @@ export default function StaffLoginPage() {
     if (currentSession && currentSession.expiry > Date.now()) {
       if (currentSession.role === 'cook' || currentSession.role === 'chef') router.push('/cook-dashboard');
       else if (currentSession.role === 'juice_maker' || currentSession.role === 'juice') router.push('/juice-dashboard');
-      else if (currentSession.role === 'cashier') router.push('/server-dashboard');
+      else if (currentSession.role === 'cashier') router.push('/cashier-dashboard');
       else if (currentSession.role === 'server') router.push('/server-dashboard');
       else if (currentSession.role === 'manager') router.push('/manager-dashboard');
       else router.push('/staff');

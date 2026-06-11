@@ -72,7 +72,7 @@ export function StaffLayout({ children, allowedRoles, themeColor = "red" }: Staf
               else if (currentSession.role === 'juice_maker' || currentSession.role === 'juice') router.push('/juice-dashboard');
               else if (currentSession.role === 'server') router.push('/server-dashboard');
               else if (currentSession.role === 'manager') router.push('/manager-dashboard');
-              else if (currentSession.role === 'cashier') router.push('/server-dashboard');
+              else if (currentSession.role === 'cashier') router.push('/cashier-dashboard');
             }}
             className="w-full bg-neutral-900 text-white font-bold py-3 px-8 rounded-xl"
           >
