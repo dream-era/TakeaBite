@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Mail, Lock, Eye, EyeOff, Utensils } from "lucide-react";
 import { toast } from "react-hot-toast";
 import ForgotPasswordModal from "@/components/auth/forgot-password-modal";
+import { getAppUrl } from "@/lib/url-config";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,7 +59,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/api/auth/callback`,
+          redirectTo: `${getAppUrl()}/api/auth/callback`,
         },
       });
 

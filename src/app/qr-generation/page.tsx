@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { useRestaurantId } from "@/store/authStore";
 import { getTableList, addTable, deleteTable, deactivateTable } from "@/actions/tables";
 import { getRestaurantProfile } from "@/actions/restaurant";
+import { getAppUrl } from "@/lib/url-config";
 
 export default function QRGenerationPage() {
   const restaurantId = useRestaurantId();
@@ -168,7 +169,7 @@ export default function QRGenerationPage() {
                 </button>
                 <button 
                   onClick={() => {
-                    const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+                    const appUrl = getAppUrl();
                     navigator.clipboard.writeText(`${appUrl}/shop/${restaurantId}`);
                     toast.success("Link copied!");
                   }}
@@ -277,7 +278,7 @@ export default function QRGenerationPage() {
                       <button 
                         onClick={async () => {
                           try {
-                            const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+                            const appUrl = getAppUrl();
                             const orderUrl = `${appUrl}/shop/${restaurantId}/table/${table.id}`;
                             if (navigator.share) {
                               await navigator.share({

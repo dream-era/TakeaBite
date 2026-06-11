@@ -1,7 +1,9 @@
+import { getAppUrl } from "./url-config";
+
 export const SEO_CONFIG = {
   defaultTitle: "TakeaBite — Transform Your Business Into a Smart Digital Experience",
   defaultDescription: "TakeaBite is the all-in-one premium SaaS platform to digitize operations and streamline workflows for modern businesses. QR ordering, real-time workflow, staff coordination, and instant payments.",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://takea-bite.vercel.app",
+  siteUrl: getAppUrl(),
   twitterHandle: "@TakeaBiteHQ", // Replace with your actual handle
   openGraph: {
     type: "website",

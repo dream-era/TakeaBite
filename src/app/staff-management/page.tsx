@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { SEO_CONFIG } from "@/lib/seo-config";
+import { getAppUrl } from "@/lib/url-config";
 import { OwnerLayout } from "@/components/layout/OwnerLayout";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Users, UserPlus, Settings, Shield, CheckCircle2, XCircle, MoreVertical, Copy, KeyRound, Ban, Trash2, Edit2 } from "lucide-react";
@@ -57,8 +58,8 @@ export default function StaffManagementPage() {
       return res.data;
     },
     onSuccess: (data, variables) => {
-      const loginUrl = "https://takea-bite.vercel.app/staff-login";
-      const whatsappMsg = `Welcome to TakeaBite\r\nYou have been added to the team.\r\n\r\nRole: ${variables.role}\r\nLogin: ${loginUrl}\r\nPhone: ${variables.phone}\r\nPIN: ${data.plainPin}`;
+      const loginUrl = `${getAppUrl()}/staff-login`;
+      const whatsappMsg = `Welcome to TakeaBite\r\n\r\nYou have been added to the team.\r\n\r\nRole: ${variables.role}\r\nLogin: ${loginUrl}\r\nPhone: ${variables.phone}\r\nPIN: ${data.plainPin}`;
       
       setGeneratedPin(data.plainPin);
       setGeneratedLink(whatsappMsg);

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import QRCode from 'qrcode'
 import { z } from 'zod'
 import { createServerSupabase, createAdminSupabase } from '@/lib/supabase'
+import { getAppUrl } from '@/lib/url-config'
 
 const QR_BUCKET = 'qr-codes'
 
@@ -196,7 +197,7 @@ export async function POST(request: Request) {
   const errors: { id: string; error: string }[] = []
 
   const url = new URL(request.url)
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || `${url.protocol}//${url.host}`
+  const appUrl = getAppUrl()
 
   if (input.mode === 'universal') {
     try {

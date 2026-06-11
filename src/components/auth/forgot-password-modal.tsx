@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Mail, X } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { getAppUrl } from "@/lib/url-config";
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -35,7 +36,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
       if (!supabase) throw new Error("Supabase client not initialized");
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${getAppUrl()}/reset-password`,
       });
 
       if (error) {
