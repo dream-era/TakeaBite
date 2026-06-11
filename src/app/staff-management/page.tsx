@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { SEO_CONFIG } from "@/lib/seo-config";
 import { OwnerLayout } from "@/components/layout/OwnerLayout";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Users, UserPlus, Settings, Shield, CheckCircle2, XCircle, MoreVertical, Copy, KeyRound, Ban, Trash2, Edit2 } from "lucide-react";
@@ -55,7 +56,7 @@ export default function StaffManagementPage() {
       return res.data;
     },
     onSuccess: (data, variables) => {
-      const loginUrl = `${window.location.origin}/staff-login`;
+      const loginUrl = `${SEO_CONFIG.siteUrl}/staff-login`;
       const whatsappMsg = `Welcome to TakeaBite\nYou have been added to the team.\n\nRole: ${variables.role}\nLogin: ${loginUrl}\nPhone: ${variables.phone}\nPIN: ${data.plainPin}`;
       
       setGeneratedPin(data.plainPin);
