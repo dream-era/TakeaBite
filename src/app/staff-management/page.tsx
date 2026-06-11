@@ -54,9 +54,9 @@ export default function StaffManagementPage() {
       if (!res.success) throw new Error(res.error);
       return res.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       const loginUrl = `${window.location.origin}/staff-login`;
-      const whatsappMsg = `Welcome to TakeaBite\nYou have been added to the team.\n\nRole: ${inviteData.role}\nLogin: ${loginUrl}\nPhone: ${inviteData.phone}\nPIN: ${data.plainPin}`;
+      const whatsappMsg = `Welcome to TakeaBite\nYou have been added to the team.\n\nRole: ${variables.role}\nLogin: ${loginUrl}\nPhone: ${variables.phone}\nPIN: ${data.plainPin}`;
       
       setGeneratedPin(data.plainPin);
       setGeneratedLink(whatsappMsg);
