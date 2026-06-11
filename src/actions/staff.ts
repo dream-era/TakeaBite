@@ -881,7 +881,8 @@ export async function loginStaff(
     if (activeStaff.role === 'cook' || activeStaff.role === 'chef') redirectTo = '/cook-dashboard'
     if (activeStaff.role === 'juice_maker' || activeStaff.role === 'juice') redirectTo = '/juice-dashboard'
     if (activeStaff.role === 'manager') redirectTo = '/manager-dashboard'
-    if (activeStaff.role === 'cashier' || activeStaff.role === 'server') redirectTo = '/server-dashboard'
+    if (activeStaff.role === 'cashier') redirectTo = '/cashier-dashboard'
+    if (activeStaff.role === 'server') redirectTo = '/server-dashboard'
     
     const session: KitchenSession = {
       staffId: activeStaff.id,
