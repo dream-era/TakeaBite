@@ -24,5 +24,5 @@ export const SEO_CONFIG = {
 export const ENV_VARS = {
   gaId: process.env.NEXT_PUBLIC_GA_ID, // Google Analytics Measurement ID (G-XXXXXXXXXX)
   gtmId: process.env.NEXT_PUBLIC_GTM_ID, // Google Tag Manager ID (GTM-XXXXXXX)
-  googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION, // GSC verification code
+  googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "clGF_WNldb9D_QpRdj4w6M5Cyq5TrHZqpfjxFf7JGSk", // GSC verification code
 };
