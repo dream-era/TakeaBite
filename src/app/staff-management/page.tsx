@@ -56,8 +56,8 @@ export default function StaffManagementPage() {
       return res.data;
     },
     onSuccess: (data, variables) => {
-      const loginUrl = `${SEO_CONFIG.siteUrl}/staff-login`;
-      const whatsappMsg = `Welcome to TakeaBite\nYou have been added to the team.\n\nRole: ${variables.role}\nLogin: ${loginUrl}\nPhone: ${variables.phone}\nPIN: ${data.plainPin}`;
+      const loginUrl = "https://takea-bite.vercel.app/staff-login";
+      const whatsappMsg = `Welcome to TakeaBite\r\nYou have been added to the team.\r\n\r\nRole: ${variables.role}\r\nLogin: ${loginUrl}\r\nPhone: ${variables.phone}\r\nPIN: ${data.plainPin}`;
       
       setGeneratedPin(data.plainPin);
       setGeneratedLink(whatsappMsg);
