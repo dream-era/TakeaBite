@@ -151,7 +151,12 @@ export default function StaffManagementPage() {
 
   const handleWhatsAppShare = () => {
     const cleanPhone = generatedPhone.replace(/\D/g, '');
-    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(generatedLink)}`;
+    const text = encodeURIComponent(generatedLink);
+    // Use the native WhatsApp deep link to bypass generic share sheet text stripping
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const url = isMobile 
+      ? `whatsapp://send?phone=${cleanPhone}&text=${text}`
+      : `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${text}`;
     window.open(url, '_blank');
   };
 
