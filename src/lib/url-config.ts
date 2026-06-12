@@ -12,5 +12,5 @@ export function getAppUrl(): string {
   }
   
   // Hard fallback to the production URL as requested by the user
-  return "https://takea-bite-zwfs.vercel.app";
+  return "https://takea-bite.vercel.app";
 }
