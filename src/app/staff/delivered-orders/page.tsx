@@ -51,7 +51,7 @@ export default function DeliveredOrdersPage() {
   if (!currentSession) return null;
 
   return (
-    <StaffLayout allowedRoles={['server', 'Server', 'Manager', 'manager']} themeColor="blue">
+    <StaffLayout allowedRoles={['server', 'Server']} themeColor="blue">
       {/* Header */}
       <div className="bg-[#1a1a1a] text-white px-6 py-4 shadow-sm sticky top-0 z-10 space-y-3">
         <div className="flex justify-between items-center">

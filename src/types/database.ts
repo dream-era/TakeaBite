@@ -9,7 +9,7 @@ export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded'
 export type PaymentMethod = 'online' | 'cash'
 export type ItemStatus = 'pending' | 'preparing' | 'done'
 export type Station = 'food' | 'juice' | 'both'
-export type StaffRole = 'owner' | 'chef' | 'juice' | 'server' | 'manager' | 'cook' | 'juice_maker' | 'cashier' | 'servant'
+export type StaffRole = 'owner' | 'chef' | 'juice' | 'server' | 'cook' | 'juice_maker' | 'cashier' | 'servant'
 export type TableStatus = 'available' | 'occupied' | 'inactive'
 export type BusinessType =
   | 'individual' | 'proprietorship'

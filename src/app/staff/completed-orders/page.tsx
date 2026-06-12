@@ -30,7 +30,7 @@ export default function CompletedOrdersPage() {
     .sort((a, b) => b.createdAt - a.createdAt);
 
   return (
-    <StaffLayout allowedRoles={['cook', 'chef', 'Cook', 'Juice Maker', 'juice', 'juice_maker', 'Manager', 'manager']} themeColor={themeColor as any}>
+    <StaffLayout allowedRoles={['cook', 'chef', 'Cook', 'Juice Maker', 'juice', 'juice_maker']} themeColor={themeColor as any}>
       {/* Header */}
       <div className="bg-[#1a1a1a] text-white px-6 py-4 shadow-sm sticky top-0 z-10 space-y-3">
         <div className="flex justify-between items-center">

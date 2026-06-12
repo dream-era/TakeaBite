@@ -219,19 +219,24 @@ export default function StockManagementPage() {
                   </div>
                 </div>
 
-                {/* Toggle Switch */}
-                <button
-                  onClick={() => handleToggle(item)}
-                  className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 ${
-                    !item.is_out_of_stock ? 'bg-emerald-500' : 'bg-neutral-300'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                      !item.is_out_of_stock ? 'translate-x-6' : 'translate-x-1'
-                    } shadow-sm`}
-                  />
-                </button>
+                {/* Action Buttons */}
+                <div className="shrink-0">
+                  {!item.is_out_of_stock ? (
+                    <button
+                      onClick={() => handleToggle(item)}
+                      className="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-[11px] rounded-lg border border-rose-200 transition-colors"
+                    >
+                      Mark Out Of Stock
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleToggle(item)}
+                      className="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold text-[11px] rounded-lg border border-emerald-200 transition-colors"
+                    >
+                      Enable Again
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

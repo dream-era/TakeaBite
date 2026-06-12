@@ -47,7 +47,7 @@ export default function JuiceMakerDashboardPage() {
   };
 
   return (
-    <StaffLayout allowedRoles={['juice', 'manager']} themeColor="green">
+    <StaffLayout allowedRoles={['juice']} themeColor="green">
       {/* Header */}
       <header className="bg-[#1a1a1a] text-white px-4 py-4 sticky top-0 z-40">
         <div className="flex justify-between items-center">

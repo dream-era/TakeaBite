@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [
         '/dashboard/', 
-        '/manager-dashboard/', 
+        '/servant-dashboard/', 
         '/server-dashboard/', 
         '/cashier-dashboard/', 
         '/cook-dashboard/', 

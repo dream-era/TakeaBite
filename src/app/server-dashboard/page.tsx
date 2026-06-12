@@ -66,7 +66,7 @@ export default function ServantDashboardPage() {
   const readyOrdersCount = orders.length - newOrdersCount;
 
   return (
-    <StaffLayout allowedRoles={['server', 'Server', 'Manager', 'manager', 'cook', 'Cook', 'chef']} themeColor="blue">
+    <StaffLayout allowedRoles={['server', 'Server', 'Servant', 'servant', 'cook', 'Cook', 'chef']} themeColor="blue">
       <style>{`
         @keyframes urgentPulse {
           0%, 100% { border-color: #dc2626; }

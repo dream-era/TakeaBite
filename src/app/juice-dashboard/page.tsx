@@ -96,7 +96,7 @@ export default function JuiceDashboardPage() {
   }).length;
 
   return (
-    <StaffLayout allowedRoles={['juice_maker', 'juice', 'cook', 'Cook', 'chef', 'Manager', 'manager']} themeColor="green">
+    <StaffLayout allowedRoles={['juice_maker', 'juice', 'cook', 'Cook', 'chef']} themeColor="green">
       <style>{`
         @keyframes urgentPulse {
           0%, 100% { border-color: #dc2626; }

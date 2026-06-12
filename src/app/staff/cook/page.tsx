@@ -47,7 +47,7 @@ export default function CookDashboardPage() {
   };
 
   return (
-    <StaffLayout allowedRoles={['chef', 'manager']} themeColor="red">
+    <StaffLayout allowedRoles={['chef']} themeColor="red">
       {/* Header */}
       <header className="bg-[#1a1a1a] text-white px-4 py-4 sticky top-0 z-40">
         <div className="flex justify-between items-center">
