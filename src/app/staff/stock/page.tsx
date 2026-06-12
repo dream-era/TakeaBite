@@ -194,9 +194,9 @@ export default function StockManagementPage() {
         ) : (
           <div className="space-y-3 pb-24">
             {filteredItems.map(item => (
-              <div key={item.id} className="bg-white rounded-xl p-3 border border-neutral-200 shadow-sm flex gap-3 items-center">
+              <div key={item.id} className="bg-white rounded-xl p-3 border border-neutral-200 shadow-sm flex items-center gap-3 h-full">
                 {/* Image placeholder */}
-                <div className="w-14 h-14 bg-neutral-100 rounded-lg shrink-0 overflow-hidden relative">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-neutral-100 rounded-lg shrink-0 overflow-hidden relative">
                   {item.image_url ? (
                     <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
                   ) : (
@@ -206,32 +206,32 @@ export default function StockManagementPage() {
                   )}
                 </div>
                 
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-neutral-900 text-sm truncate">{item.name}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase bg-neutral-100 px-1.5 py-0.5 rounded">
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  <h3 className="font-bold text-neutral-900 text-sm sm:text-[15px] truncate block w-full">{item.name}</h3>
+                  <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                    <span className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase bg-neutral-100 px-1.5 py-0.5 rounded whitespace-nowrap">
                       {item.category}
                     </span>
-                    <span className={`text-[10px] font-bold flex items-center gap-1 ${!item.is_out_of_stock ? 'text-emerald-600' : 'text-rose-600'}`}>
-                      {!item.is_out_of_stock ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                    <span className={`text-[10px] font-bold flex items-center gap-1 whitespace-nowrap ${!item.is_out_of_stock ? 'text-emerald-600' : 'text-rose-600'}`}>
+                      {!item.is_out_of_stock ? <CheckCircle2 className="w-3 h-3 shrink-0" /> : <XCircle className="w-3 h-3 shrink-0" />}
                       {!item.is_out_of_stock ? 'IN STOCK' : 'OUT OF STOCK'}
                     </span>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="shrink-0">
+                <div className="shrink-0 flex items-center">
                   {!item.is_out_of_stock ? (
                     <button
                       onClick={() => handleToggle(item)}
-                      className="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-[11px] rounded-lg border border-rose-200 transition-colors"
+                      className="px-2.5 py-2 sm:px-3 sm:py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-[10px] sm:text-[11px] rounded-lg border border-rose-200 transition-colors whitespace-nowrap"
                     >
                       Mark Out Of Stock
                     </button>
                   ) : (
                     <button
                       onClick={() => handleToggle(item)}
-                      className="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold text-[11px] rounded-lg border border-emerald-200 transition-colors"
+                      className="px-2.5 py-2 sm:px-3 sm:py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold text-[10px] sm:text-[11px] rounded-lg border border-emerald-200 transition-colors whitespace-nowrap"
                     >
                       Enable Again
                     </button>

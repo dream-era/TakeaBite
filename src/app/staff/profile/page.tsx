@@ -88,7 +88,7 @@ export default function StaffProfilePage() {
   };
 
   return (
-    <StaffLayout allowedRoles={['cook', 'chef', 'Cook', 'Juice Maker', 'juice', 'juice_maker', 'server', 'Server']} themeColor={themeColor as any}>
+    <StaffLayout allowedRoles={['cook', 'chef', 'Cook', 'Juice Maker', 'juice', 'juice_maker', 'server', 'Server', 'servant', 'Servant']} themeColor={themeColor as any}>
       {/* Header Profile Section */}
       <div className="px-4 py-8 flex flex-col items-center bg-white border-b border-neutral-100 shadow-sm relative overflow-hidden">
         {/* Accent Background blur */}
