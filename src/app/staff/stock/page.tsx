@@ -5,7 +5,8 @@ import { StaffLayout } from "@/components/staff/StaffLayout";
 import { useStaffStore } from "@/store/useStaffStore";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { Search, Package, CheckCircle2, XCircle } from "lucide-react";
-import { toggleItemAvailability } from "@/actions/stock";
+import FoodImage from '@/components/shared/FoodImage';
+import { nameToImageSlug } from '@/data/foodLibrary';
 import type { MenuItem } from "@/types/database";
 
 type CategoryFilter = 'All' | 'Food' | 'Juice' | 'Beverage' | 'Snacks';
@@ -196,14 +197,14 @@ export default function StockManagementPage() {
             {filteredItems.map(item => (
               <div key={item.id} className="bg-white rounded-xl p-3 border border-neutral-200 shadow-sm flex items-center gap-3 h-full">
                 {/* Image placeholder */}
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-neutral-100 rounded-lg shrink-0 overflow-hidden relative">
-                  {item.image_url ? (
-                    <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-neutral-300">
-                      <Package className="w-6 h-6" />
-                    </div>
-                  )}
+                <div className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 relative">
+                  <FoodImage
+                    imageUrl={item.image_url}
+                    imageSlug={nameToImageSlug(item.name)}
+                    itemName={item.name}
+                    size="sm"
+                    className="w-full h-full rounded-lg"
+                  />
                 </div>
                 
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
