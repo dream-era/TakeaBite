@@ -59,7 +59,7 @@ export default function RolesPermissionsPage() {
       isDefault: true
     },
     {
-      id: "manager", initials: "MG", color: "bg-orange-100 text-orange-700", name: "Manager",
+      id: "servant", initials: "SV", color: "bg-orange-100 text-orange-700", name: "Servant",
       description: "Manage operations and team members.",
       perms: [true, true, true, true, true, false, true, true, false],
       isDefault: false

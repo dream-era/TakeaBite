@@ -48,7 +48,7 @@ export interface Order {
 export interface StaffMember {
   id: string;
   name: string;
-  role: 'owner' | 'manager' | 'cashier' | 'kitchen' | 'server';
+  role: 'owner' | 'servant' | 'cashier' | 'kitchen' | 'server';
   status: 'active' | 'invited' | 'disabled';
   email?: string;
 }

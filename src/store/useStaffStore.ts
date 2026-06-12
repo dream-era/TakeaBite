@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type StaffRole = 'owner' | 'chef' | 'juice' | 'server' | 'manager' | 'cook' | 'juice_maker' | 'cashier' | 'Cook' | 'Juice Maker' | 'Manager' | 'Server';
+export type StaffRole = 'owner' | 'chef' | 'juice' | 'server' | 'servant' | 'cook' | 'juice_maker' | 'cashier' | 'Cook' | 'Juice Maker' | 'Servant' | 'Server';
 
 export interface CurrentSession {
   id?: string;

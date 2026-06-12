@@ -90,30 +90,37 @@ export default function StockManagementPage() {
     return true;
   });
 
-  const availableCount = filteredItems.filter(i => i.is_available).length;
-  const outOfStockCount = filteredItems.filter(i => !i.is_available).length;
+  const availableCount = filteredItems.filter(i => !i.is_out_of_stock).length;
+  const outOfStockCount = filteredItems.filter(i => i.is_out_of_stock).length;
 
   const handleToggle = async (item: MenuItem) => {
     // Optimistic update
-    const newValue = !item.is_available;
-    setItems(current => current.map(i => i.id === item.id ? { ...i, is_available: newValue } : i));
+    const newValue = !item.is_out_of_stock;
+    setItems(current => current.map(i => i.id === item.id ? { ...i, is_out_of_stock: newValue } : i));
     
     try {
-      const res = await toggleItemAvailability(item.id, newValue, item.restaurant_id);
-      if (!res.success) {
-        // Revert on failure
-        setItems(current => current.map(i => i.id === item.id ? { ...i, is_available: item.is_available } : i));
-        alert("Failed to update stock status: " + res.error);
-      }
+      const supabase = createBrowserSupabase();
+      const { error } = await supabase
+        .from('menu_items')
+        .update({ 
+          is_out_of_stock: newValue,
+          out_of_stock_by: currentSession?.staffId || currentSession?.id || null,
+          out_of_stock_at: newValue ? new Date().toISOString() : null
+        })
+        .eq('id', item.id)
+        .eq('restaurant_id', item.restaurant_id);
+        
+      if (error) throw error;
     } catch (err) {
-      setItems(current => current.map(i => i.id === item.id ? { ...i, is_available: item.is_available } : i));
+      setItems(current => current.map(i => i.id === item.id ? { ...i, is_out_of_stock: item.is_out_of_stock } : i));
+      alert("Failed to update stock status");
     }
   };
 
   const categories: CategoryFilter[] = ['All', 'Food', 'Juice', 'Beverage', 'Snacks'];
 
   return (
-    <StaffLayout allowedRoles={['chef', 'manager', 'juice_maker', 'juice', 'server', 'cook']} themeColor={themeColor}>
+    <StaffLayout allowedRoles={['chef', 'servant', 'juice_maker', 'juice', 'server', 'cook']} themeColor={themeColor}>
       <header className="bg-[#1a1a1a] text-white px-4 py-4 sticky top-0 z-40">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -205,9 +212,9 @@ export default function StockManagementPage() {
                     <span className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase bg-neutral-100 px-1.5 py-0.5 rounded">
                       {item.category}
                     </span>
-                    <span className={`text-[10px] font-bold flex items-center gap-1 ${item.is_available ? 'text-emerald-600' : 'text-rose-600'}`}>
-                      {item.is_available ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                      {item.is_available ? 'IN STOCK' : 'OUT OF STOCK'}
+                    <span className={`text-[10px] font-bold flex items-center gap-1 ${!item.is_out_of_stock ? 'text-emerald-600' : 'text-rose-600'}`}>
+                      {!item.is_out_of_stock ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                      {!item.is_out_of_stock ? 'IN STOCK' : 'OUT OF STOCK'}
                     </span>
                   </div>
                 </div>
@@ -216,12 +223,12 @@ export default function StockManagementPage() {
                 <button
                   onClick={() => handleToggle(item)}
                   className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 ${
-                    item.is_available ? 'bg-emerald-500' : 'bg-neutral-300'
+                    !item.is_out_of_stock ? 'bg-emerald-500' : 'bg-neutral-300'
                   }`}
                 >
                   <span
                     className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                      item.is_available ? 'translate-x-6' : 'translate-x-1'
+                      !item.is_out_of_stock ? 'translate-x-6' : 'translate-x-1'
                     } shadow-sm`}
                   />
                 </button>

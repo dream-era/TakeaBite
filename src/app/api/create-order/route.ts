@@ -154,10 +154,11 @@ export async function POST(request: Request) {
     const menuItemIds = items.map((i) => i.menuItemId)
     const { data: menuItems, error: menuError } = await supabase
       .from('menu_items')
-      .select('id, name, price, is_available, station')
+      .select('id, name, price, is_available, is_out_of_stock, station')
       .in('id', menuItemIds)
       .eq('restaurant_id', restaurantId)
       .eq('is_available', true)
+      .eq('is_out_of_stock', false)
 
     if (menuError || !menuItems) {
       return NextResponse.json({ error: 'Failed to verify menu items' }, { status: 500 })

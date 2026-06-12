@@ -14,6 +14,7 @@ import { getRestaurantProfile } from "@/actions/restaurant";
 type ShopMenuItem = {
   id: string;
   is_available: boolean;
+  is_out_of_stock?: boolean;
   display_order: number;
   category: string | null;
   name: string;

@@ -219,7 +219,7 @@ export default function StaffManagementPage() {
                   <EmptyState 
                     icon={Users}
                     title="No team members yet"
-                    description="Invite your kitchen staff, servers, and managers to collaborate in this workspace."
+                    description="Invite your kitchen staff, servers, and servants to collaborate in this workspace."
                     actionButton={
                       <button onClick={() => {
                         if (!restaurantId) {
@@ -330,7 +330,7 @@ export default function StaffManagementPage() {
                 <div className="border border-neutral-200 rounded-xl p-5 hover:border-brand-300 transition-colors cursor-pointer">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-2 bg-neutral-100 rounded-lg"><Shield className="h-5 w-5 text-neutral-600" /></div>
-                    <h3 className="font-bold text-neutral-900">Manager</h3>
+                    <h3 className="font-bold text-neutral-900">Servant</h3>
                   </div>
                   <p className="text-sm text-neutral-500">Full access to dashboard, menu management, and staff settings. Cannot delete workspace.</p>
                 </div>
@@ -429,7 +429,7 @@ export default function StaffManagementPage() {
                       <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as StaffRole})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
                         <option value="cook">Cook</option>
                         <option value="juice_maker">Juice Maker</option>
-                        <option value="manager">Manager</option>
+                        <option value="servant">Servant</option>
                         <option value="cashier">Cashier</option>
                       </select>
                     </div>
@@ -473,7 +473,7 @@ export default function StaffManagementPage() {
                   <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as StaffRole})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
                     <option value="cook">Cook</option>
                     <option value="juice_maker">Juice Maker</option>
-                    <option value="manager">Manager</option>
+                    <option value="servant">Servant</option>
                     <option value="cashier">Cashier</option>
                   </select>
                 </div>

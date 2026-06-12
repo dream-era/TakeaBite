@@ -9,7 +9,7 @@ export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded'
 export type PaymentMethod = 'online' | 'cash'
 export type ItemStatus = 'pending' | 'preparing' | 'done'
 export type Station = 'food' | 'juice' | 'both'
-export type StaffRole = 'owner' | 'chef' | 'juice' | 'server' | 'manager' | 'cook' | 'juice_maker' | 'cashier'
+export type StaffRole = 'owner' | 'chef' | 'juice' | 'server' | 'manager' | 'cook' | 'juice_maker' | 'cashier' | 'servant'
 export type TableStatus = 'available' | 'occupied' | 'inactive'
 export type BusinessType =
   | 'individual' | 'proprietorship'
@@ -65,6 +65,10 @@ export interface MenuItem {
   station: Station
   is_available: boolean
   display_order: number
+  is_out_of_stock?: boolean
+  out_of_stock_by?: string | null
+  out_of_stock_at?: string | null
+  out_of_stock_reason?: string | null
   created_at: string
   updated_at: string
 }

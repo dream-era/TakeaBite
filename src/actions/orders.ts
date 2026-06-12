@@ -867,3 +867,20 @@ export async function exportOrdersCSV(
     }
   }
 }
+
+export async function updateOrderStatus(orderId: string, status: string): Promise<ActionResult<void>> {
+  try {
+    const supabase = createAdminSupabase()
+    const { error } = await supabase
+      .from('orders')
+      .update({ status })
+      .eq('id', orderId)
+
+    if (error) throw error
+
+    return { success: true }
+  } catch (err) {
+    console.error('Failed to update order status:', err)
+    return { success: false, error: 'Failed to update order status' }
+  }
+}

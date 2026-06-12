@@ -71,7 +71,7 @@ export function StaffLayout({ children, allowedRoles, themeColor = "red" }: Staf
               if (currentSession.role === 'cook' || currentSession.role === 'chef') router.push('/cook-dashboard');
               else if (currentSession.role === 'juice_maker' || currentSession.role === 'juice') router.push('/juice-dashboard');
               else if (currentSession.role === 'server') router.push('/server-dashboard');
-              else if (currentSession.role === 'manager') router.push('/manager-dashboard');
+              else if (currentSession.role === 'servant') router.push('/servant-dashboard');
               else if (currentSession.role === 'cashier') router.push('/cashier-dashboard');
             }}
             className="w-full bg-neutral-900 text-white font-bold py-3 px-8 rounded-xl"
@@ -101,7 +101,7 @@ export function StaffLayout({ children, allowedRoles, themeColor = "red" }: Staf
               currentSession.role === 'cook' || currentSession.role === 'chef' || currentSession.role === 'Cook' ? '/cook-dashboard' :
               currentSession.role === 'juice_maker' || currentSession.role === 'juice' || currentSession.role === 'Juice Maker' ? '/juice-dashboard' :
               currentSession.role === 'server' || currentSession.role === 'Server' ? '/server-dashboard' :
-              currentSession.role === 'manager' || currentSession.role === 'Manager' ? '/manager-dashboard' :
+              currentSession.role === 'servant' || currentSession.role === 'Servant' ? '/servant-dashboard' :
               '/server-dashboard'
             } 
             className={`flex flex-col items-center justify-center w-full h-full ${pathname.includes('dashboard') ? themeClasses.navActive : 'text-neutral-400'}`}

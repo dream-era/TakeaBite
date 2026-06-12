@@ -27,7 +27,7 @@ export default function StaffLoginPage() {
       else if (currentSession.role === 'juice_maker' || currentSession.role === 'juice') router.push('/juice-dashboard');
       else if (currentSession.role === 'cashier') router.push('/cashier-dashboard');
       else if (currentSession.role === 'server') router.push('/server-dashboard');
-      else if (currentSession.role === 'manager') router.push('/manager-dashboard');
+      else if (currentSession.role === 'servant') router.push('/servant-dashboard');
       else router.push('/staff');
     }
   }, [currentSession, router]);

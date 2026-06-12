@@ -163,7 +163,7 @@ const PinSchema = z
 // verify-pin/route.ts which handles 'owner' as an
 // edge case but should never be set this way.
 // ─────────────────────────────────────────────
-const ASSIGNABLE_ROLES = ['manager', 'cook', 'juice_maker', 'cashier', 'chef', 'juice', 'server'] as const
+const ASSIGNABLE_ROLES = ['servant', 'cook', 'juice_maker', 'cashier', 'chef', 'juice', 'server'] as const
 
 // ============================================================
 // ACTION 1 — getStaffList
@@ -880,7 +880,7 @@ export async function loginStaff(
     let redirectTo = '/staff'
     if (activeStaff.role === 'cook' || activeStaff.role === 'chef') redirectTo = '/cook-dashboard'
     if (activeStaff.role === 'juice_maker' || activeStaff.role === 'juice') redirectTo = '/juice-dashboard'
-    if (activeStaff.role === 'manager') redirectTo = '/manager-dashboard'
+    if (activeStaff.role === 'servant') redirectTo = '/servant-dashboard'
     if (activeStaff.role === 'cashier') redirectTo = '/cashier-dashboard'
     if (activeStaff.role === 'server') redirectTo = '/server-dashboard'
     

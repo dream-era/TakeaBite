@@ -16,6 +16,7 @@ import { getRestaurantProfile } from "@/actions/restaurant";
 type ShopMenuItem = {
   id: string;
   is_available: boolean;
+  is_out_of_stock?: boolean;
   display_order: number;
   category: string | null;
   name: string;
@@ -193,7 +194,7 @@ export default function DigitalMenuPage() {
                 price={item.price}
                 imageUrl={item.image_url}
                 isVeg={item.is_veg}
-                isAvailable={item.is_available}
+                isAvailable={!item.is_out_of_stock}
                 isBestSeller={item.display_order < 3} // simple placeholder for popular items
                 quantity={cartItems.find(i => i.id === item.id)?.quantity || 0}
                 onAdd={handleAddToCart}
