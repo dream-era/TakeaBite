@@ -75,10 +75,10 @@ export function Logo({
 
   // Full variant
   return (
-    <div className={`group flex items-center gap-3 transition-opacity duration-200 hover:opacity-90 ${className}`}>
+    <div className={`group flex items-center gap-2.5 sm:gap-3 transition-opacity duration-200 hover:opacity-90 ${className}`}>
       {IconSVG}
       <div 
-        className="flex items-center tracking-tight drop-shadow-sm dark:drop-shadow-none" 
+        className="flex items-center tracking-tight whitespace-nowrap drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)] dark:drop-shadow-none" 
         style={{ 
           fontSize: size === 'sm' ? '16px' : size === 'md' ? '20px' : size === 'lg' ? '24px' : '28px',
           fontWeight: 800,
