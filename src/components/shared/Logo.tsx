@@ -75,17 +75,19 @@ export function Logo({
 
   // Full variant
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`group flex items-center gap-3 transition-opacity duration-200 hover:opacity-90 ${className}`}>
       {IconSVG}
-      <span 
-        className="font-bold tracking-tight text-[#111827] dark:text-white" 
+      <div 
+        className="flex items-center tracking-tight drop-shadow-sm dark:drop-shadow-none" 
         style={{ 
           fontSize: size === 'sm' ? '16px' : size === 'md' ? '20px' : size === 'lg' ? '24px' : '28px',
-          fontWeight: 700 
+          fontWeight: 800,
+          fontFamily: 'var(--font-inter), system-ui, sans-serif'
         }}
       >
-        TakeaBite
-      </span>
+        <span className="text-[#111111] dark:text-white">Takea</span>
+        <span className="text-[#D7303B]">Bite</span>
+      </div>
     </div>
   );
 }
