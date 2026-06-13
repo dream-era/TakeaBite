@@ -321,7 +321,7 @@ export function useRealtime({
           } catch {}
 
           const newOrderRaw = payload.new as { id: string; status: string }
-          console.log(`[REALTIME ORDER RECEIVED] INSERT for order ${newOrderRaw.id}`)
+
 
           // Skip pending orders — kitchen only sees confirmed+
           if (!isOrderVisible(newOrderRaw.status as OrderStatus)) return
@@ -370,7 +370,7 @@ export function useRealtime({
           }
 
           const newStatus = updatedRaw.status as OrderStatus
-          console.log(`[REALTIME UPDATE RECEIVED] UPDATE for order ${updatedRaw.id} to status ${newStatus}`)
+
 
           // Remove served/cancelled orders from the kitchen board
           if (!isOrderVisible(newStatus)) {
@@ -448,7 +448,7 @@ export function useRealtime({
           }
 
           const newItemStatus = updatedItem.status as ItemStatus
-          console.log(`[REALTIME UPDATE RECEIVED] ITEM ${updatedItem.id} to status ${newItemStatus}`)
+
 
           setAllOrders((prev) =>
             prev.map((order) => {

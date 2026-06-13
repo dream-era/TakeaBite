@@ -15,17 +15,6 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 export default function JuiceDashboardPage() {
   const { currentSession: session } = useStaffStore();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [hiddenOrderIds, setHiddenOrderIds] = useState<string[]>([]);
-  
-  useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem('juice_completed_orders');
-    if (stored) {
-      try { setHiddenOrderIds(JSON.parse(stored)); } catch (e) {}
-    }
-  }, []);
-
   const restaurantId = session?.restaurantId || "123";
   const station = "juice";
 
@@ -72,13 +61,7 @@ export default function JuiceDashboardPage() {
     }
   };
 
-  const handleMoveToCompleted = (orderId: string) => {
-    const updated = [...hiddenOrderIds, orderId];
-    setHiddenOrderIds(updated);
-    localStorage.setItem('juice_completed_orders', JSON.stringify(updated));
-  };
-
-  const visibleOrders = orders.filter(o => !hiddenOrderIds.includes(o.id));
+  const visibleOrders = orders;
   
   const newOrdersCount = visibleOrders.filter(o => {
     const items = o.order_items.filter((i: any) => i.station === station || i.station === 'both');
@@ -276,14 +259,7 @@ export default function JuiceDashboardPage() {
                       Mark Ready
                     </button>
                   )}
-                  {isAllReady && (
-                    <button 
-                      onClick={() => handleMoveToCompleted(order.id)}
-                      className="bg-green-600 active:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-transform active:scale-95"
-                    >
-                      Move To Completed
-                    </button>
-                  )}
+                  {/* Moved to Completed button removed as per requirements */}
                 </div>
               </div>
             );

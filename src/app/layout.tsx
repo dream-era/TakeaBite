@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Be_Vietnam_Pro, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "@/components/Providers";
 import "./globals.css";
+import "@/lib/env";
 
 import { SEO_CONFIG, ENV_VARS } from "@/lib/seo-config";
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -26,6 +27,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: {

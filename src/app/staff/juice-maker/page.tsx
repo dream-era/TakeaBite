@@ -179,14 +179,7 @@ export default function JuiceMakerDashboardPage() {
                         Mark as Ready <CheckCircle2 className="w-4 h-4" />
                       </button>
                     )}
-                    {order.statusByBeverage === 'READY' && (
-                      <button 
-                        onClick={() => updateOrderStatus(order.id, 'beverage', 'COMPLETED')}
-                        className="w-full bg-white border-[1.5px] border-emerald-500 text-emerald-600 font-bold py-3.5 rounded-[14px] flex items-center justify-center gap-2 transition-transform active:scale-[0.98]"
-                      >
-                        Mark as Completed <CheckCircle2 className="w-4 h-4" />
-                      </button>
-                    )}
+                    {/* Mark as Completed button removed */}
                   </div>
                 </div>
               </div>

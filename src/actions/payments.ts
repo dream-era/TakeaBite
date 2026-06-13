@@ -193,7 +193,7 @@ export async function getPaymentStatus(restaurantId: string): Promise<{
     const supabase = createAdminSupabase()
     const { data } = await supabase
       .from('restaurants')
-      .select('payment_enabled, razorpay_key_id, razorpay_key_secret, razorpay_account_name, payment_connected_at')
+      .select('payment_enabled, razorpay_key_id, razorpay_account_name, payment_connected_at')
       .eq('id', restaurantId)
       .single()
 
@@ -204,10 +204,7 @@ export async function getPaymentStatus(restaurantId: string): Promise<{
       data: {
         isConnected: data.payment_enabled ?? false,
         keyId: data.razorpay_key_id ?? null,
-        // Show only last 6 chars of secret e.g. "••••••••••••••••AbCdEf"
-        maskedSecret: data.razorpay_key_secret
-          ? '••••••••••••••••' + data.razorpay_key_secret.slice(-6)
-          : null,
+        maskedSecret: data.payment_enabled ? '••••••••••••••••••••' : null,
         accountName: data.razorpay_account_name ?? null,
         connectedAt: data.payment_connected_at ?? null,
       }

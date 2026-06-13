@@ -266,8 +266,8 @@ export async function addStaff(
 
     const { restaurantId, name, role, phone, email } = parsed.data
     
-    // Auto-generate 6 digit PIN
-    const pin = Math.floor(100000 + Math.random() * 900000).toString()
+    // Auto-generate 6 digit PIN securely
+    const pin = (crypto.getRandomValues(new Uint32Array(1))[0] % 900000 + 100000).toString()
 
     // Verify restaurant ownership
     const { data: restaurant } = await supabase
@@ -482,8 +482,8 @@ export async function resetStaffPin(
 
     const { staffId } = parsed.data
     
-    // Auto-generate 6 digit PIN
-    const newPin = Math.floor(100000 + Math.random() * 900000).toString()
+    // Auto-generate 6 digit PIN securely
+    const newPin = (crypto.getRandomValues(new Uint32Array(1))[0] % 900000 + 100000).toString()
 
     const { owned, restaurantId } = await verifyStaffOwnership(staffId, user.id)
     if (!owned || !restaurantId) {

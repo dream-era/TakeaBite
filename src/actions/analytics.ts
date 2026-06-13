@@ -669,7 +669,7 @@ export async function getLowDemandItem(): Promise<ActionResult<{
 
     if (neverOrdered.length > 0) {
       // Items never ordered are lower demand than ordered items
-      lowItem = neverOrdered[Math.floor(Math.random() * Math.min(neverOrdered.length, 3))]
+      lowItem = neverOrdered[0]
     } else if (orderedItems.length > 0) {
       lowItem = orderedItems.sort((a, b) => a.orders - b.orders)[0]
     } else {

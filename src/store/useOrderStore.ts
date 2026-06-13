@@ -40,10 +40,10 @@ export const useOrderStore = create<OrderStore>()(
         const hasBeverage = items.some(i => i.itemType === 'beverage');
 
         const newOrder: Order = {
-          id: `order-${Math.floor(1000 + Math.random() * 9000)}`,
+          id: `order-${crypto.randomUUID()}`,
           workspaceId,
           tableId,
-          items: items.map(item => ({ ...item, id: `oi-${Date.now()}-${Math.random()}` })),
+          items: items.map(item => ({ ...item, id: `oi-${crypto.randomUUID()}` })),
           statusByFood: hasFood ? 'NEW' : 'COMPLETED',
           statusByBeverage: hasBeverage ? 'NEW' : 'COMPLETED',
           createdAt: Date.now(),
