@@ -280,7 +280,6 @@ export default function CheckoutPage() {
               </div>
             )}
           </div>
-          </div>
           
           <div className="h-px w-full dashed-separator my-6"></div>
 
