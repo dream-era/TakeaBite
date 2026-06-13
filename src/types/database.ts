@@ -120,6 +120,7 @@ export interface Order {
   id: string
   restaurant_id: string
   table_id: string
+  customer_id: string | null
   status: OrderStatus
   total_amount: number
   payment_method: PaymentMethod
@@ -187,4 +188,10 @@ export interface AnalyticsData {
   topItems: { name: string; count: number; revenue: number }[]
 }
 
+export interface CustomerProfile {
+  id: string
+  phone: string | null
+  created_at: string
+  updated_at: string
+}
 

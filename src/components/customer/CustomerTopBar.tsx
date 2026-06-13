@@ -1,17 +1,31 @@
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { getTableDetails } from '@/actions/restaurant';
 
 interface CustomerTopBarProps {
   shopName: string;
-  shopLogoUrl?: string;
 }
 
 export function CustomerTopBar({ 
-  shopName, 
-  shopLogoUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAVUGivKj4QVwoE66Fj2qqexCQx0w1KhtQ9VrWMHh1JmwWuXh7u9EKEr5GIfpauLcJS2xtkUbSSjYorIFAKhcBYmwp41PX0BWZGJwet74G3lzuxX3MP922TxF6THuWst2b0Pf_6_gvVqvThws4Z2WqTsObDD0LViLY_Cj94-1LWrN4YDAGvGZAZD665-a0zXTLBL1SibySJ6hJYKQMQE_PPnisI6_RRTHgu0df1bc3a_hHt86_QNBKRlig1SAZncULhjiwjOeAtmp8" 
+  shopName
 }: CustomerTopBarProps) {
   const router = useRouter();
+  const params = useParams();
+  const tableId = params?.tableId as string | undefined;
+
+  const { data: tableData } = useQuery({
+    queryKey: ['table', tableId],
+    queryFn: () => getTableDetails(tableId as string).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    }),
+    enabled: !!tableId,
+  });
+
+  const table: any = tableData;
+  const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : null;
 
   return (
     <header className="bg-background dark:bg-on-surface sticky top-0 z-40 w-full">
@@ -23,12 +37,12 @@ export function CustomerTopBar({
           {shopName}
           <CheckCircle2 className="h-4 w-4 text-blue-500 fill-blue-50 shrink-0" />
         </h1>
-        <div className="w-10 h-10 rounded-full overflow-hidden border border-surface-container-high hover:opacity-80 transition-opacity active:scale-95 duration-150 shrink-0">
-          <img 
-            alt="Shop Logo" 
-            className="w-full h-full object-cover" 
-            src={shopLogoUrl} 
-          />
+        <div className="w-12 flex justify-end shrink-0">
+          {tableLabel && (
+            <span className="font-label-md text-primary bg-primary/10 px-2 py-1 rounded-md truncate max-w-[100px]">
+              {tableLabel}
+            </span>
+          )}
         </div>
       </div>
     </header>

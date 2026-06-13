@@ -41,6 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+import { CustomerIdentityProvider } from '@/components/customer/CustomerIdentityProvider';
+
 export default function ShopLayout({ children }: Props) {
-  return <>{children}</>;
+  return <CustomerIdentityProvider>{children}</CustomerIdentityProvider>;
 }

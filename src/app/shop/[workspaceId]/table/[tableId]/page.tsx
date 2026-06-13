@@ -71,7 +71,7 @@ export default function DigitalMenuPage() {
     enabled: !!tableId,
   });
   const table: any = tableData;
-  const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : `Table ${tableId.substring(0,4)}`;
+  const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : `Table`;
 
   // Fetch menu items
   const { data: menuData, isLoading: isMenuLoading } = useQuery({
@@ -190,7 +190,7 @@ export default function DigitalMenuPage() {
 
   return (
     <div className="bg-background font-body-md text-on-background min-h-screen flex flex-col mx-auto max-w-md border-x border-surface-variant relative shadow-2xl">
-      <CustomerTopBar shopName={shop.name} shopLogoUrl={shop.logo_url} />
+      <CustomerTopBar shopName={shop.name} />
 
       <main className="flex-grow pb-40 px-container-padding">
         {categories.length > 0 && (

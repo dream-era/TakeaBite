@@ -7,6 +7,7 @@ import { CustomerTopBar } from "@/components/customer/CustomerTopBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { getRestaurantProfile } from "@/actions/restaurant";
+import { useCustomerIdentity } from "@/hooks/useCustomerIdentity";
 
 export default function OrderTrackingPage() {
   const params = useParams();
@@ -14,6 +15,8 @@ export default function OrderTrackingPage() {
   const workspaceId = params.workspaceId as string;
   const tableId = params.tableId as string | undefined;
 
+  const { customerId } = useCustomerIdentity();
+  
   const queryClient = useQueryClient();
   const supabase = createBrowserSupabase();
 
@@ -28,9 +31,9 @@ export default function OrderTrackingPage() {
 
   // Fetch recent active orders for this table
   const { data: orders, isLoading } = useQuery({
-    queryKey: ['customer-orders', workspaceId, tableId],
+    queryKey: ['customer-orders', workspaceId, customerId],
     queryFn: async () => {
-      let query = supabase
+      const query = supabase
         .from('orders')
         .select(`
           *,
@@ -40,38 +43,35 @@ export default function OrderTrackingPage() {
           )
         `)
         .eq('restaurant_id', workspaceId)
+        .eq('customer_id', customerId)
         .not('status', 'in', '("pending", "failed", "cancelled")')
         .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (tableId) {
-        query = query.eq('table_id', tableId);
-      } else {
-        query = query.is('table_id', null);
-      }
+        .limit(20);
       
       const { data, error } = await query;
       
       if (error) throw error;
       return data;
-    }
+    },
+    enabled: !!workspaceId && !!customerId,
   });
 
   // Supabase Realtime Subscription for Instant Updates
   useEffect(() => {
+    if (!customerId) return;
     const channel = supabase.channel('customer-tracking')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${workspaceId}` },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, tableId] });
+          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, customerId] });
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'order_items' },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, tableId] });
+          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, customerId] });
         }
       )
       .subscribe();
@@ -79,7 +79,7 @@ export default function OrderTrackingPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, queryClient, workspaceId, tableId]);
+  }, [supabase, queryClient, workspaceId, customerId]);
 
   const getStepForStatus = (status: string) => {
     switch (status) {

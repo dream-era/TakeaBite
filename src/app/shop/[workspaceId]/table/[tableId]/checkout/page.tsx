@@ -5,7 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import { getRestaurantProfile } from "@/actions/restaurant";
+import { getRestaurantProfile, getTableDetails } from "@/actions/restaurant";
+import { useCustomerIdentity } from "@/hooks/useCustomerIdentity";
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -19,6 +20,7 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { items: allCartItems, clearCart } = useCartStore();
+  const { customerId } = useCustomerIdentity();
   
   const { data: restaurantData } = useQuery({
     queryKey: ['restaurant', workspaceId],
@@ -28,6 +30,17 @@ export default function CheckoutPage() {
     }),
     enabled: !!workspaceId,
   });
+
+  const { data: tableData } = useQuery({
+    queryKey: ['table', tableId],
+    queryFn: () => getTableDetails(tableId).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    }),
+    enabled: !!tableId,
+  });
+  const table: any = tableData;
+  const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : `Table`;
 
   const paymentEnabled = restaurantData?.payment_enabled || false;
   const [selectedMethod, setSelectedMethod] = useState<'online' | 'cash'>('cash');
@@ -41,8 +54,8 @@ export default function CheckoutPage() {
   const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
 
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const tax = subtotal * 0.02; // 2% tax
-  const total = subtotal + tax;
+  const processingFee = selectedMethod === 'online' ? subtotal * 0.02 : 0;
+  const total = subtotal + processingFee;
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +77,8 @@ export default function CheckoutPage() {
           tableId,
           items: orderItems,
           paymentMethod: selectedMethod,
-          specialInstructions: ""
+          specialInstructions: "",
+          customerId: customerId,
         })
       });
 
@@ -158,7 +172,7 @@ export default function CheckoutPage() {
             <span className="material-symbols-outlined text-primary">restaurant</span>
             <span className="font-label-md text-on-surface">Dining at Table</span>
           </div>
-          <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableId}</span>
+          <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableLabel}</span>
         </div>
 
         <form id="checkout-form" onSubmit={handlePlaceOrder} className="space-y-6">
@@ -256,6 +270,30 @@ export default function CheckoutPage() {
               </div>
             )}
           </div>
+          </div>
+
+          <div className="h-px w-full dashed-separator my-6"></div>
+
+          <div>
+            <h2 className="font-headline-md text-on-surface mb-4">Order Summary</h2>
+            <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] p-4 space-y-3">
+              <div className="flex justify-between text-secondary">
+                <span className="font-body-md">Subtotal</span>
+                <span className="font-body-md">₹{subtotal.toFixed(2)}</span>
+              </div>
+              {selectedMethod === 'online' && (
+                <div className="flex justify-between text-secondary">
+                  <span className="font-body-md">Online Processing Fee (2%)</span>
+                  <span className="font-body-md">₹{processingFee.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="h-px w-full dashed-separator my-2"></div>
+              <div className="flex justify-between items-center">
+                <span className="font-headline-md text-on-surface">Grand Total</span>
+                <span className="font-headline-md text-primary">₹{total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
         </form>
       </main>
 
@@ -264,7 +302,7 @@ export default function CheckoutPage() {
         <div className="max-w-md mx-auto p-4 flex items-center gap-4">
           <div className="flex flex-col flex-1">
             <span className="font-label-md text-secondary uppercase tracking-wider text-xs">Grand Total</span>
-            <span className="font-headline-md text-on-surface">${total.toFixed(2)}</span>
+            <span className="font-headline-md text-on-surface">₹{total.toFixed(2)}</span>
           </div>
           <button 
             form="checkout-form"

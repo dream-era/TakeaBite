@@ -48,6 +48,7 @@ const CreateOrderSchema = z.object({
   customerName: z.string().max(100).optional(),
   customerPhone: z.string().max(15).optional(),
   orderType: z.enum(['dine_in', 'takeaway']).default('dine_in'),
+  customerId: z.string().uuid().optional(),
 })
 
 function calculateTotal(items: CartItem[]): number {
@@ -124,7 +125,7 @@ export async function POST(request: Request) {
     const {
       restaurantId, tableId, items, totalAmount,
       paymentMethod, specialInstructions,
-      customerName, customerPhone, orderType
+      customerName, customerPhone, orderType, customerId
     } = parsed.data
 
     if (!isValidUUID(restaurantId)) {
@@ -204,8 +205,8 @@ export async function POST(request: Request) {
     })
 
     const subtotal = calculateTotal(verifiedItems)
-    const tax = subtotal * 0.02 // 2% tax
-    const verifiedTotal = subtotal + tax
+    const processingFee = paymentMethod === 'online' ? subtotal * 0.02 : 0
+    const verifiedTotal = subtotal + processingFee
 
     if (totalAmount !== undefined && Math.abs(verifiedTotal - totalAmount) > 1) {
       return NextResponse.json(
@@ -233,14 +234,25 @@ export async function POST(request: Request) {
       .digest('hex')
       .slice(0, 16) // first 16 chars is enough
 
+    if (customerId) {
+      const { error: profileError } = await supabase
+        .from('customer_profiles')
+        .upsert({ id: customerId }, { onConflict: 'id' })
+      if (profileError) {
+        console.warn('[ServeFlow] Failed to upsert customer profile:', profileError)
+      }
+    }
+
     // ── CASH PAYMENT ─────────────────────────────────────
     if (paymentMethod === 'cash') {
       const orderInsert: OrderInsert & {
         customer_name?: string
         customer_phone?: string
+        customer_id?: string | null
       } = {
         restaurant_id: restaurantId,
         table_id: tableId,
+        customer_id: customerId || null,
         status: 'confirmed',
         total_amount: verifiedTotal,
         payment_method: 'cash',
@@ -358,9 +370,10 @@ export async function POST(request: Request) {
       }
 
       // Insert PENDING order
-      const orderInsert: OrderInsert & { customer_name?: string, customer_phone?: string } = {
+      const orderInsert: OrderInsert & { customer_name?: string, customer_phone?: string, customer_id?: string | null } = {
         restaurant_id: restaurantId,
         table_id: tableId || null,
+        customer_id: customerId || null,
         status: 'pending',
         total_amount: verifiedTotal,
         payment_method: 'online',

@@ -11,6 +11,7 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
 import { createBrowserSupabase } from "@/lib/supabase/client";
+import { PhoneRecoveryPrompt } from "@/components/customer/PhoneRecoveryPrompt";
 
 export default function OrderConfirmationPage() {
   const params = useParams();
@@ -22,9 +23,7 @@ export default function OrderConfirmationPage() {
   const placedOrderId = useCartStore((s) => s.placedOrderId);
 
   const orderItems = confirmedOrder?.items ?? [];
-  const totalAmount = confirmedOrder?.totalAmount ?? 0;
-  const tax = totalAmount * 0.02;
-  const grandTotal = totalAmount + tax;
+  const subtotal = orderItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -161,15 +160,19 @@ export default function OrderConfirmationPage() {
             <div className="space-y-3">
               <div className="flex justify-between text-secondary">
                 <span className="font-body-md">Subtotal</span>
-                <span className="font-body-md">${totalAmount.toFixed(2)}</span>
+                <span className="font-body-md">₹{subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-secondary select-none">
-                <span className="font-body-md">Tax (2%)</span>
-                <span className="font-body-md">${tax.toFixed(2)}</span>
-              </div>
+              {orderData?.payment_method === 'online' && (
+                <div className="flex justify-between text-secondary select-none">
+                  <span className="font-body-md">Online Processing Fee (2%)</span>
+                  <span className="font-body-md">₹{(subtotal * 0.02).toFixed(2)}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center pt-2 select-none">
                 <span className="font-headline-md text-on-surface">Grand Total</span>
-                <span className="font-headline-md text-primary">${grandTotal.toFixed(2)}</span>
+                <span className="font-headline-md text-primary">
+                  ₹{(orderData?.payment_method === 'online' ? subtotal * 1.02 : subtotal).toFixed(2)}
+                </span>
               </div>
             </div>
             
@@ -199,6 +202,7 @@ export default function OrderConfirmationPage() {
 
         {/* Primary Actions */}
         <div className="mt-section-margin max-w-md mx-auto space-y-4">
+          <PhoneRecoveryPrompt />
           {/* Track order removed for now */}
           <button className="w-full flex items-center justify-center gap-2 py-3 text-secondary hover:text-on-surface transition-colors font-label-md">
             <span className="material-symbols-outlined text-[20px]">download</span>

@@ -20,8 +20,7 @@ export default function CartPage() {
   const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
 
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const tax = subtotal * 0.02; // 2% tax
-  const total = subtotal + tax;
+  const total = subtotal;
 
   const checkoutUrl = `/shop/${workspaceId}/table/${tableId}/checkout`;
 
@@ -102,16 +101,12 @@ export default function CartPage() {
               <h3 className="font-label-lg text-on-surface mb-2">Order Summary</h3>
               <div className="flex justify-between text-secondary">
                 <span className="font-body-md">Subtotal</span>
-                <span className="font-body-md">${subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-secondary">
-                <span className="font-body-md">Tax (2%)</span>
-                <span className="font-body-md">${tax.toFixed(2)}</span>
+                <span className="font-body-md">₹{subtotal.toFixed(2)}</span>
               </div>
               <div className="h-px w-full dashed-separator my-2"></div>
               <div className="flex justify-between items-center">
-                <span className="font-headline-md text-on-surface">Grand Total</span>
-                <span className="font-headline-md text-primary">${total.toFixed(2)}</span>
+                <span className="font-headline-md text-on-surface">Total</span>
+                <span className="font-headline-md text-primary">₹{total.toFixed(2)}</span>
               </div>
             </div>
           </>
