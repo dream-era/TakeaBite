@@ -15,8 +15,8 @@ export function Logo({
   variant = "full",
   withBackground = false,
 }: LogoProps) {
-  // Desktop: 48px, Tablet: 44px, Mobile: 40px
-  const heightClass = "h-[40px] md:h-[44px] lg:h-[48px]";
+  // Increased logo size: Desktop: 60px, Tablet: 54px, Mobile: 48px
+  const heightClass = "h-[48px] md:h-[54px] lg:h-[60px]";
   const widthClass = "w-auto";
 
   if (variant === "icon") {
