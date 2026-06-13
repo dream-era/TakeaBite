@@ -20,7 +20,7 @@ export function Logo({
 
   const foxIcon = (
     <Image
-      src="/fox-logo.png"
+      src="/logo-circle.png"
       alt="TakeaBite Logo"
       width={100}
       height={100}
