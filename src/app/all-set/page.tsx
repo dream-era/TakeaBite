@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Flame, Utensils,
+import { Flame,
   LayoutDashboard,
   ClipboardList,
   MenuSquare,
@@ -19,10 +19,11 @@ import { Flame, Utensils,
   Printer,
   ArrowRight,
   UserPlus,
+  UserCheck,
   Store,
   ConciergeBell,
-  UserCheck,
   Crown } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 import { toast } from "react-hot-toast";
 
 export default function AllSetPage() {
@@ -68,13 +69,8 @@ export default function AllSetPage() {
       {/* ── Left Sidebar ── */}
       <aside className="hidden w-64 flex-col border-r border-neutral-200 bg-white/80 backdrop-blur-md lg:flex shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
         <div className="flex h-20 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
-              <Utensils className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-neutral-900">
-              TakeaBite
-            </span>
+          <Link href="/" className="group">
+            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
           </Link>
         </div>
         
@@ -287,8 +283,8 @@ export default function AllSetPage() {
                     <div className="relative h-48 w-48 bg-white border-8 border-white p-1 flex items-center justify-center">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://serveflow.demo" alt="QR" className="w-full h-full object-contain" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="h-10 w-10 rounded-lg bg-brand-600 border-2 border-white flex items-center justify-center shadow-md">
-                                <Utensils className="h-5 w-5 text-white" />
+                            <div className="h-10 w-10 rounded-lg bg-neutral-50 overflow-hidden border-2 border-white flex items-center justify-center shadow-md">
+                                <Logo size="lg" variant="icon" />
                             </div>
                         </div>
                     </div>

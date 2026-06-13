@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Lock, Eye, EyeOff, Utensils } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Logo } from "@/components/shared/Logo";
 import ForgotPasswordModal from "@/components/auth/forgot-password-modal";
 import { getAppUrl } from "@/lib/url-config";
 
@@ -99,13 +100,8 @@ export default function LoginPage() {
 
       {/* ── Top navbar ── */}
       <nav className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2 group" id="login-nav-logo">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 transition-transform duration-300 group-hover:scale-110">
-            <Utensils className="h-4 w-4 text-white" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-neutral-900">
-            TakeaBite
-          </span>
+        <Link href="/" className="group" id="login-nav-logo">
+          <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
         </Link>
         <Link
           href="/login"
@@ -147,8 +143,8 @@ export default function LoginPage() {
 
                 {/* Logo */}
                 <div className="relative mb-8">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
-                    <Utensils className="h-7 w-7 text-white" />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl">
+                    <Logo size="lg" variant="icon" />
                   </div>
                 </div>
 

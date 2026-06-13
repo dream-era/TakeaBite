@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Clock, CheckCircle2, Utensils, AlertCircle } from "lucide-react";
+import { Clock, CheckCircle2, AlertCircle, Utensils } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import Link from "next/link";
+import { Logo } from "@/components/shared/Logo";
 import { useKitchenRealtime } from "@/hooks/useRealtime";
 import { toast } from "react-hot-toast";
 
@@ -67,8 +68,8 @@ export default function KitchenViewPage() {
       {/* Dark Theme Header for Kitchen Display System */}
       <header className="bg-black/50 border-b border-neutral-800 px-6 py-4 flex items-center justify-between z-10 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-brand-600 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(229,9,20,0.5)]">
-            <Utensils className="h-5 w-5 text-white" />
+          <div className="h-10 w-10 bg-neutral-800 rounded-lg overflow-hidden flex items-center justify-center border border-neutral-700 shadow-[0_0_15px_rgba(229,9,20,0.5)]">
+            <Logo size="lg" variant="icon" />
           </div>
           <div>
             <div className="flex items-center gap-2">

@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Lock, Utensils, LayoutDashboard, ClipboardList, MenuSquare, Users, QrCode,
+import { Lock, LayoutDashboard, ClipboardList, MenuSquare, Users, QrCode,
   CreditCard, BarChart3, UsersRound, Bell, Settings, ChevronDown,
   MessageCircle, Info, Flame, CheckCircle2, MoreVertical, RotateCcw, Plus } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 import { toast } from "react-hot-toast";
 
 export default function RolesPermissionsPage() {
@@ -102,14 +103,8 @@ export default function RolesPermissionsPage() {
       {/* ── Left Sidebar ── */}
       <aside className="hidden w-64 flex-col bg-white lg:flex border-r border-neutral-200 z-10 shadow-[2px_0_24px_rgba(0,0,0,0.02)]">
         <div className="flex h-20 items-center justify-center px-6 border-b border-neutral-100">
-          <Link href="/" className="flex items-center gap-2 group w-full">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 shadow-sm transition-transform duration-300 group-hover:scale-105">
-              <Utensils className="h-4 w-4 text-white" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base font-bold leading-tight tracking-tight text-neutral-900">TakeaBite</span>
-              <span className="text-[9px] font-medium text-neutral-400 uppercase tracking-widest leading-none mt-0.5">Smart Business OS</span>
-            </div>
+          <Link href="/" className="group w-full">
+            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
           </Link>
         </div>
 

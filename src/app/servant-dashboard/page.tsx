@@ -4,7 +4,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { StaffLayout } from '@/components/staff/StaffLayout';
 import { useStaffStore } from '@/store/useStaffStore';
 import { createBrowserSupabase } from '@/lib/supabase/client';
-import { CheckCircle, Clock, ChefHat, Utensils, ReceiptText, MapPin, X } from 'lucide-react';
+import { CheckCircle, Clock, ChefHat, ReceiptText, MapPin, X } from 'lucide-react';
+import { Logo } from "@/components/shared/Logo";
 import { updateOrderStatus } from '@/actions/orders';
 import { toast } from 'react-hot-toast';
 
@@ -119,8 +120,8 @@ export default function ServantDashboard() {
         <header className="bg-[#1a1a1a] text-white px-4 py-4 sticky top-0 z-40">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-500 p-1.5 rounded-lg">
-                <Utensils className="w-5 h-5 text-white" />
+              <div className="bg-white p-1.5 rounded-lg shadow-sm">
+                <Logo size="sm" variant="icon" />
               </div>
               <div className="flex flex-col">
                 <h1 className="font-bold text-[17px] leading-tight tracking-wide flex items-center gap-2">

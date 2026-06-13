@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Lock, Eye, EyeOff, Utensils } from "lucide-react";
+import { Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { Logo } from "@/components/shared/Logo";
 
 export default function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState("");
@@ -80,8 +81,8 @@ export default function ResetPasswordPage() {
         {/* Main card */}
         <div className="relative rounded-3xl border border-white/50 bg-white/80 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
           <div className="mb-8 flex flex-col items-center text-center">
-            <Link href="/" className="group mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 shadow-md transition-transform duration-300 hover:scale-105">
-              <Utensils className="h-7 w-7 text-white" />
+            <Link href="/" className="group mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-neutral-50 shadow-xl border border-neutral-200 transition-transform duration-300 hover:scale-105">
+              <Logo size="lg" variant="icon" />
             </Link>
             <h1 className="text-3xl font-bold text-neutral-900">Set New Password</h1>
             <p className="mt-3 text-sm leading-relaxed text-neutral-500">

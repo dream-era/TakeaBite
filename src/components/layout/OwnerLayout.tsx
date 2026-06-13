@@ -7,6 +7,7 @@ import {
   Utensils, LayoutDashboard, MenuSquare, Users, QrCode,
   CreditCard, BarChart3, Bell, Settings, ChevronDown, Flame, Search, Menu, X, LogOut
 } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 import { useUIStore } from "@/lib/store/ui-store";
 import { useAuthStore, useRestaurantProfile, useOwnerProfile, usePlan } from "@/store/authStore";
 
@@ -72,13 +73,8 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
         isSidebarOpen ? 'translate-x-0 flex' : '-translate-x-full hidden'
       }`}>
         <div className="flex h-20 shrink-0 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
-              <Utensils className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-neutral-900">
-              TakeaBite
-            </span>
+          <Link href="/" className="group">
+            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
           </Link>
           <button 
             className="lg:hidden p-2 text-neutral-500 hover:bg-neutral-100 rounded-lg"
@@ -171,8 +167,8 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
             >
               <Menu className="h-5 w-5" />
             </button>
-            <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-100 text-neutral-600 border border-neutral-200 shadow-inner">
-               <Utensils className="h-5 w-5" />
+            <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-50 border border-neutral-200 shadow-inner overflow-hidden">
+               <Logo size="lg" variant="icon" />
             </div>
             <div 
               onClick={() => {

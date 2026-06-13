@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { 
   LayoutDashboard, ShoppingBag, CreditCard, History, 
-  Receipt, UserCircle, Utensils, LogOut
+  Receipt, UserCircle, LogOut
 } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 import { useStaffStore } from "@/store/useStaffStore";
 
 interface CashierLayoutProps {
@@ -51,13 +52,8 @@ export default function CashierLayout({ children }: CashierLayoutProps) {
       <aside className="hidden lg:flex inset-y-0 left-0 z-50 w-64 flex-col border-r border-neutral-200 bg-white/95 backdrop-blur-md shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
         <div className="flex h-20 shrink-0 items-center px-6 border-b border-neutral-100">
           <div className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
-              <Utensils className="h-4 w-4 text-white" />
-            </div>
+            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-neutral-900 leading-none">
-                TakeaBite
-              </span>
               <span className="text-[10px] text-indigo-600 font-semibold tracking-wider uppercase mt-1">
                 Cashier Portal
               </span>
@@ -113,10 +109,7 @@ export default function CashierLayout({ children }: CashierLayoutProps) {
         {/* Mobile Header */}
         <header className="lg:hidden flex items-center justify-between h-16 px-4 bg-white border-b border-neutral-200 shrink-0 z-40 relative">
            <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600">
-              <Utensils className="h-3.5 w-3.5 text-white" />
-            </div>
-            <span className="text-lg font-bold text-neutral-900 tracking-tight">TakeaBite</span>
+            <Logo size="sm" />
           </div>
           <div className="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md">
             Cashier

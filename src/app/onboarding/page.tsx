@@ -7,7 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { createRestaurant, completeOnboarding } from "@/actions/restaurant";
 import { useAuthStore } from "@/store/authStore";
-import { Flame, Utensils,
+import { Flame,
   LayoutDashboard,
   ClipboardList,
   MenuSquare,
@@ -26,6 +26,7 @@ import { Flame, Utensils,
   ArrowLeft,
   Info,
   Save} from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -154,13 +155,8 @@ export default function OnboardingPage() {
       {/* ── Left Sidebar ── */}
       <aside className="hidden w-64 flex-col border-r border-neutral-200 bg-white/80 backdrop-blur-md lg:flex shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
         <div className="flex h-20 items-center px-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
-              <Utensils className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-neutral-900">
-              TakeaBite
-            </span>
+          <Link href="/" className="group">
+            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
           </Link>
         </div>
 

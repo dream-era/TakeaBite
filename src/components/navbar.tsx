@@ -7,8 +7,8 @@ import {
   ChevronDown,
   Menu,
   X,
-  Utensils,
 } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 
 const navLinks = [
   {
@@ -45,18 +45,8 @@ export default function Navbar() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group" id="nav-logo">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 transition-transform duration-300 group-hover:scale-110">
-            <Utensils className="h-4 w-4 text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight text-neutral-900 leading-none">
-              TakeaBite
-            </span>
-            <span className="text-[10px] font-black text-brand-600 uppercase tracking-wider mt-0.5">
-              Beta Version
-            </span>
-          </div>
+        <Link href="/" className="group" id="nav-logo">
+          <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
         </Link>
 
         {/* Desktop Nav */}

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Utensils, Phone, Mail } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 
 const footerSections = [
   {
@@ -24,11 +25,8 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand column */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 transition-transform group-hover:scale-110">
-                <Utensils className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-lg font-bold text-neutral-900">TakeaBite</span>
+            <Link href="/" className="group">
+              <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
             </Link>
           </div>
 

@@ -11,6 +11,7 @@ import { Lock, Utensils, LayoutDashboard, ClipboardList, MenuSquare, Users, QrCo
   CreditCard, BarChart3, UsersRound, Bell, Settings, Sparkles, Search,
   ChevronDown, ArrowRight, ArrowLeft, CheckCircle2, Clock, Store,
   Info } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 
 export default function BusinessSetupPage() {
   const router = useRouter();
@@ -95,11 +96,8 @@ export default function BusinessSetupPage() {
       {/* Sidebar */}
       <aside className="hidden w-64 flex-col border-r border-neutral-200 bg-white/80 backdrop-blur-md lg:flex shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10 relative">
         <div className="flex h-20 items-center px-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
-              <Utensils className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-neutral-900">TakeaBite</span>
+          <Link href="/" className="group">
+            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
           </Link>
         </div>
         <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">

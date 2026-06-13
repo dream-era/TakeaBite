@@ -12,16 +12,21 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         brand: {
-          50: "#fef2f2",
-          100: "#fee2e2",
-          200: "#fecaca",
-          300: "#fca5a5",
-          400: "#f87171",
-          500: "#ef4444",
-          600: "#dc2626",
-          700: "#b91c1c",
-          800: "#991b1b",
-          900: "#7f1d1d",
+          50: "#FEF4F4",
+          100: "#FCE8E9",
+          200: "#F7C6C8",
+          300: "#F1A3A7",
+          400: "#E65E64",
+          500: "#D7303B", // Primary Red
+          600: "#C22B35",
+          700: "#A1242C",
+          800: "#811D23",
+          900: "#69171D",
+        },
+        fox: {
+          dark: "#0B1020", // Dark Background
+          light: "#D6E8F4", // Secondary Light Blue
+          white: "#FFFFFF",
         },
         neutral: {
           50: "#fafafa",
