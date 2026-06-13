@@ -13,7 +13,7 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
-  orderType: 'dine_in' | 'takeaway';
+  orderType: 'dine_in' | 'takeaway' | null;
   setOrderType: (type: 'dine_in' | 'takeaway') => void;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
   updateQuantity: (id: string, workspaceId: string, delta: number) => void;
@@ -30,7 +30,7 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      orderType: 'dine_in',
+      orderType: null,
       setOrderType: (type) => set({ orderType: type }),
       confirmedOrderDetails: null,
       placedOrderId: null,
@@ -47,10 +47,7 @@ export const useCartStore = create<CartStore>()(
             )
           };
         }
-        // Auto-set default order type on first item added
-        if (state.items.filter(i => i.workspaceId === item.workspaceId).length === 0) {
-          set({ orderType: item.tableId ? 'dine_in' : 'takeaway' });
-        }
+        // Auto-set removed to force explicit selection
         return { items: [...state.items, { ...item, quantity: 1 }] };
       }),
       updateQuantity: (id, workspaceId, delta) => set((state) => {
@@ -69,7 +66,7 @@ export const useCartStore = create<CartStore>()(
       })),
       clearCart: (workspaceId) => set((state) => ({
         items: state.items.filter(item => item.workspaceId !== workspaceId),
-        orderType: 'dine_in', // Reset to default
+        orderType: null, // Reset to default
       })),
       getCartForWorkspace: (workspaceId, tableId) => {
         return get().items.filter(item => item.workspaceId === workspaceId && item.tableId === tableId);

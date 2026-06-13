@@ -179,9 +179,9 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization)
      * - favicon.ico
-     * - public folder files (png, jpg, svg, etc.)
      * - /order/* (customer pages — fully public, no auth needed)
+     * - /shop/* (customer pages — fully public, no auth needed)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|order/).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|order/|shop/).*)',
   ],
 }

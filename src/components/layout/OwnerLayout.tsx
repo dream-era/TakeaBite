@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { 
   Utensils, LayoutDashboard, MenuSquare, Users, QrCode,
-  CreditCard, BarChart3, Bell, Settings, ChevronDown, Flame, Search, Menu, X
+  CreditCard, BarChart3, Bell, Settings, ChevronDown, Flame, Search, Menu, X, LogOut
 } from "lucide-react";
 import { useUIStore } from "@/lib/store/ui-store";
 import { useAuthStore, useRestaurantProfile, useOwnerProfile, usePlan } from "@/store/authStore";
@@ -19,7 +19,8 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
   const router = useRouter();
   const { isSidebarOpen, setSidebarOpen } = useUIStore();
 
-  const { initialize } = useAuthStore();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { initialize, logout } = useAuthStore();
   const profile = useRestaurantProfile();
   const owner = useOwnerProfile();
   const { plan, subStatus, isTrialExpired, trialDaysRemaining } = usePlan();
@@ -45,6 +46,16 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
     { icon: BarChart3, label: "Analytics", href: "/analytics" },
     { icon: Settings, label: "Settings", href: "/settings" },
   ];
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } catch (err) {
+      console.error(err);
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <div className="flex h-screen w-full bg-[#F5F5F1] overflow-hidden font-sans">
@@ -120,6 +131,18 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Logout Button */}
+        <div className="p-4 border-t border-neutral-100 mt-auto">
+          <button 
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="flex-1 text-left">{isLoggingOut ? "Logging out..." : "Logout"}</span>
+          </button>
         </div>
       </aside>
 

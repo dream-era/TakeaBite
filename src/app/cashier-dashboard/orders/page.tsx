@@ -103,7 +103,7 @@ export default function CashierOrdersPage() {
                 <div className="p-4 border-b border-neutral-100 flex justify-between items-start bg-neutral-50/50">
                   <div>
                     <h3 className="font-mono font-black text-xl text-neutral-900 leading-none">
-                      #{order.daily_order_number || order.id.slice(0,6)}
+                      #{order.daily_order_number}
                     </h3>
                     <p className="text-sm font-bold text-indigo-700 mt-1">
                       {order.tables ? `Table ${order.tables.table_number}` : (order.order_type === 'takeaway' ? 'Takeaway' : 'Dine In')}

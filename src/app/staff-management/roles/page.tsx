@@ -5,11 +5,12 @@ import Link from "next/link";
 import { Lock, Utensils, LayoutDashboard, ClipboardList, MenuSquare, Users, QrCode,
   CreditCard, BarChart3, UsersRound, Bell, Settings, ChevronDown,
   MessageCircle, Info, Flame, CheckCircle2, MoreVertical, RotateCcw, Plus } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function RolesPermissionsPage() {
   const handleLockedClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    alert("This feature will be launched soon!");
+    toast("This feature will be launched soon!", { icon: "🚀" });
   };
 
   const [userName, setUserName] = useState("Amit");

@@ -87,6 +87,12 @@ CREATE TABLE IF NOT EXISTS public.orders (
   total_amount DECIMAL(10,2) NOT NULL,
   customer_name TEXT,
   customer_phone TEXT,
+  daily_order_number INTEGER,
+  business_date DATE,
+  payment_method TEXT CHECK (payment_method IN ('cash', 'online')),
+  order_hash TEXT,
+  razorpay_order_id TEXT,
+  razorpay_payment_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -193,3 +199,21 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- ==========================================
+-- INDEXES
+-- ==========================================
+CREATE INDEX IF NOT EXISTS idx_orders_daily_number ON public.orders(daily_order_number);
+CREATE INDEX IF NOT EXISTS idx_orders_restaurant_status ON public.orders(workspace_id, status);
+CREATE INDEX IF NOT EXISTS idx_orders_created_at ON public.orders(created_at);
+CREATE INDEX IF NOT EXISTS idx_orders_payment_method ON public.orders(payment_method);
+CREATE INDEX IF NOT EXISTS idx_orders_business_date ON public.orders(business_date);
+
+-- ==========================================
+-- SUPABASE REALTIME
+-- ==========================================
+ALTER PUBLICATION supabase_realtime ADD TABLE orders;
+ALTER PUBLICATION supabase_realtime ADD TABLE order_items;
+ALTER PUBLICATION supabase_realtime ADD TABLE tables;
+ALTER PUBLICATION supabase_realtime ADD TABLE menu_items;
+ALTER PUBLICATION supabase_realtime ADD TABLE inventory_items;

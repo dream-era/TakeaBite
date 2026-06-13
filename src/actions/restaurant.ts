@@ -101,7 +101,8 @@ async function getAuthenticatedOwner() {
 // Appends random 4-char suffix to handle duplicates.
 // Must match the URL pattern: /order/{slug}/{tableId}
 // ─────────────────────────────────────────────
-function generateSlug(name: string): string {
+async function generateUniqueSlug(name: string): Promise<string> {
+  const supabase = createAdminSupabase()
   const base = name
     .toLowerCase()
     .trim()
@@ -110,9 +111,25 @@ function generateSlug(name: string): string {
     .replace(/-+/g, '-')           // Collapse multiple hyphens
     .slice(0, 40)                  // Max 40 chars for base
 
-  // 4-char random suffix to prevent slug collisions
-  const suffix = Math.random().toString(36).slice(2, 6)
-  return `${base}-${suffix}`
+  let slug = base
+  let attempts = 0
+  
+  while (true) {
+    // Check if slug exists
+    const { data } = await supabase
+      .from('restaurants')
+      .select('id')
+      .eq('slug', slug)
+      .single()
+      
+    if (!data) {
+      return slug // It's unique!
+    }
+    
+    attempts++
+    // Append a number on collision
+    slug = `${base}-${attempts}`
+  }
 }
 
 // ─────────────────────────────────────────────
@@ -157,6 +174,7 @@ const CreateRestaurantSchema = z.object({
   address: z.string().max(300).optional(),
   city: z.string().max(100).optional(),
   description: z.string().max(200).optional(),
+  tableCount: z.number().min(1).max(100).optional(),
 })
 
 export async function createRestaurant(
@@ -201,7 +219,7 @@ export async function createRestaurant(
     }
 
     // Generate unique slug
-    const slug = generateSlug(name)
+    const slug = await generateUniqueSlug(name)
 
     // Insert restaurant row
     const { data: restaurant, error: insertError } = await supabase
@@ -233,6 +251,23 @@ export async function createRestaurant(
       return {
         success: false,
         error: 'Failed to create restaurant. Please try again.',
+      }
+    }
+
+    // Insert initial tables based on tableCount
+    if (parsed.data.tableCount && parsed.data.tableCount > 0) {
+      const tableInserts = Array.from({ length: parsed.data.tableCount }).map((_, i) => ({
+        restaurant_id: restaurant.id,
+        table_number: i + 1,
+        table_name: `Table ${i + 1}`,
+        status: 'available',
+        is_active: true
+      }));
+      
+      const { error: tableError } = await supabase.from('tables').insert(tableInserts);
+      if (tableError) {
+        console.error('[MenuQR] createRestaurant table insert error:', tableError);
+        // We don't fail the whole request, but log it
       }
     }
 
@@ -645,7 +680,7 @@ export async function updateRestaurantProfile(
     // IMPORTANT: Changing slug breaks existing printed QR codes
     // The component should warn the owner about this
     const nameChanged = name && name !== current?.name
-    const newSlug = nameChanged ? generateSlug(name) : undefined
+    const newSlug = nameChanged ? await generateUniqueSlug(name!) : undefined
 
     const updates: Record<string, unknown> = {}
     if (name) updates.name = name
@@ -810,6 +845,26 @@ export async function getRestaurantProfile(restaurantId: string): Promise<Action
     return { success: true, data }
   } catch (err) {
     console.error('getRestaurantProfile error:', err)
+    return { success: false, error: 'Internal Server Error' }
+  }
+}
+
+export async function getTableDetails(tableId: string): Promise<ActionResult<unknown>> {
+  try {
+    const supabase = createAdminSupabase()
+    const { data, error } = await supabase
+      .from('tables')
+      .select('id, table_number, table_name, status')
+      .eq('id', tableId)
+      .single()
+
+    if (error || !data) {
+      return { success: false, error: 'Table not found' }
+    }
+
+    return { success: true, data }
+  } catch (err) {
+    console.error('getTableDetails error:', err)
     return { success: false, error: 'Internal Server Error' }
   }
 }

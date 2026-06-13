@@ -122,9 +122,15 @@ export default function CartPage() {
               <span className="font-label-md text-secondary uppercase tracking-wider text-xs">Total to pay</span>
               <span className="font-headline-md text-on-surface">${total.toFixed(2)}</span>
             </div>
-            <Link href={checkoutUrl} className="flex-1 flex justify-center items-center h-14 bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">
-              Checkout
-            </Link>
+            {orderType ? (
+              <Link href={checkoutUrl} className="flex-1 flex justify-center items-center h-14 bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">
+                Checkout
+              </Link>
+            ) : (
+              <button disabled className="flex-1 flex justify-center items-center h-14 bg-surface-variant text-secondary font-label-lg rounded-xl cursor-not-allowed">
+                Select Order Type
+              </button>
+            )}
           </div>
         </div>
       )}

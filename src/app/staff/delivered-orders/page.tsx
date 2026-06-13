@@ -106,7 +106,7 @@ export default function DeliveredOrdersPage() {
                 <div className="px-4 py-3 flex justify-between items-start border-b border-dashed border-neutral-200 bg-neutral-50">
                   <div>
                     <h3 className="font-black text-lg text-neutral-500 tracking-tight leading-none mb-1 line-through decoration-neutral-300">
-                      Order #{order.id.slice(0, 6)}
+                      Order #{order.daily_order_number}
                     </h3>
                     <div className="font-bold text-neutral-500 text-sm">
                       {parsedOrderType === 'takeaway' 

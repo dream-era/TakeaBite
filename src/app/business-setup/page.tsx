@@ -19,7 +19,7 @@ export default function BusinessSetupPage() {
 
   const handleLockedClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    alert("This feature will be launched soon!");
+    toast("This feature will be launched soon!", { icon: "🚀" });
   };
 
   const [businessType, setBusinessType] = useState<"individual" | "proprietorship" | "partnership" | "private_limited">("individual");

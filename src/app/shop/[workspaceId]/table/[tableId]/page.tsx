@@ -9,9 +9,10 @@ import { CategoryChips } from "@/components/customer/CategoryChips";
 import { ProductCard } from "@/components/customer/ProductCard";
 import { StickyCartButton } from "@/components/customer/StickyCartButton";
 import { useCartStore } from "@/store/useCartStore";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPublicMenuItems } from "@/actions/menu";
-import { getRestaurantProfile } from "@/actions/restaurant";
+import { getRestaurantProfile, getTableDetails } from "@/actions/restaurant";
+import { createBrowserSupabase } from "@/lib/supabase/client";
 
 type ShopMenuItem = {
   id: string;
@@ -35,6 +36,19 @@ export default function DigitalMenuPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!workspaceId) return;
+    const supabase = createBrowserSupabase();
+    const channel = supabase.channel(`public:menu_items:shop_table_${workspaceId}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'menu_items', filter: `restaurant_id=eq.${workspaceId}` }, () => {
+        queryClient.invalidateQueries({ queryKey: ['menuPublic', workspaceId] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [workspaceId, queryClient]);
+
   // Fetch restaurant details
   const { data: restaurantData, isLoading: isShopLoading } = useQuery({
     queryKey: ['restaurant', workspaceId],
@@ -46,6 +60,18 @@ export default function DigitalMenuPage() {
   });
 
   const shop: any = restaurantData;
+
+  // Fetch table details
+  const { data: tableData } = useQuery({
+    queryKey: ['table', tableId],
+    queryFn: () => getTableDetails(tableId).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    }),
+    enabled: !!tableId,
+  });
+  const table: any = tableData;
+  const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : `Table ${tableId.substring(0,4)}`;
 
   // Fetch menu items
   const { data: menuData, isLoading: isMenuLoading } = useQuery({
@@ -179,7 +205,7 @@ export default function DigitalMenuPage() {
           <h2 className="font-headline-lg text-headline-lg text-on-surface">{activeCategory} Menu</h2>
           {tableId && (
             <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">
-              Table {tableId}
+              {tableLabel}
             </span>
           )}
         </div>

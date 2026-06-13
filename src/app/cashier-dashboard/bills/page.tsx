@@ -158,7 +158,7 @@ export default function CashierBillsPage() {
 
               <div className="mb-4 text-xs">
                 <p>Date: {new Date(order.created_at).toLocaleString()}</p>
-                <p>Order No: #{order.daily_order_number || order.id.slice(0, 8)}</p>
+                <p>Order No: #{order.daily_order_number}</p>
                 {order.tables && <p>Table: {order.tables.table_number}</p>}
                 {order.customer_name && <p>Customer: {order.customer_name}</p>}
                 {order.payment_status === 'paid' ? (

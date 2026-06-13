@@ -118,7 +118,7 @@ export default function CashierPaymentsPage() {
                     const isPaid = payment.payment_status === 'paid';
                     return (
                       <tr key={payment.id} className="hover:bg-neutral-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap font-mono font-bold text-neutral-900">#{payment.daily_order_number || payment.id.slice(0,6)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap font-mono font-bold text-neutral-900">#{payment.daily_order_number}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-neutral-900">₹{payment.total_amount}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm font-semibold capitalize text-neutral-700">{payment.payment_method}</span>
@@ -152,7 +152,7 @@ export default function CashierPaymentsPage() {
                    <div key={payment.id} className="p-4 flex flex-col gap-3">
                      <div className="flex justify-between items-start">
                         <div>
-                          <span className="font-mono font-bold text-lg text-neutral-900">#{payment.daily_order_number || payment.id.slice(0,6)}</span>
+                          <span className="font-mono font-bold text-lg text-neutral-900">#{payment.daily_order_number}</span>
                           <p className="text-xs text-neutral-500 font-mono mt-0.5 truncate max-w-[150px]">
                             {payment.razorpay_payment_id || 'No Txn ID'}
                           </p>

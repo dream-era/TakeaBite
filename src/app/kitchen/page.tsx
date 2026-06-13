@@ -130,7 +130,7 @@ export default function KitchenViewPage() {
                 <div key={order.id} className="flex-shrink-0 w-80 max-w-[85vw] h-full flex flex-col bg-neutral-800 rounded-2xl border border-neutral-700 shadow-xl overflow-hidden snap-center">
                   <div className={`${isOrderReady ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-rose-500/10 border-rose-500/20'} border-b px-5 py-3`}>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-lg font-bold text-white">#{order.id.slice(0, 6)}</span>
+                      <span className="text-lg font-bold text-white">#{order.daily_order_number}</span>
                       <span className={`${isOrderReady ? 'text-emerald-400' : 'text-rose-400'} text-xs font-bold flex items-center gap-1 animate-pulse`}>
                         <Clock className="h-3 w-3" /> {Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000)}m waiting
                       </span>

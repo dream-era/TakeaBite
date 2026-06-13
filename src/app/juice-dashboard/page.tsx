@@ -176,6 +176,10 @@ export default function JuiceDashboardPage() {
             const orderAgeMinutes = Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000);
             const isUrgent = orderAgeMinutes >= 15;
 
+            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(dine_in|takeaway)\]/)?.[1] || (order.table_id ? 'dine_in' : 'takeaway');
+            const paymentMethodLabel = order.payment_method === 'cash' ? '💵 Cash' : '📱 Online';
+            const orderTypeLabel = parsedOrderType === 'takeaway' ? '🛍 Takeaway' : '🍽 Eat Here';
+
             return (
               <div 
                 key={order.id} 
@@ -189,12 +193,20 @@ export default function JuiceDashboardPage() {
                 <div className="px-4 py-3 flex justify-between items-start border-b border-dashed border-neutral-200">
                   <div>
                     <h3 className="font-black text-3xl text-[#111827] tracking-tight leading-none mb-1 font-mono">
-                      #{order.daily_order_number ?? order.id.slice(0, 6)}
+                      #{order.daily_order_number}
                     </h3>
-                    <div className="font-bold text-neutral-700 text-sm">
+                    <div className="font-bold text-neutral-700 text-sm mb-2">
                       {order.tables 
                         ? (order.tables.table_name || `Table ${order.tables.table_number}`)
                         : 'Counter / Takeaway'}
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface">
+                        {orderTypeLabel}
+                      </span>
+                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface">
+                        {paymentMethodLabel}
+                      </span>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1.5">

@@ -5,6 +5,7 @@ import { StaffLayout } from "@/components/staff/StaffLayout";
 import { useStaffStore } from "@/store/useStaffStore";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { Search, Package, CheckCircle2, XCircle } from "lucide-react";
+import { toast } from "react-hot-toast";
 import FoodImage from '@/components/shared/FoodImage';
 import { nameToImageSlug } from '@/data/foodLibrary';
 import type { MenuItem } from "@/types/database";
@@ -114,7 +115,7 @@ export default function StockManagementPage() {
       if (error) throw error;
     } catch (err) {
       setItems(current => current.map(i => i.id === item.id ? { ...i, is_out_of_stock: item.is_out_of_stock } : i));
-      alert("Failed to update stock status");
+      toast.error("Failed to update stock status");
     }
   };
 

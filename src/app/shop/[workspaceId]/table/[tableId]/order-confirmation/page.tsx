@@ -10,12 +10,13 @@ import FoodImage from "@/components/shared/FoodImage";
 import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
+import { createBrowserSupabase } from "@/lib/supabase/client";
 
 export default function OrderConfirmationPage() {
   const params = useParams();
   const router = useRouter();
   const workspaceId = params.workspaceId as string;
-  const tableId = params.tableId as string || "4";
+  const tableId = params.tableId as string | undefined;
 
   const confirmedOrder = useCartStore((s) => s.confirmedOrderDetails);
   const placedOrderId = useCartStore((s) => s.placedOrderId);
@@ -37,11 +38,71 @@ export default function OrderConfirmationPage() {
     enabled: !!workspaceId,
   });
 
+  const { data: orderData, isLoading: isOrderLoading } = useQuery({
+    queryKey: ['order-status', placedOrderId],
+    queryFn: async () => {
+      if (!placedOrderId) return null;
+      const supabase = createBrowserSupabase();
+      const { data, error } = await supabase
+        .from('orders')
+        .select('status, payment_status, payment_method, daily_order_number')
+        .eq('id', placedOrderId)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!placedOrderId,
+    refetchInterval: (data) => {
+      // Refetch every 3s if it's still pending (webhook might update it)
+      if (data?.status === 'pending' || data?.payment_status === 'pending') {
+        return 3000;
+      }
+      return false;
+    }
+  });
+
   const handleTrackOrder = () => {
     router.push(`/shop/${workspaceId}/order-tracking`);
   };
 
   if (!mounted) return null;
+
+  if (isOrderLoading) {
+    return (
+      <div className="bg-background min-h-screen flex items-center justify-center">
+        <div className="animate-spin material-symbols-outlined text-primary text-4xl">refresh</div>
+      </div>
+    );
+  }
+
+  const isOnlinePending = orderData?.payment_method === 'online' && orderData?.payment_status === 'pending';
+  const isFailed = orderData?.status === 'failed' || orderData?.status === 'cancelled';
+
+  if (isFailed || isOnlinePending) {
+    return (
+      <div className="bg-background min-h-screen flex flex-col items-center justify-center p-6 text-center">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-surface-variant text-secondary rounded-full mb-6">
+          <span className="material-symbols-outlined text-5xl">
+            {isFailed ? 'error' : 'hourglass_empty'}
+          </span>
+        </div>
+        <h2 className="font-headline-xl text-on-surface mb-2">
+          {isFailed ? 'Payment Failed' : 'Awaiting Payment'}
+        </h2>
+        <p className="font-body-lg text-secondary mb-8">
+          {isFailed 
+            ? 'Your payment could not be processed. Please try again.' 
+            : 'We are verifying your payment. This page will refresh automatically.'}
+        </p>
+        <button 
+          onClick={() => router.replace(`/shop/${workspaceId}`)}
+          className="px-8 py-3 bg-primary text-on-primary rounded-xl font-label-lg shadow-lg"
+        >
+          Return to Menu
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background font-body-md text-on-background min-h-screen flex flex-col mx-auto max-w-md border-x border-surface-variant relative shadow-2xl">
@@ -64,7 +125,7 @@ export default function OrderConfirmationPage() {
             <div className="flex justify-between items-start mb-element-gap-md">
               <div>
                 <p className="font-label-md text-secondary uppercase tracking-wider text-[10px]">Order ID</p>
-                <p className="font-headline-md text-on-surface">#{placedOrderId?.slice(0, 8).toUpperCase() ?? 'LOADING'}</p>
+                <p className="font-headline-md text-on-surface">#{orderData?.daily_order_number ?? '...'}</p>
               </div>
               <div className="text-right">
                 <p className="font-label-md text-secondary uppercase tracking-wider text-[10px]">Date</p>
@@ -112,8 +173,8 @@ export default function OrderConfirmationPage() {
               </div>
             </div>
             
-            <div className="mt-6 pt-4 border-t border-dashed border-surface-variant flex items-center gap-2">
-              <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Payment Details:</span>
+            <div className="mt-6 pt-4 border-t border-dashed border-surface-variant flex items-center gap-2 justify-between">
+              <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Payment Method: <span className="font-bold text-primary">{orderData?.payment_method === 'cash' ? 'Cash at Counter' : 'Online'}</span></span>
               <div className="flex items-center text-green-600 gap-1">
                 <span className="material-symbols-outlined text-[18px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                 <span className="text-xs font-bold uppercase">Success</span>
@@ -139,7 +200,7 @@ export default function OrderConfirmationPage() {
         </div>
       </main>
 
-      <CustomerBottomNav workspaceId={workspaceId} tableId={tableId} activeTab="orders" />
+      <CustomerBottomNav workspaceId={workspaceId} activeTab="orders" />
     </div>
   );
 }

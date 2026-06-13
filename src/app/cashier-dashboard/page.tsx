@@ -149,7 +149,7 @@ export default function CashierDashboard() {
                 const isPaid = order.payment_status === 'paid';
                 return (
                   <tr key={order.id} className="hover:bg-neutral-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap font-mono font-bold text-neutral-900">#{order.daily_order_number || order.id.slice(0,6)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono font-bold text-neutral-900">#{order.daily_order_number}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-neutral-700">
                       {order.tables ? `Table ${order.tables.table_number}` : (order.order_type === 'takeaway' ? 'Takeaway' : 'Dine In')}
                     </td>
@@ -180,7 +180,7 @@ export default function CashierDashboard() {
                <div key={order.id} className="p-4 flex flex-col gap-3">
                  <div className="flex justify-between items-start">
                     <div>
-                      <span className="font-mono font-bold text-lg text-neutral-900">#{order.daily_order_number || order.id.slice(0,6)}</span>
+                      <span className="font-mono font-bold text-lg text-neutral-900">#{order.daily_order_number}</span>
                       <p className="text-sm font-semibold text-neutral-600 mt-0.5">
                         {order.tables ? `Table ${order.tables.table_number}` : (order.order_type === 'takeaway' ? 'Takeaway' : 'Dine In')}
                       </p>

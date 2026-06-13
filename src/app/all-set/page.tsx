@@ -23,11 +23,12 @@ import { Flame, Utensils,
   ConciergeBell,
   UserCheck,
   Crown } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function AllSetPage() {
   const handleLockedClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    alert("This feature will be launched soon!");
+    toast("This feature will be launched soon!", { icon: "🚀" });
   };
 
   const [userName, setUserName] = useState("Amit");

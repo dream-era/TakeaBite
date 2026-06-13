@@ -12,7 +12,7 @@ export default function OrderTrackingPage() {
   const params = useParams();
   const router = useRouter();
   const workspaceId = params.workspaceId as string;
-  const tableId = params.tableId as string || "4";
+  const tableId = params.tableId as string | undefined;
 
   const queryClient = useQueryClient();
   const supabase = createBrowserSupabase();
@@ -30,7 +30,7 @@ export default function OrderTrackingPage() {
   const { data: orders, isLoading } = useQuery({
     queryKey: ['customer-orders', workspaceId, tableId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('orders')
         .select(`
           *,
@@ -40,9 +40,17 @@ export default function OrderTrackingPage() {
           )
         `)
         .eq('restaurant_id', workspaceId)
-        .eq('table_id', tableId)
+        .not('status', 'in', '("pending", "failed", "cancelled")')
         .order('created_at', { ascending: false })
         .limit(10);
+
+      if (tableId) {
+        query = query.eq('table_id', tableId);
+      } else {
+        query = query.is('table_id', null);
+      }
+      
+      const { data, error } = await query;
       
       if (error) throw error;
       return data;
@@ -51,7 +59,7 @@ export default function OrderTrackingPage() {
 
   // Supabase Realtime Subscription for Instant Updates
   useEffect(() => {
-    const channel = supabase.channel('customer-tracking-table')
+    const channel = supabase.channel('customer-tracking')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${workspaceId}` },
@@ -123,7 +131,7 @@ export default function OrderTrackingPage() {
                   <div className="flex justify-between items-center border-b border-surface-variant pb-4 mb-6">
                     <div>
                       <p className="font-label-md text-secondary uppercase tracking-wider text-[10px]">Order No</p>
-                      <p className="font-headline-md text-[32px] font-black text-on-surface">#{order.daily_order_number ?? order.id.slice(0, 8)}</p>
+                      <p className="font-headline-md text-[32px] font-black text-on-surface">#{order.daily_order_number}</p>
                     </div>
                     <div className="bg-surface-container-high px-3 py-1 rounded-md">
                       <span className="font-label-md text-primary flex items-center gap-1">
@@ -189,7 +197,7 @@ export default function OrderTrackingPage() {
 
       </main>
 
-      <CustomerBottomNav workspaceId={workspaceId} tableId={tableId} activeTab="orders" />
+      <CustomerBottomNav workspaceId={workspaceId} activeTab="orders" />
     </div>
   );
 }

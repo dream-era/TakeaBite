@@ -168,7 +168,7 @@ export default function ServantDashboardPage() {
                 <div className="px-4 py-3 flex justify-between items-start border-b border-dashed border-neutral-200">
                   <div>
                     <h3 className="font-black text-3xl text-[#111827] tracking-tight leading-none mb-1 font-mono">
-                      #{order.daily_order_number ?? order.id.slice(0, 6)}
+                      #{order.daily_order_number}
                     </h3>
                     <div className="font-bold text-neutral-700 text-sm">
                       {parsedOrderType === 'takeaway' 

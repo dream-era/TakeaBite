@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import { getRestaurantProfile } from "@/actions/restaurant";
+import { getRestaurantProfile, getTableDetails } from "@/actions/restaurant";
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -28,6 +28,24 @@ export default function CheckoutPage() {
     }),
     enabled: !!workspaceId,
   });
+
+  const { data: tableData } = useQuery({
+    queryKey: ['table', tableId],
+    queryFn: () => getTableDetails(tableId as string).then(res => {
+      if (!res.success) throw new Error(res.error);
+      return res.data;
+    }),
+    enabled: !!tableId,
+  });
+  const table: any = tableData;
+  const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : (tableId ? `Table ${tableId.substring(0,4)}` : '');
+
+  // Redirect back to cart if order type is somehow null
+  useEffect(() => {
+    if (mounted && !orderType && items.length > 0) {
+      router.replace(tableId ? `/shop/${workspaceId}/table/${tableId}/cart` : `/shop/${workspaceId}/cart`);
+    }
+  }, [mounted, orderType, items.length, router, workspaceId, tableId]);
 
   const paymentEnabled = restaurantData?.payment_enabled || false;
   const [selectedMethod, setSelectedMethod] = useState<'online' | 'cash'>('cash');
@@ -75,8 +93,6 @@ export default function CheckoutPage() {
       }
 
       const { setConfirmedOrderDetails, setPlacedOrderId } = useCartStore.getState();
-      setConfirmedOrderDetails(result.orderDetails);
-      setPlacedOrderId(result.orderId || result.id);
       
       if (selectedMethod === 'online' && result.razorpay) {
         const script = document.createElement('script');
@@ -101,6 +117,8 @@ export default function CheckoutPage() {
               },
             },
             handler: (response: any) => {
+              setConfirmedOrderDetails(result.orderDetails);
+              setPlacedOrderId(result.orderId || result.id);
               clearCart(workspaceId);
               const nextUrl = tableId 
                 ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
@@ -118,6 +136,8 @@ export default function CheckoutPage() {
         };
         document.body.appendChild(script);
       } else {
+        setConfirmedOrderDetails(result.orderDetails);
+        setPlacedOrderId(result.orderId || result.id);
         toast.success("Order placed successfully");
         clearCart(workspaceId);
         const nextUrl = tableId 
@@ -159,7 +179,7 @@ export default function CheckoutPage() {
               {orderType === 'dine_in' ? 'Dine In' : 'Takeaway / Counter Pickup'}
             </span>
           </div>
-          {orderType === 'dine_in' && tableId && <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableId}</span>}
+          {orderType === 'dine_in' && tableId && <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableLabel}</span>}
         </div>
 
         <form id="checkout-form" onSubmit={handlePlaceOrder} className="space-y-6">
