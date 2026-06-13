@@ -417,11 +417,11 @@ export default function FoodLibraryPicker({
         </div>
 
         {/* ── CONTENT ── */}
-        <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
 
           {/* SEARCH MODE */}
           {viewMode === 'search' && (
-            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
               <div style={{ padding: '12px 20px', borderBottom: '0.5px solid #f3f4f6' }}>
                 <input
                   type="text"
@@ -440,7 +440,7 @@ export default function FoodLibraryPicker({
                   }}
                 />
               </div>
-              <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px' }}>
+              <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px', minHeight: 0 }}>
                 {!searchQuery && (
                   <div style={{ textAlign: 'center', color: '#9ca3af', padding: '40px 0', fontSize: 13 }}>
                     Type to search from {FOOD_LIBRARY.length} food items
@@ -460,7 +460,7 @@ export default function FoodLibraryPicker({
 
           {/* BROWSE MODE */}
           {viewMode === 'browse' && (
-            <div style={{ display: 'flex', height: '100%' }}>
+            <div style={{ display: 'flex', height: '100%', minHeight: 0 }}>
               {/* Category sidebar */}
               <div
                 style={{
