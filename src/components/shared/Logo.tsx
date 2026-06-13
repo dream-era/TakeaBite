@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface LogoProps {
   className?: string;
@@ -7,44 +8,43 @@ interface LogoProps {
   withBackground?: boolean;
 }
 
-import Image from "next/image";
-
 export function Logo({
   className = "",
   size = "md",
   variant = "full",
   withBackground = false,
 }: LogoProps) {
-  // Increased logo size: Desktop: 60px, Tablet: 54px, Mobile: 48px
-  const heightClass = "h-[48px] md:h-[54px] lg:h-[60px]";
+  // Height range 40px to 48px
+  const heightClass = "h-[40px] md:h-[44px] lg:h-[48px]";
   const widthClass = "w-auto";
+
+  const foxIcon = (
+    <Image
+      src="/fox-logo.png"
+      alt="TakeaBite Logo"
+      width={100}
+      height={100}
+      className={`${heightClass} ${widthClass} object-contain shrink-0`}
+      priority
+    />
+  );
 
   if (variant === "icon") {
     return (
       <div className={`flex items-center justify-center ${className}`}>
-        <Image
-          src="/icon.png"
-          alt="TakeaBite Icon"
-          width={397}
-          height={397}
-          className={`${heightClass} ${widthClass} object-contain shrink-0`}
-          priority
-        />
+        {foxIcon}
       </div>
     );
   }
 
-  // Full variant using the exact attached image as requested
+  // Full variant using the exact attached image and wordmark
   return (
-    <div className={`flex items-center transition-opacity duration-200 hover:opacity-90 ${className}`}>
-      <Image
-        src="/takeabite-logo.png"
-        alt="TakeaBite Logo"
-        width={1024}
-        height={397}
-        className={`${heightClass} ${widthClass} object-contain shrink-0`}
-        priority
-      />
+    <div className={`flex items-center gap-3 transition-opacity duration-200 hover:opacity-90 ${className}`}>
+      {foxIcon}
+      <div className="flex items-center leading-none font-[800] text-xl md:text-2xl tracking-tight">
+        <span style={{ color: '#111111' }}>Takea</span>
+        <span style={{ color: '#D7303B' }}>Bite</span>
+      </div>
     </div>
   );
 }

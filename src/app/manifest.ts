@@ -15,17 +15,16 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: 'any',
         type: 'image/x-icon',
       },
-      // You can add more icons here if you generate them in the public folder, e.g.,
-      // {
-      //   src: '/icon-192x192.png',
-      //   sizes: '192x192',
-      //   type: 'image/png',
-      // },
-      // {
-      //   src: '/icon-512x512.png',
-      //   sizes: '512x512',
-      //   type: 'image/png',
-      // },
+      {
+        src: '/icon-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        src: '/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
     ],
   };
 }
