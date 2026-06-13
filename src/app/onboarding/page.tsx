@@ -116,9 +116,7 @@ export default function OnboardingPage() {
       } finally {
         setIsSubmitting(false);
       }
-    } else if (currentStep < 6) {
-      setCurrentStep(currentStep + 1);
-    } else if (currentStep === 6) {
+    } else if (currentStep === 2) {
       if (!restaurant) return;
       setIsSubmitting(true);
       try {
@@ -143,11 +141,7 @@ export default function OnboardingPage() {
 
   const steps = [
     { number: 1, title: "Shop Details" },
-    { number: 2, title: "Business Setup" },
-    { number: 3, title: "Menu Setup" },
-    { number: 4, title: "Payment Setup" },
-    { number: 5, title: "QR Setup" },
-    { number: 6, title: "Review & Launch" },
+    { number: 2, title: "Review & Launch" },
   ];
 
   return (
@@ -219,8 +213,8 @@ export default function OnboardingPage() {
               <Bell className="h-4 w-4" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-white"></span>
             </button>
-            <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-sm ring-1 ring-neutral-200">
-              <img src="https://i.pravatar.cc/150?u=amit" alt="Profile" className="h-full w-full object-cover" />
+            <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-sm ring-1 ring-neutral-200 bg-brand-50 flex items-center justify-center text-brand-600 font-bold">
+              {userName.charAt(0).toUpperCase()}
             </div>
           </div>
         </header>
@@ -378,19 +372,7 @@ export default function OnboardingPage() {
                   </div>
                 )}
 
-                {currentStep > 1 && currentStep < 6 && (
-                  <div className="flex flex-col items-center justify-center h-full text-center animate-in fade-in duration-500 py-16">
-                    <div className="h-20 w-20 bg-brand-50 text-brand-500 rounded-full flex items-center justify-center mb-6">
-                      <Settings className="h-10 w-10 animate-spin-slow" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-neutral-900 mb-2">{steps[currentStep-1].title}</h3>
-                    <p className="text-neutral-500 max-w-md">
-                      This step is currently in preview. For now, you can skip ahead. You can always configure these settings from your dashboard later.
-                    </p>
-                  </div>
-                )}
-                
-                {currentStep === 6 && (
+                {currentStep === 2 && (
                   <div className="flex flex-col items-center justify-center h-full text-center animate-in fade-in duration-500 py-16">
                     <div className="h-24 w-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-6">
                       <CheckCircle2 className="h-12 w-12" />
@@ -428,9 +410,9 @@ export default function OnboardingPage() {
               className="flex items-center gap-2 w-full sm:w-auto justify-center rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 px-8 py-3.5 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(229,9,20,0.5)] transition-all hover:scale-[1.02] hover:shadow-[0_12px_25px_-4px_rgba(229,9,20,0.6)] disabled:opacity-50 disabled:pointer-events-none"
             >
               {isSubmitting 
-                ? (currentStep === 6 ? "Launching..." : "Saving...") 
-                : (currentStep === 6 ? "Launch Dashboard" : "Save & Continue")}
-              {currentStep < 6 && <ArrowRight className="h-4 w-4" />}
+                ? (currentStep === 2 ? "Launching..." : "Saving...") 
+                : (currentStep === 2 ? "Launch Dashboard" : "Save & Continue")}
+              {currentStep < 2 && <ArrowRight className="h-4 w-4" />}
             </button>
           </div>
         </div>

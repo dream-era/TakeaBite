@@ -52,6 +52,7 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
     setIsLoggingOut(true);
     try {
       await logout();
+      router.push('/login');
     } catch (err) {
       console.error(err);
       setIsLoggingOut(false);

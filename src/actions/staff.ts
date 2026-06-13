@@ -908,3 +908,47 @@ export async function loginStaff(
   }
 }
 
+export async function toggleMenuItemStock(
+  itemId: string,
+  isOutOfStock: boolean,
+  staffId: string,
+  restaurantId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = createAdminSupabase();
+
+    // Verify staff exists and is active for this restaurant
+    const { data: staffData, error: staffError } = await supabase
+      .from('staff')
+      .select('id, status, is_active')
+      .eq('id', staffId)
+      .eq('restaurant_id', restaurantId)
+      .single();
+
+    if (staffError || !staffData || (staffData.status !== 'active' && !staffData.is_active)) {
+      return { success: false, error: 'Unauthorized staff session' };
+    }
+
+    const { error } = await supabase
+      .from('menu_items')
+      .update({ 
+        is_out_of_stock: isOutOfStock,
+        out_of_stock_by: staffId,
+        out_of_stock_at: isOutOfStock ? new Date().toISOString() : null
+      })
+      .eq('id', itemId)
+      .eq('restaurant_id', restaurantId);
+
+    if (error) {
+      console.error("[staff] Error updating availability:", error);
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath(`/shop/${restaurantId}`);
+    revalidatePath(`/staff/stock`);
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "Failed to update item availability" };
+  }
+}

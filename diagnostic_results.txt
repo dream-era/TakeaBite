@@ -1,0 +1,11 @@
+=== TAX ERRORS ===
+=== CURRENCY ERRORS ===
+=== CONSOLE LOGS ===
+=== MISSING FORCE DYNAMIC ===
+Missing in src/app/api/debug/env/route.ts
+=== TODO / FIXME ===
+=== MOCK DATA ===
+=== COMPLETED TAB IN KITCHEN ===
+=== HARDCODED RESTAURANT IDS ===
+=== RAZORPAY EXPOSURE ===
+=== GOOGLE FONTS LINK ===

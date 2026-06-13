@@ -175,10 +175,17 @@ export default function OrderConfirmationPage() {
             
             <div className="mt-6 pt-4 border-t border-dashed border-surface-variant flex items-center gap-2 justify-between">
               <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Payment Method: <span className="font-bold text-primary">{orderData?.payment_method === 'cash' ? 'Cash at Counter' : 'Online'}</span></span>
-              <div className="flex items-center text-green-600 gap-1">
-                <span className="material-symbols-outlined text-[18px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                <span className="text-xs font-bold uppercase">Success</span>
-              </div>
+              {orderData?.payment_status === 'paid' ? (
+                <div className="flex items-center text-green-600 gap-1">
+                  <span className="material-symbols-outlined text-[18px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                  <span className="text-xs font-bold uppercase">Success</span>
+                </div>
+              ) : (
+                <div className="flex items-center text-orange-600 gap-1">
+                  <span className="material-symbols-outlined text-[18px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
+                  <span className="text-xs font-bold uppercase">Pending</span>
+                </div>
+              )}
             </div>
           </div>
           

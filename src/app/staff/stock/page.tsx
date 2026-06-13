@@ -101,21 +101,16 @@ export default function StockManagementPage() {
     setItems(current => current.map(i => i.id === item.id ? { ...i, is_out_of_stock: newValue } : i));
     
     try {
-      const supabase = createBrowserSupabase();
-      const { error } = await supabase
-        .from('menu_items')
-        .update({ 
-          is_out_of_stock: newValue,
-          out_of_stock_by: currentSession?.staffId || currentSession?.id || null,
-          out_of_stock_at: newValue ? new Date().toISOString() : null
-        })
-        .eq('id', item.id)
-        .eq('restaurant_id', item.restaurant_id);
+      const { toggleMenuItemStock } = await import('@/actions/staff');
+      const restaurantId = currentSession?.restaurantId || currentSession?.workspaceId || '';
+      const staffId = currentSession?.staffId || currentSession?.id || '';
+      
+      const res = await toggleMenuItemStock(item.id, newValue, staffId, restaurantId);
         
-      if (error) throw error;
-    } catch (err) {
+      if (!res.success) throw new Error(res.error);
+    } catch (err: any) {
       setItems(current => current.map(i => i.id === item.id ? { ...i, is_out_of_stock: item.is_out_of_stock } : i));
-      toast.error("Failed to update stock status");
+      toast.error(err.message || "Failed to update stock status");
     }
   };
 
