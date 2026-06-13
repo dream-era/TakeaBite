@@ -22,7 +22,7 @@ export default function CashierOrdersPage() {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-kitchen-session': currentSession?.fingerprint || '', 'x-staff-id': currentSession?.staffId || '' },
         body: JSON.stringify({ type: 'payment', id: orderId, status: 'paid', restaurantId })
       });
       if (!res.ok) throw new Error("Failed to update payment status");

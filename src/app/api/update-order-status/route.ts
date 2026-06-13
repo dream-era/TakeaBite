@@ -1,12 +1,12 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server'
-import { createAdminSupabase } from '@/lib/supabase'
+import { createAdminSupabase, createServerSupabase } from '@/lib/supabase'
 import { z } from 'zod'
 
 const UpdateStatusSchema = z.object({
-  type: z.enum(['item', 'order']),
+  type: z.enum(['item', 'order', 'payment']),
   id: z.string().uuid(),
-  status: z.enum(['pending', 'preparing', 'done', 'ready', 'served', 'cancelled']),
+  status: z.enum(['pending', 'preparing', 'done', 'ready', 'served', 'cancelled', 'paid']),
   restaurantId: z.string().uuid().optional(),
 })
 
@@ -14,6 +14,35 @@ export async function POST(request: Request) {
   const supabase = createAdminSupabase()
 
   try {
+    const sessionFingerprint = request.headers.get('x-kitchen-session')
+    let isAuthorized = false
+
+    if (sessionFingerprint) {
+      const staffId = request.headers.get('x-staff-id')
+      if (staffId) {
+        const { data: staffData } = await supabase
+          .from('staff')
+          .select('session_fingerprint, session_expires_at')
+          .eq('id', staffId)
+          .single()
+
+        if (staffData && staffData.session_fingerprint === sessionFingerprint) {
+          if (new Date(staffData.session_expires_at) > new Date()) {
+            isAuthorized = true
+          }
+        }
+      }
+    } else {
+      // Fallback to Supabase Auth for owner/admin
+      const serverSupabase = createServerSupabase()
+      const { data: { user } } = await serverSupabase.auth.getUser()
+      if (user) isAuthorized = true
+    }
+
+    if (!isAuthorized) {
+      return NextResponse.json({ error: 'Unauthorized session' }, { status: 401 })
+    }
+
     const body = await request.json()
     const parsed = UpdateStatusSchema.safeParse(body)
     
@@ -49,6 +78,16 @@ export async function POST(request: Request) {
           }
         }
       }
+
+      return NextResponse.json({ success: true })
+    } else if (type === 'payment') {
+      // Update payment status
+      const { error: updateError } = await supabase
+        .from('orders')
+        .update({ payment_status: status })
+        .eq('id', id)
+
+      if (updateError) throw updateError
 
       return NextResponse.json({ success: true })
     } else {

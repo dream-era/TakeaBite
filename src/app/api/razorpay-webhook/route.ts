@@ -339,6 +339,22 @@ async function handleOrderPaid(
 // MAIN HANDLER — POST /api/razorpay-webhook
 // ─────────────────────────────────────────────
 export async function POST(request: Request) {
+  const contentLength = parseInt(request.headers.get('content-length') ?? '0')
+  if (contentLength > 50000) { // 50KB max
+    return NextResponse.json({ error: 'Request too large' }, { status: 413 })
+  }
+
+  // ── STEP 0: IP Allowlist ─────────────
+  const RAZORPAY_IPS = [
+    '52.66.29.74', '52.66.29.75', '65.2.123.248', '65.2.123.249', '3.109.80.205'
+  ]
+  const requestIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+  if (process.env.NODE_ENV === 'production' && requestIp) {
+    if (!RAZORPAY_IPS.includes(requestIp)) {
+      console.warn('[SECURITY] Webhook from non-Razorpay IP:', requestIp)
+    }
+  }
+
   // ── STEP 1: Read raw body as TEXT ─────────────
   // Must read as text before any parsing.
   // The raw string is needed for signature verification.
@@ -395,6 +411,26 @@ export async function POST(request: Request) {
   }
 
   const eventType = webhookData.event as RazorpayEvent
+
+  // ── STEP 4.5: Idempotency Check ───────────────
+  const supabase = createAdminSupabase()
+  const eventId = `${webhookData.account_id}_${webhookData.created_at}_${eventType}`
+
+  const { data: existingEvent } = await supabase
+    .from('webhook_events')
+    .select('id')
+    .eq('id', eventId)
+    .single()
+
+  if (existingEvent) {
+    console.warn('[SECURITY] Duplicate webhook event:', eventId)
+    return NextResponse.json({ received: true, duplicate: true }, { status: 200 })
+  }
+
+  await supabase.from('webhook_events').insert({
+    id: eventId,
+    event_type: eventType,
+  })
 
   // ── STEP 5: Route to correct event handler ─────
   try {

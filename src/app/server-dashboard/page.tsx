@@ -47,7 +47,7 @@ export default function ServantDashboardPage() {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
         body: JSON.stringify({ type: 'order', id: orderId, status: 'served', restaurantId })
       });
       if (!res.ok) throw new Error("Failed to deliver order");

@@ -2,8 +2,10 @@
 
 import { createServerSupabase, createAdminSupabase } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
+import { headers } from 'next/headers'
 import { z } from 'zod'
 import Razorpay from 'razorpay'
+import { encryptSecret } from '@/lib/crypto'
 
 // ── ACTION 1: connectRazorpayKeys ────────────────────────────
 // Called when owner submits their Razorpay Key ID + Secret.
@@ -24,9 +26,23 @@ export async function connectRazorpayKeys(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const supabaseAuth = createServerSupabase()
-    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser()
-    if (authError || !user) {
+    const { data: { session }, error: authError } = await supabaseAuth.auth.getSession()
+    if (authError || !session?.user) {
       return { success: false, error: 'Not authenticated' }
+    }
+    const user = session.user
+
+    // Verify session age (< 5 minutes)
+    const signInTime = new Date(user.last_sign_in_at || Date.now()).getTime()
+    const sessionAge = Date.now() - signInTime
+    const FIVE_MINUTES = 5 * 60 * 1000
+
+    if (sessionAge > FIVE_MINUTES) {
+      return {
+        success: false,
+        error: 'For security, please log out and log in again before changing payment settings.',
+        requiresReauth: true,
+      } as any
     }
 
     const parsed = ConnectKeysSchema.safeParse(input)
@@ -73,11 +89,12 @@ export async function connectRazorpayKeys(
     }
 
     // Save the keys to Supabase
+    const encryptedSecret = encryptSecret(keySecret)
     const { error: updateError } = await supabase
       .from('restaurants')
       .update({
         razorpay_key_id: keyId,
-        razorpay_key_secret: keySecret,
+        razorpay_key_secret: encryptedSecret,
         razorpay_account_name: accountName,
         payment_enabled: true,
         payment_connected_at: new Date().toISOString(),
@@ -88,6 +105,17 @@ export async function connectRazorpayKeys(
       console.error('[ServeFlow] Failed to save Razorpay keys:', updateError)
       return { success: false, error: 'Failed to save payment settings. Try again.' }
     }
+
+    // Add audit log
+    const headersList = await headers()
+    await supabase.from('security_audit_log').insert({
+      event_type: 'razorpay_keys_connected',
+      user_id: user.id,
+      restaurant_id: restaurantId,
+      ip_address: headersList.get('x-forwarded-for') ?? 'unknown',
+      user_agent: headersList.get('user-agent') ?? 'unknown',
+      details: { account_name: accountName },
+    })
 
     revalidatePath('/dashboard/payments')
 
@@ -126,6 +154,17 @@ export async function disconnectRazorpay(
       .eq('owner_id', user.id)
 
     if (error) return { success: false, error: 'Failed to disconnect. Try again.' }
+
+    // Add audit log
+    const headersList = await headers()
+    await supabase.from('security_audit_log').insert({
+      event_type: 'razorpay_keys_disconnected',
+      user_id: user.id,
+      restaurant_id: restaurantId,
+      ip_address: headersList.get('x-forwarded-for') ?? 'unknown',
+      user_agent: headersList.get('user-agent') ?? 'unknown',
+      details: {},
+    })
 
     revalidatePath('/dashboard/payments')
     return { success: true }

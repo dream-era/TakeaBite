@@ -35,7 +35,7 @@ export default function CookDashboardPage() {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
         body: JSON.stringify({ type: 'item', id: itemId, status, restaurantId })
       });
       if (!res.ok) throw new Error("Failed to update item");
@@ -49,7 +49,7 @@ export default function CookDashboardPage() {
       await Promise.all(items.filter(i => i.status === 'pending').map(item => 
         fetch('/api/update-order-status', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
           body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId })
         })
       ));
@@ -63,7 +63,7 @@ export default function CookDashboardPage() {
       await Promise.all(items.filter(i => i.status !== 'done').map(item => 
         fetch('/api/update-order-status', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
           body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId })
         })
       ));

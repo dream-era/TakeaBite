@@ -42,12 +42,25 @@
 
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { rateLimiters, checkRateLimit } from '@/lib/ratelimit'
 
 export async function middleware(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+    const { pathname } = request.nextUrl
+
+    if (pathname.startsWith('/api/')) {
+      const allowed = await checkRateLimit(rateLimiters.general, ip)
+      if (!allowed) {
+        return NextResponse.json(
+          { error: 'Too many requests. Please slow down.' },
+          { status: 429, headers: { 'Retry-After': '60' } }
+        )
+      }
+    }
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    const { pathname } = request.nextUrl
 
     // Safe environment variable validation (Task 5 & 6)
     if (!supabaseUrl || !supabaseKey || !supabaseUrl.startsWith('http')) {

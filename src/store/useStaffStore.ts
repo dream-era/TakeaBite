@@ -12,6 +12,7 @@ export interface CurrentSession {
   restaurantId?: string;
   restaurantName?: string;
   expiry: number;
+  fingerprint?: string;
 }
 
 interface StaffStore {

@@ -65,6 +65,7 @@ import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
+import crypto from 'crypto'
 import { createAdminSupabase } from '@/lib/supabase'
 import type { StaffRole, KitchenSession } from '@/types/database'
 
@@ -175,11 +176,16 @@ async function findStaffByPin(
 // flow so it doesn't slow down the PIN response.
 // If it fails, it's non-critical — session still works.
 // ─────────────────────────────────────────────
-function recordLastLogin(staffId: string): void {
+function recordLastLogin(staffId: string, fingerprint: string): void {
   const supabase = createAdminSupabase()
+  const expiresAt = new Date(Date.now() + SESSION_DURATION_MS).toISOString()
   supabase
     .from('staff')
-    .update({ last_login: new Date().toISOString() })
+    .update({ 
+      last_login: new Date().toISOString(),
+      session_expires_at: expiresAt,
+      session_fingerprint: fingerprint
+    })
     .eq('id', staffId)
     .then(({ error }) => {
       if (error) {
@@ -258,20 +264,25 @@ export async function POST(request: Request) {
   }
 
   // ── STEP 5: Build session object ──────────────
-  // This exact shape matches the KitchenSession interface
-  // in types/database.ts — kitchen layout stores this
-  // directly in localStorage without transformation
-  const session: KitchenSession = {
+  const userAgent = request.headers.get('user-agent') ?? ''
+  const acceptLanguage = request.headers.get('accept-language') ?? ''
+  const fingerprint = crypto
+    .createHash('sha256')
+    .update(userAgent + acceptLanguage)
+    .digest('hex')
+    .slice(0, 16)
+
+  const session: KitchenSession & { fingerprint: string } = {
     staffId: matchedStaff.id,
     role: matchedStaff.role,
     name: matchedStaff.name,
     restaurantId: matchedStaff.restaurant_id,
     expiry: Date.now() + SESSION_DURATION_MS,
+    fingerprint,
   }
 
   // ── STEP 6: Record last login (non-blocking) ──
-  // Fire and forget — don't delay the response
-  recordLastLogin(matchedStaff.id)
+  recordLastLogin(matchedStaff.id, fingerprint)
 
   // ── STEP 7: Return session to kitchen layout ──
   // Kitchen layout stores this in localStorage.

@@ -41,7 +41,7 @@ export default function KitchenViewPage() {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-kitchen-session': currentSession?.fingerprint || '', 'x-staff-id': currentSession?.staffId || '' },
         body: JSON.stringify({ type: 'item', id: itemId, status, restaurantId })
       });
       if (!res.ok) throw new Error("Failed to update item");
@@ -54,7 +54,7 @@ export default function KitchenViewPage() {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-kitchen-session': currentSession?.fingerprint || '', 'x-staff-id': currentSession?.staffId || '' },
         body: JSON.stringify({ type: 'order', id: orderId, status, restaurantId })
       });
       if (!res.ok) throw new Error("Failed to update order");

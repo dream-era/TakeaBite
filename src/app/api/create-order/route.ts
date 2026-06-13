@@ -18,6 +18,8 @@ import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 import crypto from 'crypto'
 import { createAdminSupabase, verifyTableOwnership } from '@/lib/supabase'
+import { decryptSecret } from '@/lib/crypto'
+import { sanitizeInstructions, isValidUUID } from '@/lib/sanitize'
 import type { CartItem, OrderInsert, OrderItemInsert, Station } from '@/types/database'
 
 // Rate limiter
@@ -88,7 +90,19 @@ async function getNextDailyOrderNumber(
   return (data?.daily_order_number ?? 0) + 1
 }
 
+export const maxDuration = 15
+
 export async function POST(request: Request) {
+  // Check payload size limit
+  const contentLength = parseInt(request.headers.get('content-length') ?? '0')
+  if (contentLength > 50000) {
+    return NextResponse.json({ error: 'Request too large' }, { status: 413 })
+  }
+  const contentType = request.headers.get('content-type')
+  if (!contentType?.includes('application/json')) {
+    return NextResponse.json({ error: 'Content-Type must be application/json' }, { status: 415 })
+  }
+
   const supabase = createAdminSupabase()
 
   try {
@@ -112,6 +126,10 @@ export async function POST(request: Request) {
       paymentMethod, specialInstructions,
       customerName, customerPhone, orderType
     } = parsed.data
+
+    if (!isValidUUID(restaurantId)) {
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 })
+    }
 
     // Rate limit check
     try {
@@ -196,7 +214,8 @@ export async function POST(request: Request) {
       )
     }
 
-    const encodedSpecialInstructions = `[TYPE:${orderType}] ${specialInstructions || ''}`.trim()
+    const safeInstructions = specialInstructions ? sanitizeInstructions(specialInstructions) : ''
+    const encodedSpecialInstructions = `[TYPE:${orderType}] ${safeInstructions}`.trim()
 
     // Generate a tamper-detection hash
     const orderHash = crypto
@@ -311,9 +330,10 @@ export async function POST(request: Request) {
       const totalPaise = Math.round(verifiedTotal * 100)
 
       // Use restaurant's OWN Razorpay keys
+      const decryptedSecret = decryptSecret(restaurant.razorpay_key_secret)
       const razorpay = new Razorpay({
         key_id: restaurant.razorpay_key_id,
-        key_secret: restaurant.razorpay_key_secret,
+        key_secret: decryptedSecret,
       })
 
       let razorpayOrder
