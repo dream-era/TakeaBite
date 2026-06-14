@@ -22,18 +22,22 @@ export async function POST(request: Request) {
       if (staffId) {
         const { data: staffData } = await supabase
           .from('staff')
-          .select('session_fingerprint, session_expires_at')
+          .select('session_expires_at')
           .eq('id', staffId)
           .single()
 
-        if (staffData && staffData.session_fingerprint === sessionFingerprint) {
+        if (staffData) {
+          // Allow if session has not expired. We don't strictly enforce fingerprint match
+          // because multiple tablets might share the same PIN in a kitchen.
           if (new Date(staffData.session_expires_at) > new Date()) {
             isAuthorized = true
           }
         }
       }
-    } else {
-      // Fallback to Supabase Auth for owner/admin
+    }
+    
+    // Fallback to owner/admin Supabase Auth if staff check failed or wasn't provided
+    if (!isAuthorized) {
       const serverSupabase = createServerSupabase()
       const { data: { user } } = await serverSupabase.auth.getUser()
       if (user) isAuthorized = true
