@@ -18,7 +18,7 @@ export default function CartPage() {
   const { items: allCartItems, updateQuantity, orderType, setOrderType } = useCartStore();
   const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
 
-  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = items.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0);
   const total = subtotal;
 
   const checkoutUrl = tableId 

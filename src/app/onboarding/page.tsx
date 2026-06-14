@@ -200,20 +200,18 @@ export default function OnboardingPage() {
       {/* ── Main Content Area ── */}
       <main className="flex flex-1 flex-col overflow-y-auto">
         {/* Top Header */}
-        <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-neutral-200/60 bg-[#F5F5F1]/80 px-8 backdrop-blur-md">
-          <div>
-            <h1 className="text-xl font-bold text-neutral-900">Welcome, {userName}! 👋</h1>
-            <p className="text-sm text-neutral-500">Let’s set up your digital shop in a few simple steps.</p>
+        <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-neutral-200/60 bg-[#F5F5F1]/80 px-4 md:px-8 backdrop-blur-md gap-4">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl font-bold text-neutral-900 truncate">Welcome, {userName}! 👋</h1>
+            <p className="text-sm text-neutral-500 truncate hidden md:block">Let’s set up your digital shop in a few simple steps.</p>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white border border-neutral-200 text-neutral-500 shadow-sm transition-colors hover:text-neutral-900">
-              <Search className="h-4 w-4" />
-            </button>
-            <button className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white border border-neutral-200 text-neutral-500 shadow-sm transition-colors hover:text-neutral-900">
+          <div className="flex items-center gap-2 md:gap-4 shrink-0">
+            {/* Hidden on mobile to prevent overlap, dummy buttons anyway */}
+            <button className="hidden md:flex relative h-10 w-10 items-center justify-center rounded-full bg-white border border-neutral-200 text-neutral-500 shadow-sm transition-colors hover:text-neutral-900">
               <Bell className="h-4 w-4" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-white"></span>
             </button>
-            <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-sm ring-1 ring-neutral-200 bg-brand-50 flex items-center justify-center text-brand-600 font-bold">
+            <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-sm ring-1 ring-neutral-200 bg-brand-50 flex items-center justify-center text-brand-600 font-bold shrink-0">
               {userName.charAt(0).toUpperCase()}
             </div>
           </div>

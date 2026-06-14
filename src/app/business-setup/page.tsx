@@ -141,30 +141,30 @@ export default function BusinessSetupPage() {
       {/* Main */}
       <main className="flex flex-1 flex-col overflow-y-auto relative">
         {/* Header */}
-        <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-8 backdrop-blur-md shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-100 text-neutral-600 border border-neutral-200 shadow-inner overflow-hidden">
+        <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-neutral-200/60 bg-white/80 px-4 md:px-8 backdrop-blur-md shadow-sm gap-2 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="flex shrink-0 h-10 w-10 items-center justify-center rounded-xl bg-neutral-100 text-neutral-600 border border-neutral-200 shadow-inner overflow-hidden">
               <img src={restaurant?.logo_url || `https://ui-avatars.com/api/?name=${restaurant?.name || 'Shop'}&background=fef2f2&color=ef4444&size=40`} alt="" className="h-full w-full object-cover" />
             </div>
-            <div className="flex cursor-pointer items-center gap-2 rounded-lg py-1 px-2 hover:bg-neutral-50 transition-colors">
-              <div>
-                <h3 className="text-sm font-bold text-neutral-900 leading-tight">{restaurant?.name || 'Your Shop'}</h3>
-                <p className="text-[10px] font-medium text-brand-600 uppercase tracking-wide">Main Branch</p>
+            <div className="flex cursor-pointer items-center gap-2 rounded-lg py-1 px-2 hover:bg-neutral-50 transition-colors min-w-0">
+              <div className="min-w-0">
+                <h3 className="text-sm font-bold text-neutral-900 leading-tight truncate">{restaurant?.name || 'Your Shop'}</h3>
+                <p className="text-[10px] font-medium text-brand-600 uppercase tracking-wide truncate">Main Branch</p>
               </div>
-              <ChevronDown className="h-4 w-4 text-neutral-400" />
+              <ChevronDown className="h-4 w-4 text-neutral-400 shrink-0" />
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4 shrink-0">
 
-            <button className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white border border-neutral-200 text-neutral-500 shadow-sm hover:text-neutral-900">
+            <button className="hidden md:flex relative h-10 w-10 items-center justify-center rounded-full bg-white border border-neutral-200 text-neutral-500 shadow-sm hover:text-neutral-900">
               <Bell className="h-4 w-4" />
             </button>
-            <div className="flex items-center gap-3 cursor-pointer rounded-full border border-neutral-200 bg-white py-1.5 pl-1.5 pr-4 shadow-sm hover:bg-neutral-50">
-              <div className="h-7 w-7 overflow-hidden rounded-full border border-neutral-100">
+            <div className="flex items-center gap-2 md:gap-3 cursor-pointer rounded-full border border-neutral-200 bg-white p-1 md:py-1.5 md:pl-1.5 md:pr-4 shadow-sm hover:bg-neutral-50 shrink-0">
+              <div className="h-7 w-7 overflow-hidden rounded-full border border-neutral-100 shrink-0">
                 <img src={`https://ui-avatars.com/api/?name=${user?.email?.split('@')[0] || 'User'}&background=fef2f2&color=ef4444`} alt="" className="h-full w-full object-cover" />
               </div>
-              <span className="text-sm font-medium text-neutral-700">{user?.email?.split('@')[0] || 'Owner'}</span>
-              <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
+              <span className="hidden md:block text-sm font-medium text-neutral-700 truncate max-w-[100px]">{user?.email?.split('@')[0] || 'Owner'}</span>
+              <ChevronDown className="hidden md:block h-3.5 w-3.5 text-neutral-400" />
             </div>
           </div>
         </header>

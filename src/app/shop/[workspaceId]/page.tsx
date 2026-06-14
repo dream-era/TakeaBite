@@ -120,7 +120,7 @@ export default function DigitalMenuPage() {
     activeCategory === "All" ? true : item.category === activeCategory
   );
 
-  const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const cartTotal = cartItems.reduce((total, item) => total + ((item.price || 0) * item.quantity), 0);
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const basePath = `/shop/${workspaceId}`;

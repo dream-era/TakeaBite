@@ -19,7 +19,7 @@ export default function CartPage() {
   const { items: allCartItems, updateQuantity } = useCartStore();
   const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
 
-  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = items.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0);
   const total = subtotal;
 
   const checkoutUrl = `/shop/${workspaceId}/table/${tableId}/checkout`;
@@ -67,7 +67,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex-1 flex flex-col justify-start">
                       <h3 className="font-label-md text-on-surface line-clamp-2 leading-tight mb-1">{item.name}</h3>
-                      <span className="font-price-display text-primary block mb-3">${item.price.toFixed(2)}</span>
+                      <span className="font-price-display text-primary block mb-3">${(item.price || 0).toFixed(2)}</span>
                       
                       <div className="mt-auto">
                         <div className="inline-flex items-center bg-surface-variant rounded-xl h-9 overflow-hidden shadow-sm">
