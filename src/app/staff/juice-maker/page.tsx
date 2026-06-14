@@ -35,29 +35,35 @@ export default function JuiceDashboardPage() {
 
   const handleStartPreparing = async (items: any[]) => {
     try {
-      await Promise.all(items.filter(i => i.status === 'pending').map(item => 
+      const results = await Promise.all(items.filter(i => i.status === 'pending').map(item => 
         fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
           body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId })
         })
       ));
-    } catch(err) {
-      toast.error("Error starting preparation");
+      const failed = results.filter(r => !r.ok);
+      if (failed.length > 0) throw new Error("Some items failed to update");
+      toast.success("Started preparation!");
+    } catch(err: any) {
+      toast.error(err.message || "Error starting preparation");
     }
   };
 
   const handleMarkReady = async (items: any[]) => {
     try {
-      await Promise.all(items.filter(i => i.status !== 'done').map(item => 
+      const results = await Promise.all(items.filter(i => i.status !== 'done').map(item => 
         fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
           body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId })
         })
       ));
-    } catch(err) {
-      toast.error("Error marking as ready");
+      const failed = results.filter(r => !r.ok);
+      if (failed.length > 0) throw new Error("Some items failed to update");
+      toast.success("Marked as ready!");
+    } catch(err: any) {
+      toast.error(err.message || "Error marking as ready");
     }
   };
 

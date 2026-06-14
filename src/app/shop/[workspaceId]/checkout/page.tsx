@@ -42,6 +42,8 @@ export default function CheckoutPage() {
   const table: any = tableData;
   const tableLabel = table ? (table.table_name || `Table ${table.table_number}`) : (tableId ? `Table` : '');
 
+  const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
+
   // Redirect back to cart if order type is somehow null
   useEffect(() => {
     if (mounted && !orderType && items.length > 0) {
@@ -57,8 +59,6 @@ export default function CheckoutPage() {
       setSelectedMethod('cash');
     }
   }, [paymentEnabled, selectedMethod]);
-  
-  const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
 
   const subtotal = items.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0);
   const processingFee = selectedMethod === 'online' ? subtotal * 0.02 : 0;
