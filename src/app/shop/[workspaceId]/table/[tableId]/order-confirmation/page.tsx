@@ -23,7 +23,7 @@ export default function OrderConfirmationPage() {
   const placedOrderId = useCartStore((s) => s.placedOrderId);
 
   const orderItems = confirmedOrder?.items ?? [];
-  const subtotal = orderItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+  const subtotal = orderItems.reduce((sum: number, item: any) => sum + ((item.price || 0) * item.quantity), 0);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -149,7 +149,7 @@ export default function OrderConfirmationPage() {
                     </div>
                     <span className="font-body-lg font-medium text-on-surface leading-tight">{item.quantity}x {item.name}</span>
                   </div>
-                  <span className="font-price-display text-on-surface text-base">${(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="font-price-display text-on-surface text-base">${((item.price || 0) * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>

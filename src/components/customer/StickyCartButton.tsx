@@ -20,7 +20,7 @@ export function StickyCartButton({ itemCount, totalPrice, checkoutUrl }: StickyC
             </div>
             <div className="flex flex-col">
               <span className="font-label-md text-sm opacity-90">Total</span>
-              <span className="font-price-display text-lg">${totalPrice.toFixed(2)}</span>
+              <span className="font-price-display text-lg">${(totalPrice || 0).toFixed(2)}</span>
             </div>
           </div>
           <div className="flex items-center gap-2 font-label-lg">
