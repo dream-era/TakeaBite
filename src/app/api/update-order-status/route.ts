@@ -16,13 +16,15 @@ export async function POST(request: Request) {
   try {
     const sessionFingerprint = request.headers.get('x-kitchen-session')
     let isAuthorized = false
+    let currentStaffName = null
+    let currentStaffId = null
 
     if (sessionFingerprint) {
       const staffId = request.headers.get('x-staff-id')
       if (staffId) {
         const { data: staffData } = await supabase
           .from('staff')
-          .select('session_expires_at')
+          .select('session_expires_at, name, id')
           .eq('id', staffId)
           .single()
 
@@ -31,6 +33,8 @@ export async function POST(request: Request) {
           // because multiple tablets might share the same PIN in a kitchen.
           if (new Date(staffData.session_expires_at) > new Date()) {
             isAuthorized = true
+            currentStaffName = staffData.name
+            currentStaffId = staffData.id
           }
         }
       }
@@ -78,7 +82,13 @@ export async function POST(request: Request) {
           else if (anyPreparing) newOrderStatus = 'preparing'
 
           if (newOrderStatus) {
-            await supabase.from('orders').update({ status: newOrderStatus }).eq('id', itemData.order_id)
+            const updatePayload: any = { status: newOrderStatus }
+            if (newOrderStatus === 'preparing' && currentStaffId) {
+              updatePayload.assigned_staff_id = currentStaffId
+              updatePayload.assigned_staff_name = currentStaffName
+              updatePayload.assigned_at = new Date().toISOString()
+            }
+            await supabase.from('orders').update(updatePayload).eq('id', itemData.order_id)
           }
         }
       }
@@ -96,9 +106,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true })
     } else {
       // Update order status
+      const updatePayload: any = { status }
+      if (status === 'preparing' && currentStaffId) {
+        updatePayload.assigned_staff_id = currentStaffId
+        updatePayload.assigned_staff_name = currentStaffName
+        updatePayload.assigned_at = new Date().toISOString()
+      }
       const { error: updateError } = await supabase
         .from('orders')
-        .update({ status })
+        .update(updatePayload)
         .eq('id', id)
 
       if (updateError) throw updateError

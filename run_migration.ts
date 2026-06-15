@@ -10,21 +10,19 @@ async function run() {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
   
-  const sql = fs.readFileSync(path.join(__dirname, 'src/supabase/migrations/018_fix_orders_rls_and_fk.sql'), 'utf-8');
+  const sql = fs.readFileSync(path.join(__dirname, 'src/supabase/migrations/022_cook_assignment.sql'), 'utf-8');
   
-  // Split the SQL into individual statements
   const statements = sql
     .split(';')
     .map(s => s.trim())
     .filter(s => s.length > 0 && !s.startsWith('-- ='));
     
   for (const stmt of statements) {
-    if (stmt.startsWith('--')) continue; // skip pure comments
+    if (stmt.startsWith('--') && !stmt.includes('\n')) continue;
     console.log('Executing:', stmt.substring(0, 50) + '...');
     const { error } = await supabase.rpc('exec_sql', { sql: stmt + ';' });
     if (error) {
-      console.error('Error executing SQL (may not have exec_sql RPC?):', error);
-      break;
+      console.error('Error executing SQL:', error);
     }
   }
   console.log('Done');

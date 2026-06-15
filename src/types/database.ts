@@ -131,11 +131,14 @@ export interface Order {
   daily_order_number: number | null
   order_hash: string | null
   order_type: 'eat_here' | 'takeaway'
-  device_uid: string | null
-  session_token: string | null
   phone: string | null
+  device_cookie: string | null
+  order_token: string
   created_at: string
   updated_at: string
+  assigned_staff_id: string | null
+  assigned_staff_name: string | null
+  assigned_at: string | null
 }
 export type OrderInsert = Omit<Order, 'id' | 'created_at' | 'updated_at'>
 

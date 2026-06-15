@@ -20,8 +20,10 @@ export default function OrderConfirmationPage() {
   const tableId = params.tableId as string | undefined;
 
   const confirmedOrder = useCartStore((s) => s.confirmedOrderDetails);
+  const placedOrderId = useCartStore((s) => s.placedOrderId);
   const searchParams = useSearchParams();
   const urlOrderId = searchParams.get('id');
+  const token = searchParams.get('token');
   const activeOrderId = placedOrderId || (urlOrderId && urlOrderId !== 'success' ? urlOrderId : null);
 
   const orderItems = confirmedOrder?.items ?? [];
@@ -73,7 +75,11 @@ export default function OrderConfirmationPage() {
   });
 
   const handleTrackOrder = () => {
-    router.push(`/shop/${workspaceId}/order-tracking`);
+    if (token) {
+      router.push(`/shop/${workspaceId}/table/${tableId}/order-tracking?token=${token}`);
+    } else {
+      router.push(`/shop/${workspaceId}/table/${tableId}/order-tracking`);
+    }
   };
 
   if (!mounted) return null;

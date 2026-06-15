@@ -7,7 +7,7 @@ import { CustomerTopBar } from "@/components/customer/CustomerTopBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { getRestaurantProfile } from "@/actions/restaurant";
-import { getDeviceUID, getSessionTokenFromURL } from "@/lib/deviceSession";
+import { getDeviceCookie } from "@/lib/deviceCookie";
 
 export default function OrderTrackingPage() {
   const params = useParams();
@@ -15,16 +15,20 @@ export default function OrderTrackingPage() {
   const workspaceId = params.workspaceId as string;
   const tableId = params.tableId as string | undefined;
 
-  const [deviceUid, setDeviceUid] = useState<string | null>(null);
-  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [deviceCookie, setDeviceCookie] = useState<string | null>(null);
+  const [savedPhone, setSavedPhone] = useState<string | null>(null);
+  const [urlToken, setUrlToken] = useState<string | null>(null);
   const [showPhonePrompt, setShowPhonePrompt] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
   
   useEffect(() => {
-    setDeviceUid(getDeviceUID());
-    setSessionToken(getSessionTokenFromURL());
-    const saved = localStorage.getItem('takebite_phone_saved');
-    if (!saved) setShowPhonePrompt(true);
+    setDeviceCookie(getDeviceCookie());
+    const phone = localStorage.getItem('tb_phone');
+    setSavedPhone(phone);
+    if (!phone) setShowPhonePrompt(true);
+    
+    const searchParams = new URLSearchParams(window.location.search);
+    setUrlToken(searchParams.get('token'));
   }, []);
   
   const queryClient = useQueryClient();
@@ -41,63 +45,79 @@ export default function OrderTrackingPage() {
 
   // Fetch recent active orders for this device
   const { data: orders, isLoading } = useQuery({
-    queryKey: ['customer-orders', workspaceId, deviceUid, sessionToken],
+    queryKey: ['customer-orders', workspaceId, deviceCookie, savedPhone, urlToken],
     queryFn: async () => {
-      let query = supabase
-        .from('orders')
-        .select(`
-          *,
-          order_items (
+      let resolvedOrders: any[] = [];
+      
+      if (urlToken) {
+        const { data } = await supabase
+          .from('orders')
+          .select(`
             *,
-            menu_items ( name )
-          ),
-          tables(table_number)
-        `)
-        .eq('restaurant_id', workspaceId)
-        .order('created_at', { ascending: false })
-        .limit(20);
-        
-      if (deviceUid && sessionToken) {
-        query = query.or(`device_uid.eq.${deviceUid},session_token.eq.${sessionToken}`);
-      } else if (deviceUid) {
-        query = query.eq('device_uid', deviceUid);
-      } else if (sessionToken) {
-        query = query.eq('session_token', sessionToken);
-      } else {
-        return [];
+            order_items (
+              *,
+              menu_items ( name )
+            ),
+            tables(table_number)
+          `)
+          .eq('order_token', urlToken)
+          .eq('restaurant_id', workspaceId)
+          .single();
+        if (data) resolvedOrders = [data];
+      }
+
+      if (savedPhone || deviceCookie) {
+        let query = supabase
+          .from('orders')
+          .select(`
+            *,
+            order_items (
+              *,
+              menu_items ( name )
+            ),
+            tables(table_number)
+          `)
+          .eq('restaurant_id', workspaceId)
+          .order('created_at', { ascending: false })
+          .limit(20);
+
+        if (savedPhone) {
+          query = query.eq('phone', savedPhone);
+        } else if (deviceCookie) {
+          query = query.eq('device_cookie', deviceCookie);
+        }
+
+        const { data, error } = await query;
+        if (!error && data) {
+          const existing = new Set(resolvedOrders.map(o => o.id));
+          resolvedOrders = [...resolvedOrders, ...data.filter(o => !existing.has(o.id))];
+        }
       }
       
-      const { data, error } = await query;
-      
-      if (error) throw error;
-      return data;
+      return resolvedOrders;
     },
-    enabled: !!workspaceId && (!!deviceUid || !!sessionToken),
+    enabled: !!workspaceId && (!!deviceCookie || !!savedPhone || !!urlToken),
   });
 
   // Supabase Realtime Subscription for Instant Updates
   useEffect(() => {
-    if (!deviceUid && !sessionToken) return;
+    if (!orders || orders.length === 0) return;
     
-    let filterStr = `restaurant_id=eq.${workspaceId}`;
-    // Using a single condition for realtime because Supabase Realtime doesn't support complex OR filters easily.
-    // If we have deviceUid, listen to it. If not, listen to sessionToken.
-    if (deviceUid) filterStr = `device_uid=eq.${deviceUid}`;
-    else if (sessionToken) filterStr = `session_token=eq.${sessionToken}`;
+    const uuids = orders.map((o: any) => o.id).join(',');
     
     const channel = supabase.channel('customer-tracking')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'orders', filter: filterStr },
+        { event: '*', schema: 'public', table: 'orders', filter: `id=in.(${uuids})` },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, deviceUid, sessionToken] });
+          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, deviceCookie, savedPhone, urlToken] });
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'order_items' },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, deviceUid, sessionToken] });
+          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, deviceCookie, savedPhone, urlToken] });
         }
       )
       .subscribe();
@@ -105,14 +125,23 @@ export default function OrderTrackingPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, queryClient, workspaceId, deviceUid, sessionToken]);
+  }, [supabase, queryClient, workspaceId, deviceCookie, savedPhone, urlToken, orders]);
 
   const handleSavePhone = async () => {
-    if (!phoneInput || !deviceUid) return;
+    if (!phoneInput) return;
     try {
-      await supabase.from('orders').update({ phone: phoneInput }).eq('device_uid', deviceUid);
-      localStorage.setItem('takebite_phone_saved', 'true');
+      const cleanPhone = `+91${phoneInput.replace(/\\D/g, '')}`;
+      localStorage.setItem('tb_phone', cleanPhone);
+      setSavedPhone(cleanPhone);
+      
+      if (urlToken) {
+        await supabase.from('orders').update({ phone: cleanPhone }).eq('order_token', urlToken);
+      } else if (deviceCookie) {
+        await supabase.from('orders').update({ phone: cleanPhone }).eq('device_cookie', deviceCookie);
+      }
+      
       setShowPhonePrompt(false);
+      queryClient.invalidateQueries({ queryKey: ['customer-orders'] });
     } catch(e) {
       console.error("Failed to save phone", e);
     }
@@ -141,9 +170,9 @@ export default function OrderTrackingPage() {
           <div className="w-6" />
         </div>
 
-        {showPhonePrompt && deviceUid && (
+        {showPhonePrompt && (urlToken || deviceCookie) && !savedPhone && (
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6 relative">
-            <button onClick={() => { setShowPhonePrompt(false); localStorage.setItem('takebite_phone_saved', 'true'); }} className="absolute top-2 right-2 text-on-surface-variant hover:text-on-surface">
+            <button onClick={() => { setShowPhonePrompt(false); localStorage.setItem('tb_phone', 'skip'); }} className="absolute top-2 right-2 text-on-surface-variant hover:text-on-surface">
               <span className="material-symbols-outlined text-sm">close</span>
             </button>
             <p className="font-body-md text-on-surface font-semibold mb-2 pr-4">Want updates on WhatsApp? Save your number</p>

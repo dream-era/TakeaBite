@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile, getTableDetails } from "@/actions/restaurant";
-import { getOrCreateDeviceUID, getOrCreateSessionToken } from '@/lib/deviceSession';
+import { getOrCreateDeviceCookie } from '@/lib/deviceCookie';
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -19,6 +19,7 @@ export default function CheckoutPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  const [phone, setPhone] = useState('');
   const { items: allCartItems, clearCart, orderType } = useCartStore();
 
   const { data: restaurantData } = useQuery({
@@ -85,8 +86,8 @@ export default function CheckoutPage() {
           paymentMethod: selectedMethod,
           specialInstructions: "",
           orderType: orderType,
-          deviceUid: getOrCreateDeviceUID(),
-          sessionToken: getOrCreateSessionToken(),
+          deviceCookie: getOrCreateDeviceCookie(),
+          phone: phone || undefined,
         })
       });
 
@@ -123,10 +124,9 @@ export default function CheckoutPage() {
               setConfirmedOrderDetails(result.orderDetails);
               setPlacedOrderId(result.orderId || result.id);
               clearCart(workspaceId);
-              const sessionToken = getOrCreateSessionToken();
               const nextUrl = tableId 
-                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}` 
-                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}`;
+                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id}&token=${result.orderToken}` 
+                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id}&token=${result.orderToken}`;
               router.push(nextUrl);
             },
             modal: {
@@ -144,10 +144,9 @@ export default function CheckoutPage() {
         setPlacedOrderId(result.orderId || result.id);
         toast.success("Order placed successfully");
         clearCart(workspaceId);
-        const sessionToken = getOrCreateSessionToken();
         const nextUrl = tableId 
-          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}` 
-          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}`;
+          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id}&token=${result.orderToken}` 
+          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id}&token=${result.orderToken}`;
         router.push(nextUrl);
       }
     } catch (error: unknown) {
@@ -200,12 +199,24 @@ export default function CheckoutPage() {
                 />
               </div>
               <div>
-                <label className="font-label-md text-on-surface block mb-2">Mobile Number</label>
-                <input 
-                  type="tel" 
-                  placeholder="Enter mobile number" 
-                  className="w-full bg-surface-container-lowest border border-surface-variant rounded-xl p-4 font-body-md text-on-surface placeholder:text-secondary focus:outline-none focus:border-primary transition-colors"
-                />
+                <label className="font-label-md text-on-surface block mb-2">
+                  Mobile Number
+                  <span className="ml-1 text-xs text-gray-400">(for order updates)</span>
+                </label>
+                <div className="flex items-center bg-surface-container-lowest border border-surface-variant rounded-xl overflow-hidden focus-within:border-primary transition-colors">
+                  <span className="px-4 py-4 bg-surface-container-low text-secondary border-r border-surface-variant text-sm font-body-md">+91</span>
+                  <input 
+                    type="tel" 
+                    maxLength={10}
+                    placeholder="Enter mobile number" 
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\\D/g, ''))}
+                    className="flex-1 px-4 py-4 font-body-md text-on-surface placeholder:text-secondary focus:outline-none bg-transparent"
+                  />
+                </div>
+                <p className="text-xs text-secondary mt-2">
+                  Optional — helps you track this order and view past orders
+                </p>
               </div>
             </div>
           </div>

@@ -200,6 +200,12 @@ export default function JuiceDashboardPage() {
                         {paymentMethodLabel}
                       </span>
                     </div>
+                    {(order as any).assigned_staff_name && (
+                      <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase border border-blue-100">
+                        <span className="material-symbols-outlined text-[12px]">person</span>
+                        Assigned To: {(order as any).assigned_staff_name}
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-col items-end gap-1.5">
                     <span className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded border ${statusColorClass}`}>
@@ -263,9 +269,14 @@ export default function JuiceDashboardPage() {
                   {!isAllNew && !isAllReady && (
                     <button 
                       onClick={() => handleMarkReady(relevantItems)}
-                      className="bg-[#1B5E20] active:bg-[#0A3D0A] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-transform active:scale-95"
+                      disabled={(order as any).assigned_staff_id && (order as any).assigned_staff_id !== session?.staffId}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-transform ${
+                        (order as any).assigned_staff_id && (order as any).assigned_staff_id !== session?.staffId
+                          ? 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
+                          : 'bg-orange-500 active:bg-orange-600 active:scale-95 text-white'
+                      }`}
                     >
-                      Mark Ready
+                      { (order as any).assigned_staff_id && (order as any).assigned_staff_id !== session?.staffId ? 'Locked' : 'Mark Ready' }
                     </button>
                   )}
                   {/* Moved to Completed button removed as per requirements */}

@@ -20,6 +20,7 @@ import crypto from 'crypto'
 import { createAdminSupabase, verifyTableOwnership } from '@/lib/supabase'
 import { decryptSecret } from '@/lib/crypto'
 import { sanitizeInstructions, isValidUUID } from '@/lib/sanitize'
+import { nanoid } from 'nanoid'
 import type { CartItem, OrderInsert, OrderItemInsert, Station } from '@/types/database'
 
 // Rate limiter
@@ -48,8 +49,8 @@ const CreateOrderSchema = z.object({
   customerName: z.string().max(100).optional(),
   customerPhone: z.string().max(15).optional(),
   orderType: z.enum(['eat_here', 'takeaway']),
-  deviceUid: z.string().optional(),
-  sessionToken: z.string().optional(),
+  deviceCookie: z.string().optional(),
+  phone: z.string().optional(),
 })
 
 function calculateTotal(items: CartItem[]): number {
@@ -125,7 +126,7 @@ export async function POST(request: Request) {
 
     let {
       restaurantId, tableId, items, totalAmount, paymentMethod, specialInstructions,
-      customerName, customerPhone, orderType, deviceUid, sessionToken
+      customerName, customerPhone, orderType, deviceCookie, phone
     } = parsed.data
 
     if (orderType === 'takeaway') {
@@ -238,22 +239,16 @@ export async function POST(request: Request) {
       .digest('hex')
       .slice(0, 16) // first 16 chars is enough
 
-    // No longer using customerId, deviceUid handles anonymous tracking
-
     // ── CASH PAYMENT ─────────────────────────────────────
     if (paymentMethod === 'cash') {
-      const orderInsert: OrderInsert & {
-        customer_name?: string
-        customer_phone?: string
-        device_uid?: string | null
-        session_token?: string | null
-        phone?: string | null
-      } = {
+      const orderToken = nanoid(10)
+      
+      const orderInsert: any = {
         restaurant_id: restaurantId,
         table_id: tableId,
-        device_uid: deviceUid || null,
-        session_token: sessionToken || null,
-        phone: customerPhone || null,
+        device_cookie: deviceCookie || null,
+        order_token: orderToken,
+        phone: phone || null,
         status: 'confirmed',
         total_amount: verifiedTotal,
         payment_method: 'cash',
@@ -317,6 +312,7 @@ export async function POST(request: Request) {
         success: true,
         paymentMethod: 'cash',
         orderId: order.id,
+        orderToken,
         orderDetails: {
           items: verifiedItems.map(i => ({
             name: i.name,
@@ -371,13 +367,15 @@ export async function POST(request: Request) {
         )
       }
 
+      const orderToken = nanoid(10)
+
       // Insert PENDING order
-      const orderInsert: OrderInsert & { customer_name?: string, customer_phone?: string, device_uid?: string, session_token?: string, phone?: string } = {
+      const orderInsert: any = {
         restaurant_id: restaurantId,
         table_id: tableId || null,
-        device_uid: deviceUid || null,
-        session_token: sessionToken || null,
-        phone: customerPhone || null,
+        device_cookie: deviceCookie || null,
+        order_token: orderToken,
+        phone: phone || null,
         status: 'pending',
         total_amount: verifiedTotal,
         payment_method: 'online',
@@ -430,6 +428,7 @@ export async function POST(request: Request) {
         success: true,
         paymentMethod: 'online',
         orderId: order.id,
+        orderToken,
         razorpay: {
           orderId: razorpayOrder.id,
           amount: totalPaise,
