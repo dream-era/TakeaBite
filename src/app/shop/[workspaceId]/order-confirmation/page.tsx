@@ -13,7 +13,7 @@ import { getRestaurantProfile } from "@/actions/restaurant";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationContent() {
   const params = useParams();
   const router = useRouter();
   const workspaceId = params.workspaceId as string;
@@ -232,5 +232,19 @@ export default function OrderConfirmationPage() {
 
       <CustomerBottomNav workspaceId={workspaceId} activeTab="orders" />
     </div>
+  );
+}
+
+import { Suspense } from "react";
+
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="bg-background min-h-screen flex items-center justify-center">
+        <div className="animate-spin material-symbols-outlined text-primary text-4xl">refresh</div>
+      </div>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
   );
 }

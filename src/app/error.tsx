@@ -24,11 +24,14 @@ export default function ErrorBoundary({
           </svg>
         </div>
         <h2 className="text-2xl font-bold text-neutral-900 mb-3 tracking-tight">Oops! Something broke.</h2>
-        <p className="text-neutral-500 mb-8 leading-relaxed">
-          {error.message?.includes("environment variables") 
-            ? "The application is missing required configuration."
-            : "We encountered an unexpected error. Don't worry, it's not your fault."}
+        <p className="text-neutral-500 mb-2 leading-relaxed text-sm font-mono break-words text-left">
+          {error.message}
         </p>
+        {error.stack && (
+          <pre className="text-left text-[10px] text-red-600 bg-red-50 p-4 rounded-lg overflow-auto max-h-64 mb-8 whitespace-pre-wrap font-mono border border-red-100">
+            {error.stack}
+          </pre>
+        )}
         <div className="flex gap-3">
           <button
             onClick={() => window.location.href = '/'}
