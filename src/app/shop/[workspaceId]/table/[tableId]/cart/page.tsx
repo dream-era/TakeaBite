@@ -16,8 +16,14 @@ export default function CartPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const { items: allCartItems, updateQuantity } = useCartStore();
+  const { items: allCartItems, updateQuantity, orderType, setOrderType } = useCartStore();
   const items = allCartItems.filter(i => i.workspaceId === workspaceId && i.tableId === tableId);
+
+  useEffect(() => {
+    if (mounted && orderType === null) {
+      setOrderType('eat_here');
+    }
+  }, [mounted, orderType, setOrderType]);
 
   const subtotal = items.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0);
   const total = subtotal;
@@ -96,6 +102,27 @@ export default function CartPage() {
               />
             </div>
 
+            {/* Order Type Selection */}
+            <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] p-4 mb-6">
+              <h3 className="font-label-lg text-on-surface mb-3">Order Type</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setOrderType('eat_here')}
+                  className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${orderType === 'eat_here' ? 'border-primary bg-primary/5 text-primary' : 'border-surface-variant text-secondary bg-surface-container-lowest'}`}
+                >
+                  <span className="material-symbols-outlined mb-1 text-[28px]">restaurant</span>
+                  <span className="font-label-lg mt-2">Eat Here</span>
+                </button>
+                <button
+                  onClick={() => setOrderType('takeaway')}
+                  className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${orderType === 'takeaway' ? 'border-primary bg-primary/5 text-primary' : 'border-surface-variant text-secondary bg-surface-container-lowest'}`}
+                >
+                  <span className="material-symbols-outlined mb-1 text-[28px]">takeout_dining</span>
+                  <span className="font-label-lg mt-2">Takeaway</span>
+                </button>
+              </div>
+            </div>
+
             {/* Order Summary */}
             <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] p-4 space-y-3">
               <h3 className="font-label-lg text-on-surface mb-2">Order Summary</h3>
@@ -121,9 +148,15 @@ export default function CartPage() {
               <span className="font-label-md text-secondary uppercase tracking-wider text-xs">Total to pay</span>
               <span className="font-headline-md text-on-surface leading-tight">${total.toFixed(2)}</span>
             </div>
-            <Link href={checkoutUrl} className="flex-1 flex justify-center items-center h-[48px] bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">
-              Checkout
-            </Link>
+            {orderType ? (
+              <Link href={checkoutUrl} className="flex-1 flex justify-center items-center h-[48px] bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">
+                Checkout
+              </Link>
+            ) : (
+              <button disabled className="flex-1 flex justify-center items-center h-[48px] bg-surface-variant text-secondary font-label-lg rounded-xl cursor-not-allowed">
+                Select Order Type
+              </button>
+            )}
           </div>
         </div>
       )}

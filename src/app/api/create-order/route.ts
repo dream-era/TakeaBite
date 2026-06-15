@@ -47,8 +47,9 @@ const CreateOrderSchema = z.object({
   specialInstructions: z.string().max(300).optional(),
   customerName: z.string().max(100).optional(),
   customerPhone: z.string().max(15).optional(),
-  orderType: z.enum(['dine_in', 'takeaway']).default('dine_in'),
-  customerId: z.string().uuid().optional(),
+  orderType: z.enum(['eat_here', 'takeaway']),
+  deviceUid: z.string().optional(),
+  sessionToken: z.string().optional(),
 })
 
 function calculateTotal(items: CartItem[]): number {
@@ -122,11 +123,14 @@ export async function POST(request: Request) {
       )
     }
 
-    const {
-      restaurantId, tableId, items, totalAmount,
-      paymentMethod, specialInstructions,
-      customerName, customerPhone, orderType, customerId
+    let {
+      restaurantId, tableId, items, totalAmount, paymentMethod, specialInstructions,
+      customerName, customerPhone, orderType, deviceUid, sessionToken
     } = parsed.data
+
+    if (orderType === 'takeaway') {
+      tableId = null;
+    }
 
     if (!isValidUUID(restaurantId)) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 })
@@ -216,7 +220,7 @@ export async function POST(request: Request) {
     }
 
     const safeInstructions = specialInstructions ? sanitizeInstructions(specialInstructions) : ''
-    const encodedSpecialInstructions = `[TYPE:${orderType}] ${safeInstructions}`.trim()
+    const encodedSpecialInstructions = safeInstructions;
 
     // Generate a tamper-detection hash
     const orderHash = crypto
@@ -248,19 +252,24 @@ export async function POST(request: Request) {
       const orderInsert: OrderInsert & {
         customer_name?: string
         customer_phone?: string
-        customer_id?: string | null
+        device_uid?: string | null
+        session_token?: string | null
+        phone?: string | null
       } = {
         restaurant_id: restaurantId,
         table_id: tableId,
-        customer_id: customerId || null,
+        device_uid: deviceUid || null,
+        session_token: sessionToken || null,
+        phone: customerPhone || null,
         status: 'confirmed',
         total_amount: verifiedTotal,
         payment_method: 'cash',
         payment_status: 'pending',
         razorpay_order_id: null,
         razorpay_payment_id: null,
-        special_instructions: encodedSpecialInstructions,
+        special_instructions: encodedSpecialInstructions || null,
         order_hash: orderHash,
+        order_type: orderType,
       }
 
       let dailyOrderNumber = await getNextDailyOrderNumber(restaurantId, supabase)
@@ -370,18 +379,21 @@ export async function POST(request: Request) {
       }
 
       // Insert PENDING order
-      const orderInsert: OrderInsert & { customer_name?: string, customer_phone?: string, customer_id?: string | null } = {
+      const orderInsert: OrderInsert & { customer_name?: string, customer_phone?: string, device_uid?: string, session_token?: string, phone?: string } = {
         restaurant_id: restaurantId,
         table_id: tableId || null,
-        customer_id: customerId || null,
+        device_uid: deviceUid || null,
+        session_token: sessionToken || null,
+        phone: customerPhone || null,
         status: 'pending',
         total_amount: verifiedTotal,
         payment_method: 'online',
         payment_status: 'pending',
         razorpay_order_id: razorpayOrder.id,
         razorpay_payment_id: null,
-        special_instructions: encodedSpecialInstructions,
+        special_instructions: encodedSpecialInstructions || null,
         order_hash: orderHash,
+        order_type: orderType,
       }
 
       let dailyOrderNumber = await getNextDailyOrderNumber(restaurantId, supabase)

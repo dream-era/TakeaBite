@@ -130,6 +130,10 @@ export interface Order {
   special_instructions: string | null
   daily_order_number: number | null
   order_hash: string | null
+  order_type: 'eat_here' | 'takeaway'
+  device_uid: string | null
+  session_token: string | null
+  phone: string | null
   created_at: string
   updated_at: string
 }

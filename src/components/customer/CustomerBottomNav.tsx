@@ -11,6 +11,15 @@ interface CustomerBottomNavProps {
 
 export function CustomerBottomNav({ workspaceId, tableId, activeTab = 'home' }: CustomerBottomNavProps) {
   const basePath = tableId ? `/shop/${workspaceId}/table/${tableId}` : `/shop/${workspaceId}`;
+  
+  const [sessionToken, setSessionToken] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSessionToken(sessionStorage.getItem('takebite_session'));
+    }
+  }, []);
+  
+  const trackingUrl = sessionToken ? `${basePath}/order-tracking?session=${sessionToken}` : `${basePath}/order-tracking`;
 
   return (
     <nav className="bg-surface dark:bg-inverse-surface fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md rounded-t-xl z-50 shadow-[0px_-4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md pb-safe">
@@ -40,7 +49,7 @@ export function CustomerBottomNav({ workspaceId, tableId, activeTab = 'home' }: 
         </Link>
 
         <Link 
-          href={`${basePath}/order-tracking`}
+          href={trackingUrl}
           className={`flex flex-col items-center justify-center transition-colors active:scale-90 duration-200 px-4 py-1 rounded-lg ${
             activeTab === 'orders' 
               ? 'text-primary dark:text-inverse-primary font-bold' 

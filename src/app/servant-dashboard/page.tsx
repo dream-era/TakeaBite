@@ -47,7 +47,11 @@ export default function ServantDashboard() {
       .order('created_at', { ascending: false });
 
     if (!error && data) {
-      setOrders(data);
+      const filteredData = data.filter(order => {
+        const parsedOrderType = order.order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway|dine_in)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
+        return parsedOrderType !== 'takeaway';
+      });
+      setOrders(filteredData);
     }
     setLoading(false);
   }, [currentSession]);
@@ -180,19 +184,7 @@ export default function ServantDashboard() {
             </section>
           )}
 
-          {/* Served */}
-          {servedOrders.length > 0 && (
-            <section className="opacity-70">
-              <h2 className="text-sm font-bold text-neutral-900 mb-3 flex items-center gap-2 uppercase tracking-wider">
-                <CheckCircle className="w-4 h-4 text-neutral-500" /> Served
-              </h2>
-              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                {servedOrders.map(order => (
-                  <OrderCard key={order.id} order={order} onClick={() => setSelectedOrder(order)} />
-                ))}
-              </div>
-            </section>
-          )}
+
 
           {loading && orders.length === 0 && (
             <div className="text-center py-10 text-neutral-500 text-sm">Loading orders...</div>
@@ -210,58 +202,87 @@ export default function ServantDashboard() {
         {selectedOrder && (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center p-4">
             <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95">
-              <div className="p-4 border-b border-neutral-100 flex justify-between items-center bg-neutral-50">
-                <div>
-                  <h3 className="font-bold text-neutral-900 text-lg">Order #{selectedOrder.daily_order_number}</h3>
-                  <p className="text-xs text-neutral-500 flex items-center gap-1">
-                    <MapPin className="w-3 h-3" /> 
-                    {selectedOrder.tables?.table_name || `Table ${selectedOrder.tables?.table_number}` || "Takeaway"}
-                  </p>
-                </div>
-                <button onClick={() => setSelectedOrder(null)} className="p-2 bg-white rounded-full border border-neutral-200 shadow-sm text-neutral-500 hover:text-neutral-900">
+              
+              {/* Header */}
+              <div className="p-5 border-b border-neutral-100 flex justify-between items-start bg-neutral-50 relative">
+                <button onClick={() => setSelectedOrder(null)} className="absolute top-4 right-4 p-2 bg-white rounded-full border border-neutral-200 shadow-sm text-neutral-500 hover:text-neutral-900 active:scale-95 transition-transform">
                   <X className="w-5 h-5" />
                 </button>
+                <div className="space-y-1">
+                  <h3 className="font-black text-neutral-900 text-2xl tracking-tight">Order #{selectedOrder.daily_order_number}</h3>
+                  <div className="flex items-center gap-3 text-sm font-semibold text-neutral-600">
+                    <span className="flex items-center gap-1 bg-neutral-200/50 px-2 py-1 rounded-md">
+                      <MapPin className="w-3.5 h-3.5" /> 
+                      {selectedOrder.tables ? (selectedOrder.tables.table_name || `Table ${selectedOrder.tables.table_number}`) : "Takeaway"}
+                    </span>
+                    <span className="flex items-center gap-1 text-neutral-500">
+                      <Clock className="w-3.5 h-3.5" />
+                      {new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date(selectedOrder.created_at))}
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {/* Body */}
               <div className="p-5 max-h-[60vh] overflow-y-auto">
-                <div className="space-y-3 mb-6">
-                  {selectedOrder.order_items?.map((item: any) => (
-                    <div key={item.id} className="flex justify-between items-start border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
-                      <div>
-                        <p className="font-bold text-neutral-900 text-sm">{item.quantity}x {item.menu_items?.name}</p>
-                        {item.station && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 bg-neutral-100 px-1.5 py-0.5 rounded mr-2">
-                            {item.station}
-                          </span>
-                        )}
+                <div className="mb-6">
+                  <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-3">Items</h4>
+                  <div className="space-y-3">
+                    {selectedOrder.order_items?.map((item: any) => (
+                      <div key={item.id} className="flex justify-between items-start">
+                        <div className="flex gap-2">
+                          <span className="font-bold text-neutral-900 text-sm">{item.quantity}x</span>
+                          <div>
+                            <p className="font-semibold text-neutral-800 text-sm">{item.menu_items?.name}</p>
+                            {item.station && (
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 bg-neutral-100 px-1.5 py-0.5 rounded mt-1 inline-block">
+                                {item.station}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <span className="font-medium text-neutral-600 text-sm">₹{item.price * item.quantity}</span>
                       </div>
-                      <span className="font-medium text-neutral-600 text-sm">₹{item.price * item.quantity}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-between items-center bg-neutral-50 p-3 rounded-xl border border-neutral-200 mb-6">
-                  <span className="font-medium text-neutral-600 text-sm">Total Amount</span>
-                  <span className="font-bold text-neutral-900 text-lg">₹{selectedOrder.total_amount}</span>
-                </div>
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-sm font-medium text-neutral-500">Payment:</span>
-                  <span className={`text-xs font-bold uppercase px-2 py-1 rounded ${selectedOrder.payment_status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
-                    {selectedOrder.payment_method} - {selectedOrder.payment_status}
-                  </span>
+                    ))}
+                  </div>
                 </div>
 
-                {selectedOrder.status === 'ready' && (
+                <div className="h-px w-full border-t border-dashed border-neutral-200 mb-6"></div>
+
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between items-center bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+                    <span className="font-bold text-neutral-600 text-sm uppercase tracking-wider">Total Amount</span>
+                    <span className="font-black text-neutral-900 text-xl">₹{selectedOrder.total_amount}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-3 border border-neutral-100 rounded-lg">
+                    <span className="text-sm font-bold text-neutral-500">Payment</span>
+                    <span className={`text-xs font-bold uppercase px-2.5 py-1 rounded-md ${selectedOrder.payment_status === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                      {selectedOrder.payment_method} - {selectedOrder.payment_status}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-3 border border-neutral-100 rounded-lg">
+                    <span className="text-sm font-bold text-neutral-500">Order Type</span>
+                    <span className="text-sm font-bold text-neutral-900">
+                      {selectedOrder.order_type === 'takeaway' ? 'Takeaway' : 'Eat Here'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-3">Actions</h4>
+                {selectedOrder.status === 'ready' ? (
                   <button 
                     onClick={() => markAsServed(selectedOrder.id)}
-                    className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base rounded-xl shadow-lg transition-transform active:scale-[0.98] flex items-center justify-center gap-2"
                   >
                     <CheckCircle className="w-5 h-5" />
-                    MARK AS SERVED
+                    MARK AS DELIVERED
                   </button>
-                )}
-                
-                {selectedOrder.status !== 'ready' && selectedOrder.status !== 'served' && (
-                  <div className="w-full py-3 bg-neutral-100 text-neutral-500 font-bold rounded-xl text-center text-sm">
-                    {getStatusText(selectedOrder.status)}...
+                ) : (
+                  <div className="w-full py-4 bg-neutral-100 text-neutral-500 font-bold rounded-xl text-center text-sm border border-neutral-200">
+                    Status: {getStatusText(selectedOrder.status)}
                   </div>
                 )}
               </div>
@@ -289,7 +310,7 @@ export default function ServantDashboard() {
         </div>
         <div className="flex items-center gap-1.5 text-sm font-bold text-neutral-700 mt-3 bg-white/50 p-2 rounded-lg inline-flex">
           <MapPin className="w-4 h-4 text-brand-500" />
-          {order.tables?.table_name || `Table ${order.tables?.table_number}` || "Takeaway"}
+          {order.tables ? (order.tables.table_name || `Table ${order.tables.table_number}`) : "Takeaway"}
         </div>
       </div>
     );

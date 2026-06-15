@@ -13,8 +13,8 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
-  orderType: 'dine_in' | 'takeaway' | null;
-  setOrderType: (type: 'dine_in' | 'takeaway') => void;
+  orderType: 'eat_here' | 'takeaway' | null;
+  setOrderType: (type: 'eat_here' | 'takeaway') => void;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
   updateQuantity: (id: string, workspaceId: string, delta: number) => void;
   removeItem: (id: string, workspaceId: string) => void;

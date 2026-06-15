@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile, getTableDetails } from "@/actions/restaurant";
-import { useCustomerIdentity } from "@/hooks/useCustomerIdentity";
+import { getOrCreateDeviceUID, getOrCreateSessionToken } from '@/lib/deviceSession';
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -20,7 +20,6 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { items: allCartItems, clearCart, orderType } = useCartStore();
-  const { customerId } = useCustomerIdentity();
 
   const { data: restaurantData } = useQuery({
     queryKey: ['restaurant', workspaceId],
@@ -86,7 +85,8 @@ export default function CheckoutPage() {
           paymentMethod: selectedMethod,
           specialInstructions: "",
           orderType: orderType,
-          customerId: customerId,
+          deviceUid: getOrCreateDeviceUID(),
+          sessionToken: getOrCreateSessionToken(),
         })
       });
 
@@ -123,9 +123,10 @@ export default function CheckoutPage() {
               setConfirmedOrderDetails(result.orderDetails);
               setPlacedOrderId(result.orderId || result.id);
               clearCart(workspaceId);
+              const sessionToken = getOrCreateSessionToken();
               const nextUrl = tableId 
-                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
-                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}`;
+                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}` 
+                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}`;
               router.push(nextUrl);
             },
             modal: {
@@ -143,9 +144,10 @@ export default function CheckoutPage() {
         setPlacedOrderId(result.orderId || result.id);
         toast.success("Order placed successfully");
         clearCart(workspaceId);
+        const sessionToken = getOrCreateSessionToken();
         const nextUrl = tableId 
-          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
-          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}`;
+          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}` 
+          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}`;
         router.push(nextUrl);
       }
     } catch (error: unknown) {
@@ -176,13 +178,13 @@ export default function CheckoutPage() {
         <div className="bg-surface-container-low rounded-xl p-4 flex items-center justify-between border border-surface-container-high">
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-primary">
-              {orderType === 'dine_in' ? 'restaurant' : 'takeout_dining'}
+              {orderType === 'eat_here' ? 'restaurant' : 'takeout_dining'}
             </span>
             <span className="font-label-md text-on-surface">
-              {orderType === 'dine_in' ? 'Dine In' : 'Takeaway / Counter Pickup'}
+              {orderType === 'eat_here' ? 'Eat Here' : 'Takeaway / Counter Pickup'}
             </span>
           </div>
-          {orderType === 'dine_in' && tableId && <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableLabel}</span>}
+          {orderType === 'eat_here' && tableId && <span className="font-headline-md text-primary bg-primary/10 px-3 py-1 rounded-md">{tableLabel}</span>}
         </div>
 
         <form id="checkout-form" onSubmit={handlePlaceOrder} className="space-y-6">

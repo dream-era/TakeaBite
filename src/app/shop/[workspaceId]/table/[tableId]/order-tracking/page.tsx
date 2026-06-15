@@ -7,7 +7,7 @@ import { CustomerTopBar } from "@/components/customer/CustomerTopBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { getRestaurantProfile } from "@/actions/restaurant";
-import { useCustomerIdentity } from "@/hooks/useCustomerIdentity";
+import { getDeviceUID, getSessionTokenFromURL } from "@/lib/deviceSession";
 
 export default function OrderTrackingPage() {
   const params = useParams();
@@ -15,7 +15,17 @@ export default function OrderTrackingPage() {
   const workspaceId = params.workspaceId as string;
   const tableId = params.tableId as string | undefined;
 
-  const { customerId } = useCustomerIdentity();
+  const [deviceUid, setDeviceUid] = useState<string | null>(null);
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [showPhonePrompt, setShowPhonePrompt] = useState(false);
+  const [phoneInput, setPhoneInput] = useState('');
+  
+  useEffect(() => {
+    setDeviceUid(getDeviceUID());
+    setSessionToken(getSessionTokenFromURL());
+    const saved = localStorage.getItem('takebite_phone_saved');
+    if (!saved) setShowPhonePrompt(true);
+  }, []);
   
   const queryClient = useQueryClient();
   const supabase = createBrowserSupabase();
@@ -29,49 +39,65 @@ export default function OrderTrackingPage() {
     enabled: !!workspaceId,
   });
 
-  // Fetch recent active orders for this table
+  // Fetch recent active orders for this device
   const { data: orders, isLoading } = useQuery({
-    queryKey: ['customer-orders', workspaceId, customerId],
+    queryKey: ['customer-orders', workspaceId, deviceUid, sessionToken],
     queryFn: async () => {
-      const query = supabase
+      let query = supabase
         .from('orders')
         .select(`
           *,
           order_items (
             *,
             menu_items ( name )
-          )
+          ),
+          tables(table_number)
         `)
         .eq('restaurant_id', workspaceId)
-        .eq('customer_id', customerId)
-        .not('status', 'in', '("pending", "failed", "cancelled")')
         .order('created_at', { ascending: false })
         .limit(20);
+        
+      if (deviceUid && sessionToken) {
+        query = query.or(`device_uid.eq.${deviceUid},session_token.eq.${sessionToken}`);
+      } else if (deviceUid) {
+        query = query.eq('device_uid', deviceUid);
+      } else if (sessionToken) {
+        query = query.eq('session_token', sessionToken);
+      } else {
+        return [];
+      }
       
       const { data, error } = await query;
       
       if (error) throw error;
       return data;
     },
-    enabled: !!workspaceId && !!customerId,
+    enabled: !!workspaceId && (!!deviceUid || !!sessionToken),
   });
 
   // Supabase Realtime Subscription for Instant Updates
   useEffect(() => {
-    if (!customerId) return;
+    if (!deviceUid && !sessionToken) return;
+    
+    let filterStr = `restaurant_id=eq.${workspaceId}`;
+    // Using a single condition for realtime because Supabase Realtime doesn't support complex OR filters easily.
+    // If we have deviceUid, listen to it. If not, listen to sessionToken.
+    if (deviceUid) filterStr = `device_uid=eq.${deviceUid}`;
+    else if (sessionToken) filterStr = `session_token=eq.${sessionToken}`;
+    
     const channel = supabase.channel('customer-tracking')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${workspaceId}` },
+        { event: '*', schema: 'public', table: 'orders', filter: filterStr },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, customerId] });
+          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, deviceUid, sessionToken] });
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'order_items' },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, customerId] });
+          queryClient.invalidateQueries({ queryKey: ['customer-orders', workspaceId, deviceUid, sessionToken] });
         }
       )
       .subscribe();
@@ -79,7 +105,18 @@ export default function OrderTrackingPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, queryClient, workspaceId, customerId]);
+  }, [supabase, queryClient, workspaceId, deviceUid, sessionToken]);
+
+  const handleSavePhone = async () => {
+    if (!phoneInput || !deviceUid) return;
+    try {
+      await supabase.from('orders').update({ phone: phoneInput }).eq('device_uid', deviceUid);
+      localStorage.setItem('takebite_phone_saved', 'true');
+      setShowPhonePrompt(false);
+    } catch(e) {
+      console.error("Failed to save phone", e);
+    }
+  };
 
   const getStepForStatus = (status: string) => {
     switch (status) {
@@ -100,9 +137,30 @@ export default function OrderTrackingPage() {
           <button onClick={() => router.back()} className="text-on-surface hover:opacity-80 transition-opacity active:scale-95 duration-150 flex items-center">
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          <h2 className="font-headline-md text-headline-md text-on-surface">Track Order</h2>
+          <h1 className="font-headline-md text-headline-md text-on-surface">Your Orders</h1>
           <div className="w-6" />
         </div>
+
+        {showPhonePrompt && deviceUid && (
+          <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6 relative">
+            <button onClick={() => { setShowPhonePrompt(false); localStorage.setItem('takebite_phone_saved', 'true'); }} className="absolute top-2 right-2 text-on-surface-variant hover:text-on-surface">
+              <span className="material-symbols-outlined text-sm">close</span>
+            </button>
+            <p className="font-body-md text-on-surface font-semibold mb-2 pr-4">Want updates on WhatsApp? Save your number</p>
+            <div className="flex gap-2">
+              <input 
+                type="tel" 
+                placeholder="Mobile Number" 
+                value={phoneInput} 
+                onChange={(e) => setPhoneInput(e.target.value)}
+                className="flex-grow bg-white border border-surface-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
+              />
+              <button onClick={handleSavePhone} className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap active:scale-95 transition-transform">
+                Save
+              </button>
+            </div>
+          </div>
+        )}
 
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
@@ -111,13 +169,19 @@ export default function OrderTrackingPage() {
         ) : !orders || orders.length === 0 ? (
           <div className="text-center py-20 text-secondary">
             <span className="material-symbols-outlined text-6xl mb-4 opacity-50">receipt_long</span>
-            <p>No active orders found for this table.</p>
+            <p className="mb-6">No orders found.</p>
+            <button 
+              onClick={() => router.push(tableId ? `/shop/${workspaceId}/table/${tableId}` : `/shop/${workspaceId}`)}
+              className="bg-primary text-white px-6 py-3 rounded-xl font-bold active:scale-95 transition-transform"
+            >
+              Go to Menu
+            </button>
           </div>
         ) : (
           <div className="space-y-8">
             {orders.map((order: { id: string; status: string; special_instructions: string | null; table_id: string | null; created_at: string; updated_at: string; order_items: { id: string; quantity: number; price: number; menu_items: { name: string } }[]; total_amount: number; daily_order_number: number | null; }) => {
               const currentStep = getStepForStatus(order.status);
-              const parsedOrderType = order.special_instructions?.match(/\[TYPE:(dine_in|takeaway)\]/)?.[1] || (order.table_id ? 'dine_in' : 'takeaway');
+              const parsedOrderType = (order as any).order_type || (order.table_id ? 'eat_here' : 'takeaway');
               
               const steps = [
                 { id: 1, title: "Order Received", desc: "We've got your order", icon: "receipt_long", time: new Date(order.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) },
@@ -135,8 +199,8 @@ export default function OrderTrackingPage() {
                     </div>
                     <div className="bg-surface-container-high px-3 py-1 rounded-md">
                       <span className="font-label-md text-primary flex items-center gap-1">
-                        {parsedOrderType === 'takeaway' ? '🛍 Takeaway' : '🍽 Dine In'}
-                        {tableId && parsedOrderType === 'dine_in' ? ` - Table ${tableId}` : ''}
+                        {parsedOrderType === 'takeaway' ? '🛍 Takeaway' : '🍽 Eat Here'}
+                        {tableId && parsedOrderType === 'eat_here' ? ` - Table ${tableId}` : ''}
                       </span>
                     </div>
                   </div>

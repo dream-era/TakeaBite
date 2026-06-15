@@ -66,11 +66,11 @@ export default function CartPage() {
               <h3 className="font-label-lg text-on-surface mb-3">Order Type</h3>
               <div className="grid grid-cols-2 gap-3">
                 <button
-                  onClick={() => setOrderType('dine_in')}
-                  className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${orderType === 'dine_in' ? 'border-primary bg-primary/5 text-primary' : 'border-surface-variant text-secondary bg-surface-container-lowest'}`}
+                  onClick={() => setOrderType('eat_here')}
+                  className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${orderType === 'eat_here' ? 'border-primary bg-primary/5 text-primary' : 'border-surface-variant text-secondary bg-surface-container-lowest'}`}
                 >
                   <span className="material-symbols-outlined mb-1 text-[28px]">restaurant</span>
-                  <span className="font-label-md">Dine In</span>
+                  <span className="font-label-lg mt-2">Eat Here</span>
                 </button>
                 <button
                   onClick={() => setOrderType('takeaway')}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CustomerBottomNav } from "@/components/customer/CustomerBottomNav";
 import { CustomerTopBar } from "@/components/customer/CustomerTopBar";
 
@@ -11,7 +11,7 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
 import { createBrowserSupabase } from "@/lib/supabase/client";
-import { PhoneRecoveryPrompt } from "@/components/customer/PhoneRecoveryPrompt";
+
 
 export default function OrderConfirmationPage() {
   const params = useParams();
@@ -20,7 +20,9 @@ export default function OrderConfirmationPage() {
   const tableId = params.tableId as string | undefined;
 
   const confirmedOrder = useCartStore((s) => s.confirmedOrderDetails);
-  const placedOrderId = useCartStore((s) => s.placedOrderId);
+  const searchParams = useSearchParams();
+  const urlOrderId = searchParams.get('id');
+  const activeOrderId = placedOrderId || (urlOrderId && urlOrderId !== 'success' ? urlOrderId : null);
 
   const orderItems = confirmedOrder?.items ?? [];
   const subtotal = orderItems.reduce((sum: number, item: any) => sum + ((item.price || 0) * item.quantity), 0);
@@ -38,19 +40,29 @@ export default function OrderConfirmationPage() {
   });
 
   const { data: orderData, isLoading: isOrderLoading } = useQuery({
-    queryKey: ['order-status', placedOrderId],
+    queryKey: ['order-status', activeOrderId],
     queryFn: async () => {
-      if (!placedOrderId) return null;
+      if (!activeOrderId) return null;
       const supabase = createBrowserSupabase();
       const { data, error } = await supabase
         .from('orders')
-        .select('status, payment_status, payment_method, daily_order_number')
-        .eq('id', placedOrderId)
+        .select(`
+          status, 
+          payment_status, 
+          payment_method, 
+          daily_order_number,
+          order_items (
+            quantity,
+            price,
+            menu_items ( name )
+          )
+        `)
+        .eq('id', activeOrderId)
         .single();
       if (error) throw error;
       return data;
     },
-    enabled: !!placedOrderId,
+    enabled: !!activeOrderId,
     refetchInterval: (data) => {
       // Refetch every 3s if it's still pending (webhook might update it)
       if (data?.status === 'pending' || data?.payment_status === 'pending') {
@@ -136,20 +148,21 @@ export default function OrderConfirmationPage() {
             
             {/* Items List */}
             <div className="space-y-4">
-              {orderItems.map((item: any, i: number) => (
+              {(orderItems.length > 0 ? orderItems : orderData?.order_items || []).map((item: any, i: number) => (
                 <div key={i} className="flex justify-between items-center">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center overflow-hidden shrink-0">
-                      <FoodImage
-                        imageSlug={nameToImageSlug(item.name)}
-                        itemName={item.name}
-                        size="sm"
-                        className="w-full h-full object-cover"
+                    <div className="w-10 h-10 bg-surface-variant rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm border border-outline-variant">
+                      <FoodImage 
+                        name={item.name || item.menu_items?.name || ''} 
+                        slug={nameToImageSlug(item.name || item.menu_items?.name || '')} 
                       />
                     </div>
-                    <span className="font-body-lg font-medium text-on-surface leading-tight">{item.quantity}x {item.name}</span>
+                    <div>
+                      <p className="font-label-md text-on-surface line-clamp-1">{item.name || item.menu_items?.name}</p>
+                      <p className="font-body-md text-secondary text-xs">Qty: {item.quantity}</p>
+                    </div>
                   </div>
-                  <span className="font-price-display text-on-surface text-base">${((item.price || 0) * item.quantity).toFixed(2)}</span>
+                  <p className="font-label-md text-on-surface">₹{item.price * item.quantity}</p>
                 </div>
               ))}
             </div>
@@ -202,7 +215,7 @@ export default function OrderConfirmationPage() {
 
         {/* Primary Actions */}
         <div className="mt-section-margin max-w-md mx-auto space-y-4">
-          <PhoneRecoveryPrompt />
+
           {/* Track order removed for now */}
           <button className="w-full flex items-center justify-center gap-2 py-3 text-secondary hover:text-on-surface transition-colors font-label-md">
             <span className="material-symbols-outlined text-[20px]">download</span>

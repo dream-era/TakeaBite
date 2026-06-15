@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile, getTableDetails } from "@/actions/restaurant";
-import { useCustomerIdentity } from "@/hooks/useCustomerIdentity";
+import { getOrCreateDeviceUID, getOrCreateSessionToken } from '@/lib/deviceSession';
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -19,8 +19,7 @@ export default function CheckoutPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const { items: allCartItems, clearCart } = useCartStore();
-  const { customerId } = useCustomerIdentity();
+  const { items: allCartItems, clearCart, orderType } = useCartStore();
   
   const { data: restaurantData } = useQuery({
     queryKey: ['restaurant', workspaceId],
@@ -78,7 +77,9 @@ export default function CheckoutPage() {
           items: orderItems,
           paymentMethod: selectedMethod,
           specialInstructions: "",
-          customerId: customerId,
+          orderType: orderType,
+          deviceUid: getOrCreateDeviceUID(),
+          sessionToken: getOrCreateSessionToken(),
         })
       });
 
@@ -119,9 +120,10 @@ export default function CheckoutPage() {
             },
             handler: (response: any) => {
               clearCart(workspaceId);
+              const sessionToken = getOrCreateSessionToken();
               const nextUrl = tableId 
-                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
-                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}`;
+                ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}` 
+                : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}`;
               router.push(nextUrl);
             },
             modal: {
@@ -137,9 +139,10 @@ export default function CheckoutPage() {
       } else {
         toast.success("Order placed successfully");
         clearCart(workspaceId);
+        const sessionToken = getOrCreateSessionToken();
         const nextUrl = tableId 
-          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}` 
-          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}`;
+          ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}` 
+          : `/shop/${workspaceId}/order-confirmation?id=${result.orderId || result.id || 'success'}&session=${sessionToken}`;
         router.push(nextUrl);
       }
     } catch (error: unknown) {

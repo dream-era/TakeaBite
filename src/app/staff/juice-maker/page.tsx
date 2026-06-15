@@ -15,7 +15,7 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 export default function JuiceDashboardPage() {
   const { currentSession: session } = useStaffStore();
   const router = useRouter();
-  const restaurantId = session?.restaurantId || "123";
+  const restaurantId = session?.restaurantId || session?.workspaceId || undefined;
   const station = "juice";
 
   const { orders, isLoading, isConnected, secondsAgo } = useKitchenRealtime(restaurantId, station);
@@ -39,7 +39,7 @@ export default function JuiceDashboardPage() {
         fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-          body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId })
+          body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId: restaurantId || undefined })
         })
       ));
       const failed = results.filter(r => !r.ok);
@@ -56,7 +56,7 @@ export default function JuiceDashboardPage() {
         fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-          body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId })
+          body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId: restaurantId || undefined })
         })
       ));
       const failed = results.filter(r => !r.ok);
@@ -67,7 +67,11 @@ export default function JuiceDashboardPage() {
     }
   };
 
-  const visibleOrders = orders;
+  const visibleOrders = orders.filter(order => {
+    const items = order.order_items.filter((i: any) => i.station === station || i.station === 'both');
+    if (items.length === 0) return false;
+    return !items.every((i: any) => i.status === 'done');
+  });
   
   const newOrdersCount = visibleOrders.filter(o => {
     const items = o.order_items.filter((i: any) => i.station === station || i.station === 'both');
@@ -146,7 +150,6 @@ export default function JuiceDashboardPage() {
         ) : (
           visibleOrders.map((order) => {
             const relevantItems = order.order_items.filter((i: any) => i.station === station || i.station === 'both');
-            if (relevantItems.length === 0) return null;
 
             const isAllNew = relevantItems.every((i: any) => i.status === 'pending');
             const isAllReady = relevantItems.every((i: any) => i.status === 'done');
@@ -165,7 +168,7 @@ export default function JuiceDashboardPage() {
             const orderAgeMinutes = Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000);
             const isUrgent = orderAgeMinutes >= 15;
 
-            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(dine_in|takeaway)\]/)?.[1] || (order.table_id ? 'dine_in' : 'takeaway');
+            const parsedOrderType = (order as any).order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway|dine_in)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
             const paymentMethodLabel = order.payment_method === 'cash' ? '💵 Cash' : '📱 Online';
             const orderTypeLabel = parsedOrderType === 'takeaway' ? '🛍 Takeaway' : '🍽 Eat Here';
 
