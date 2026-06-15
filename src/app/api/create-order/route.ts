@@ -238,14 +238,7 @@ export async function POST(request: Request) {
       .digest('hex')
       .slice(0, 16) // first 16 chars is enough
 
-    if (customerId) {
-      const { error: profileError } = await supabase
-        .from('customer_profiles')
-        .upsert({ id: customerId }, { onConflict: 'id' })
-      if (profileError) {
-        console.warn('[ServeFlow] Failed to upsert customer profile:', profileError)
-      }
-    }
+    // No longer using customerId, deviceUid handles anonymous tracking
 
     // ── CASH PAYMENT ─────────────────────────────────────
     if (paymentMethod === 'cash') {
