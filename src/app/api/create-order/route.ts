@@ -262,7 +262,7 @@ export async function POST(request: Request) {
         razorpay_payment_id: null,
         special_instructions: encodedSpecialInstructions || null,
         order_hash: orderHash,
-        order_type: orderType,
+        order_type: orderType === 'eat_here' ? 'dine_in' : orderType,
       }
 
       let dailyOrderNumber = await getNextDailyOrderNumber(restaurantId, supabase)
@@ -281,8 +281,8 @@ export async function POST(request: Request) {
           dailyOrderNumber++
           attempts++
         } else if (error) {
-          console.error('[ServeFlow] Cash order insert failed:', error)
-          return NextResponse.json({ error: 'Failed to place order. Please try again.' }, { status: 500 })
+          console.error('[ServeFlow] Cash order insert failed:', JSON.stringify(error, null, 2))
+          return NextResponse.json({ error: 'Failed to place order. Please try again.', details: error }, { status: 500 })
         } else {
           order = data
         }
@@ -386,7 +386,7 @@ export async function POST(request: Request) {
         razorpay_payment_id: null,
         special_instructions: encodedSpecialInstructions || null,
         order_hash: orderHash,
-        order_type: orderType,
+        order_type: orderType === 'eat_here' ? 'dine_in' : orderType,
       }
 
       let dailyOrderNumber = await getNextDailyOrderNumber(restaurantId, supabase)
