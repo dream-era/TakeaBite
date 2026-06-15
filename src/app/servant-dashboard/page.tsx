@@ -48,7 +48,7 @@ export default function ServantDashboard() {
 
     if (!error && data) {
       const filteredData = data.filter(order => {
-        const parsedOrderType = order.order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway|dine_in)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
+        const parsedOrderType = order.order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
         return parsedOrderType !== 'takeaway';
       });
       setOrders(filteredData);
@@ -118,7 +118,7 @@ export default function ServantDashboard() {
   };
 
   return (
-    <StaffLayout allowedRoles={['servant', 'cook', 'chef', 'juice', 'server']} themeColor="emerald">
+    <StaffLayout allowedRoles={['servant', 'cook', 'chef', 'juice', 'server']} themeColor="green">
       <div className="min-h-screen bg-neutral-50 pb-24">
         {/* Header */}
         <header className="bg-[#1a1a1a] text-white px-4 py-4 sticky top-0 z-40">

@@ -53,7 +53,7 @@ export function StaffLayout({ children, allowedRoles, themeColor = "red" }: Staf
   if (!mounted) return null;
   if (!currentSession) return null;
 
-  const isAuthorized = allowedRoles.includes(currentSession.role);
+  const isAuthorized = allowedRoles.includes(currentSession.role as any);
 
   if (!isAuthorized) {
     return (

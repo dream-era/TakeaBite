@@ -202,3 +202,4 @@ export interface CustomerProfile {
   updated_at: string
 }
 
+export type Database = any;

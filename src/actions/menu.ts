@@ -104,7 +104,6 @@ async function verifyItemOwnership(
   const { data } = await supabase
     .from('menu_items')
     .select('id, restaurant_id, restaurants!inner(owner_id)')
-    // @ts-expect-error - Bypass complex supabase join inference
     .eq('id', itemId)
     .single()
 
@@ -414,7 +413,6 @@ export async function deleteMenuItem(
     const { data: activeOrderItems } = await supabase
       .from('order_items')
       .select('id, orders!inner(status)')
-      // @ts-expect-error - Bypass complex supabase join inference
       .eq('menu_item_id', itemId)
       .not('orders.status', 'in', '("served","cancelled")')
       .limit(1)
@@ -761,6 +759,7 @@ export async function getMenuItems(restaurantId: string): Promise<
         items: allItems,
         byCategory,
         categories,
+        menuCategories: [],
         totalCount: allItems.length,
       },
     }
@@ -988,7 +987,6 @@ export async function updateCategory(input: z.infer<typeof UpdateCategorySchema>
     const { data: cat } = await supabase
       .from('menu_categories')
       .select('id, restaurant_id, name, restaurants!inner(owner_id)')
-      // @ts-expect-error - bypass strict typing for complex join
       .eq('id', parsed.data.id)
       .single()
 
@@ -1034,7 +1032,6 @@ export async function toggleCategoryStatus(categoryId: string, isActive: boolean
     const { data: cat } = await supabase
       .from('menu_categories')
       .select('restaurant_id, restaurants!inner(owner_id)')
-      // @ts-expect-error join
       .eq('id', categoryId)
       .single()
       
@@ -1067,7 +1064,6 @@ export async function deleteCategory(categoryId: string) {
     const { data: cat } = await supabase
       .from('menu_categories')
       .select('restaurant_id, restaurants!inner(owner_id)')
-      // @ts-expect-error join
       .eq('id', categoryId)
       .single()
       

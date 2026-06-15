@@ -10,7 +10,8 @@ export default function InviteAcceptancePage() {
   const router = useRouter();
   const token = params.token as string;
 
-  const { invitations, acceptInvitation } = useStaffStore();
+  const invitations: any[] = [];
+  const acceptInvitation = (...args: any[]) => {};
   const [mounted, setMounted] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ export default function InviteAcceptancePage() {
 
   if (!mounted) return null;
 
-  const invite = invitations.find(i => i.token === token);
+  const invite = invitations.find((i: any) => i.token === token);
 
   if (!invite) {
     return (

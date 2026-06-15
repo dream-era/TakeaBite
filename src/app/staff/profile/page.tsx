@@ -29,7 +29,7 @@ export default function StaffProfilePage() {
     if (!currentSession) return;
     setIsRefreshing(true);
     try {
-      const data = await fetchStaffDailyMetrics(currentSession.restaurantId, currentSession.role);
+      const data = await fetchStaffDailyMetrics(currentSession.restaurantId || "", currentSession.role as any);
       setMetrics(data);
     } catch (error) {
       console.error("Failed to load metrics", error);
@@ -116,7 +116,7 @@ export default function StaffProfilePage() {
       <div className="px-4 py-6 space-y-6">
         {/* Today's Performance Card */}
         <div>
-          <h3 className="text-sm font-bold text-neutral-900 mb-3 uppercase tracking-wider px-1">Today's Performance</h3>
+          <h3 className="text-sm font-bold text-neutral-900 mb-3 uppercase tracking-wider px-1">Today&apos;s Performance</h3>
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-5 grid grid-cols-2 gap-4">
             <div className="col-span-2 flex justify-between items-center pb-4 border-b border-neutral-100">
               <span className="text-neutral-500 font-medium text-sm">{labels.completed}</span>
@@ -148,7 +148,7 @@ export default function StaffProfilePage() {
               <Phone className="h-5 w-5 text-neutral-400" />
               <div>
                 <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Phone</p>
-                <p className="text-sm font-bold text-neutral-900">{currentSession.phone || "Not provided"}</p>
+                <p className="text-sm font-bold text-neutral-900">{(currentSession as any).phone || "Not provided"}</p>
               </div>
             </div>
             <div className="p-4 flex items-center gap-3 border-b border-neutral-100">

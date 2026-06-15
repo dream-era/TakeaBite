@@ -68,7 +68,7 @@ export default function MenuManagementPage() {
   const addMutation = useMutation({
     mutationFn: (newItem: Parameters<typeof addMenuItem>[0]) => addMenuItem(newItem),
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       toast.success("Item added successfully");
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
       setIsAddModalOpen(false);
@@ -80,7 +80,7 @@ export default function MenuManagementPage() {
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteMenuItem(id),
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       toast.success("Item deleted");
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
     },
@@ -90,7 +90,7 @@ export default function MenuManagementPage() {
   const toggleMutation = useMutation({
     mutationFn: ({ id, isAvailable }: { id: string, isAvailable: boolean }) => toggleItemAvailability(id, isAvailable),
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
     },
     onError: () => toast.error("Failed to update status")
@@ -99,7 +99,7 @@ export default function MenuManagementPage() {
   const editMutation = useMutation({
     mutationFn: (updatedItem: Parameters<typeof updateMenuItem>[0]) => updateMenuItem(updatedItem),
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       toast.success("Item updated successfully");
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
       setEditingItemId(null);
@@ -112,7 +112,7 @@ export default function MenuManagementPage() {
   const addCategoryMut = useMutation({
     mutationFn: addCategory,
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       toast.success("Category created");
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
       setIsCategoryModalOpen(false);
@@ -122,7 +122,7 @@ export default function MenuManagementPage() {
   const editCategoryMut = useMutation({
     mutationFn: updateCategory,
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       toast.success("Category updated");
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
       setEditingCategoryId(null);
@@ -132,7 +132,7 @@ export default function MenuManagementPage() {
   const deleteCategoryMut = useMutation({
     mutationFn: deleteCategory,
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       toast.success("Category deleted");
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
     }
@@ -141,7 +141,7 @@ export default function MenuManagementPage() {
   const toggleCategoryMut = useMutation({
     mutationFn: ({ id, isActive }: { id: string, isActive: boolean }) => toggleCategoryStatus(id, isActive),
     onSuccess: (res) => {
-      if (!res.success) { toast.error(res.error); return; }
+      if (!res.success) { toast.error(res.error || "An error occurred"); return; }
       queryClient.invalidateQueries({ queryKey: ['menu', restaurantId] });
     }
   });
@@ -180,6 +180,7 @@ export default function MenuManagementPage() {
         station: "food",
         isVeg: true,
         isAvailable: true,
+        displayOrder: 0,
       });
     }
   };

@@ -15,7 +15,7 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 export default function CookDashboardPage() {
   const { currentSession: session } = useStaffStore();
   const router = useRouter();
-  const restaurantId = session?.restaurantId || session?.workspaceId || undefined;
+  const restaurantId = session?.restaurantId || (session as any)?.workspaceId || "";
   const station = "food";
 
   const { orders, isLoading, isConnected, secondsAgo } = useKitchenRealtime(restaurantId, station);
@@ -163,7 +163,7 @@ export default function CookDashboardPage() {
             const orderAgeMinutes = Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000);
             const isUrgent = orderAgeMinutes >= 15;
 
-            const parsedOrderType = (order as any).order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway|dine_in)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
+            const parsedOrderType = (order as any).order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
             const paymentMethodLabel = order.payment_method === 'cash' ? '💵 Cash' : '📱 Online';
             const orderTypeLabel = parsedOrderType === 'takeaway' ? '🛍 Takeaway' : '🍽 Eat Here';
 
@@ -241,7 +241,7 @@ export default function CookDashboardPage() {
                           
                           {/* Display order-level notes below the item to match KDS format if no item-level notes exist */}
                           {(!item.notes && order.special_instructions) && (() => {
-                            const cleanSpecialInstructions = order.special_instructions?.replace(/\[TYPE:(dine_in|takeaway)\]\s*/, '') || '';
+                            const cleanSpecialInstructions = order.special_instructions?.replace(/\[TYPE:(eat_here|takeaway)\]\s*/, '') || '';
                             if (!cleanSpecialInstructions) return null;
                             return (
                               <div className="mt-2 space-y-1">

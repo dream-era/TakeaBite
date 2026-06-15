@@ -15,7 +15,7 @@ import { Logo } from "@/components/shared/Logo";
 
 export default function BusinessSetupPage() {
   const router = useRouter();
-  const { user, restaurant, setRestaurant } = useAuthStore();
+  const { owner, restaurant, updateRestaurant } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLockedClick = (e: React.MouseEvent) => {
@@ -81,7 +81,7 @@ export default function BusinessSetupPage() {
         return;
       }
       
-      setRestaurant(result.data);
+      updateRestaurant(result.data);
       toast.success("Business details saved!");
       router.push("/qr-generation");
     } catch {
@@ -107,12 +107,12 @@ export default function BusinessSetupPage() {
               href={item.href || "#"}
               onClick={item.locked ? handleLockedClick : undefined}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
-                item.active
+                (item as any).active
                   ? "bg-brand-50 text-brand-600 shadow-sm"
                   : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
               }`}
             >
-              <item.icon className={`h-5 w-5 ${item.active ? "text-brand-600" : "text-neutral-400"}`} />
+              <item.icon className={`h-5 w-5 ${(item as any).active ? "text-brand-600" : "text-neutral-400"}`} />
               <span className="flex-1 text-left">{item.label}</span>
               {item.locked && (
                   <Lock className="h-3.5 w-3.5 text-neutral-400 opacity-60 ml-1" />
@@ -161,9 +161,9 @@ export default function BusinessSetupPage() {
             </button>
             <div className="flex items-center gap-2 md:gap-3 cursor-pointer rounded-full border border-neutral-200 bg-white p-1 md:py-1.5 md:pl-1.5 md:pr-4 shadow-sm hover:bg-neutral-50 shrink-0">
               <div className="h-7 w-7 overflow-hidden rounded-full border border-neutral-100 shrink-0">
-                <img src={`https://ui-avatars.com/api/?name=${user?.email?.split('@')[0] || 'User'}&background=fef2f2&color=ef4444`} alt="" className="h-full w-full object-cover" />
+                <img src={`https://ui-avatars.com/api/?name=${owner?.email?.split('@')[0] || 'Owner'}&background=fef2f2&color=ef4444`} alt="" className="h-full w-full object-cover" />
               </div>
-              <span className="hidden md:block text-sm font-medium text-neutral-700 truncate max-w-[100px]">{user?.email?.split('@')[0] || 'Owner'}</span>
+              <span className="hidden md:block text-sm font-medium text-neutral-700 truncate max-w-[100px]">{owner?.email?.split('@')[0] || 'Owner'}</span>
               <ChevronDown className="hidden md:block h-3.5 w-3.5 text-neutral-400" />
             </div>
           </div>
@@ -260,7 +260,7 @@ export default function BusinessSetupPage() {
                   {/* Email */}
                   <div>
                     <label className="block text-sm font-semibold text-neutral-700 mb-2">Email Address</label>
-                    <input type="email" placeholder="mario.pizza@gmail.com" defaultValue={user?.email || ''} disabled
+                    <input type="email" placeholder="mario.pizza@gmail.com" defaultValue={owner?.email || ''} disabled
                       className="w-full h-12 rounded-xl border border-neutral-200 bg-neutral-50 px-4 text-sm focus:outline-none text-neutral-500" />
                   </div>
                 </div>

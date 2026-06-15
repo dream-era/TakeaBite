@@ -110,7 +110,6 @@ async function verifyStaffOwnership(
   const { data } = await supabase
     .from('staff')
     .select('id, restaurant_id, restaurants!inner(owner_id)')
-    // @ts-expect-error - Bypass complex supabase join inference
     .eq('id', staffId)
     .single()
 

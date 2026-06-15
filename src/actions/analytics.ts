@@ -300,7 +300,7 @@ export async function getWeeklyStats(): Promise<ActionResult<{
         topSellingItem: topItem?.[0] ?? null,
         topSellingCount: topItem?.[1] ?? 0,
         peakTime: peakTimeStr,
-        peakTimeOrders: peakHour ? parseInt(peakHour[1]) : 0,
+        peakTimeOrders: peakHour ? peakHour[1] : 0,
       }
     }
   } catch (err) {
@@ -791,16 +791,7 @@ export async function getPreparationInsight(): Promise<ActionResult<{
 // Runs ALL analytics queries in parallel.
 // The Analytics page calls this ONCE and gets everything.
 // ============================================================
-export async function getFullAnalytics(): Promise<ActionResult<{
-  health: Awaited<ReturnType<typeof getBusinessHealth>> extends { success: true; data: infer D } ? D : never
-  weeklyStats: Awaited<ReturnType<typeof getWeeklyStats>> extends { success: true; data: infer D } ? D : never
-  salesChart: Awaited<ReturnType<typeof getSalesChartData>> extends { success: true; data: infer D } ? D : never
-  highDemand: Awaited<ReturnType<typeof getHighDemandProducts>> extends { success: true; data: infer D } ? D : never
-  peakDay: Awaited<ReturnType<typeof getPeakDay>> extends { success: true; data: infer D } ? D : never
-  bestSeller: Awaited<ReturnType<typeof getBestSeller>> extends { success: true; data: infer D } ? D : never
-  lowDemand: Awaited<ReturnType<typeof getLowDemandItem>> extends { success: true; data: infer D } ? D : never
-  prepInsight: Awaited<ReturnType<typeof getPreparationInsight>> extends { success: true; data: infer D } ? D : never
-}>> {
+export async function getFullAnalytics(): Promise<ActionResult<any>> {
   try {
     // All 8 queries fire simultaneously
     const [health, weeklyStats, salesChart, highDemand, peakDay, bestSeller, lowDemand, prepInsight] =

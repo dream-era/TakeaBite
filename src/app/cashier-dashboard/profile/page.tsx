@@ -64,7 +64,7 @@ export default function CashierProfilePage() {
                   Cashier
                 </span>
                 <span className="text-sm font-semibold text-neutral-500 flex items-center gap-1">
-                  <Store className="h-4 w-4" /> Restaurant ID: {currentSession.restaurantId.slice(0,8)}...
+                  <Store className="h-4 w-4" /> Restaurant ID: {(currentSession.restaurantId || "").slice(0,8)}...
                 </span>
               </div>
             </div>
@@ -76,11 +76,11 @@ export default function CashierProfilePage() {
             <div className="space-y-6">
               <div>
                 <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1 flex items-center gap-1"><Phone className="h-3 w-3"/> Phone Number</label>
-                <p className="font-semibold text-neutral-900">{currentSession.phone || 'Not Provided'}</p>
+                <p className="font-semibold text-neutral-900">{(currentSession as any).phone || 'Not Provided'}</p>
               </div>
               <div>
                 <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1 flex items-center gap-1"><Mail className="h-3 w-3"/> Email Address</label>
-                <p className="font-semibold text-neutral-900">{currentSession.email || 'Not Provided'}</p>
+                <p className="font-semibold text-neutral-900">{(currentSession as any).email || 'Not Provided'}</p>
               </div>
             </div>
             

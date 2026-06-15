@@ -40,7 +40,7 @@ export default function StaffManagementPage() {
     name: '',
     phone: '',
     email: '',
-    role: 'cook' as StaffRole
+    role: 'cook' as Exclude<StaffRole, 'owner'>
   });
 
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
@@ -118,7 +118,7 @@ export default function StaffManagementPage() {
   });
 
   const editMutation = useMutation({
-    mutationFn: async (data: { staffId: string, name: string, phone: string, email?: string, role: StaffRole }) => {
+    mutationFn: async (data: { staffId: string, name: string, phone: string, email?: string, role: Exclude<StaffRole, 'owner'> }) => {
       const res = await updateStaff(data);
       if (!res.success) throw new Error(res.error);
       return res.data;
@@ -282,7 +282,7 @@ export default function StaffManagementPage() {
                                       name: member.name,
                                       phone: member.phone || '',
                                       email: member.email || '',
-                                      role: member.role as StaffRole
+                                      role: member.role as Exclude<StaffRole, 'owner'>
                                     });
                                     setEditingStaffId(member.id);
                                     setIsEditModalOpen(true);
@@ -426,7 +426,7 @@ export default function StaffManagementPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 mb-1">Role</label>
-                      <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as StaffRole})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
+                      <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as Exclude<StaffRole, 'owner'>})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
                         <option value="cook">Cook</option>
                         <option value="juice_maker">Juice Maker</option>
                         <option value="servant">Servant</option>
@@ -470,7 +470,7 @@ export default function StaffManagementPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Role</label>
-                  <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as StaffRole})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
+                  <select value={inviteData.role} onChange={e => setInviteData({...inviteData, role: e.target.value as Exclude<StaffRole, 'owner'>})} className="w-full border border-neutral-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none bg-white">
                     <option value="cook">Cook</option>
                     <option value="juice_maker">Juice Maker</option>
                     <option value="servant">Servant</option>

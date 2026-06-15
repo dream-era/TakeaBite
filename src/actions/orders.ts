@@ -107,7 +107,6 @@ async function verifyOrderOwnership(
   const { data } = await supabase
     .from('orders')
     .select('*, restaurants!inner(owner_id)')
-    // @ts-expect-error - Bypass complex supabase join inference
     .eq('id', orderId)
     .single()
 
@@ -878,7 +877,7 @@ export async function updateOrderStatus(orderId: string, status: string): Promis
 
     if (error) throw error
 
-    return { success: true }
+    return { success: true, data: undefined }
   } catch (err) {
     console.error('Failed to update order status:', err)
     return { success: false, error: 'Failed to update order status' }

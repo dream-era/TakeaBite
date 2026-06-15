@@ -65,8 +65,9 @@ function OrderConfirmationContent() {
       return data;
     },
     enabled: !!activeOrderId,
-    refetchInterval: (data) => {
+    refetchInterval: (query) => {
       // Refetch every 3s if it's still pending (webhook might update it)
+      const data = query.state?.data as any;
       if (data?.status === 'pending' || data?.payment_status === 'pending') {
         return 3000;
       }

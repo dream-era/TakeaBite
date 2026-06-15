@@ -88,7 +88,7 @@ export default function DeliveredOrdersPage() {
           </div>
         ) : (
           orders.map((order: any) => {
-            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(dine_in|takeaway)\]/)?.[1] || (order.tables ? 'dine_in' : 'takeaway');
+            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.tables ? 'eat_here' : 'takeaway');
             
             let paymentBadge = null;
             if (order.payment_method === 'online' && order.payment_status === 'paid') {

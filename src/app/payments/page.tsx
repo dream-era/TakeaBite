@@ -304,7 +304,7 @@ export default function PaymentsPage() {
       </div>
 
       <div className="mt-8 text-center px-4">
-        <p className="text-sm font-bold text-neutral-600 mb-2">💡 Don't have a Razorpay account?</p>
+        <p className="text-sm font-bold text-neutral-600 mb-2">💡 Don&apos;t have a Razorpay account?</p>
         <p className="text-sm font-medium text-neutral-500">Create one free at razorpay.com. Approval takes 10 minutes. You can use test keys first.</p>
         <div className="mt-8 pt-6 border-t border-neutral-200">
           <p className="text-xs font-medium text-neutral-400">

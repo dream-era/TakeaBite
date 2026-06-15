@@ -126,8 +126,8 @@ export default function ServantDashboardPage() {
           </div>
         ) : (
           orders.map((order: any) => {
-            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(dine_in|takeaway)\]/)?.[1] || (order.tables ? 'dine_in' : 'takeaway');
-            const cleanSpecialInstructions = order.special_instructions?.replace(/\[TYPE:(dine_in|takeaway)\]\s*/, '') || null;
+            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.tables ? 'eat_here' : 'takeaway');
+            const cleanSpecialInstructions = order.special_instructions?.replace(/\[TYPE:(eat_here|takeaway)\]\s*/, '') || null;
 
             const foodItems = order.order_items.filter((i: any) => i.station === 'food' || i.station === 'both');
             const drinkItems = order.order_items.filter((i: any) => i.station === 'juice' || i.station === 'both');

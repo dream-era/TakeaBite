@@ -29,7 +29,6 @@ export default function CashierDashboard() {
   useEffect(() => {
     if (!restaurantId) return;
     const supabase = createBrowserSupabase();
-    let channel: RealtimeChannel;
 
     const fetchDashboardData = async () => {
       const today = new Date();
@@ -81,7 +80,7 @@ export default function CashierDashboard() {
     fetchDashboardData();
 
     // Subscribe to realtime changes
-    channel = supabase.channel(`cashier_dash_${restaurantId}`)
+    const channel = supabase.channel(`cashier_dash_${restaurantId}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${restaurantId}` }, () => {
         fetchDashboardData();
       })
@@ -109,7 +108,7 @@ export default function CashierDashboard() {
     <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl lg:text-3xl font-bold text-neutral-900 tracking-tight">Dashboard Overview</h1>
-        <p className="text-neutral-500 mt-1">Real-time statistics for today's service</p>
+        <p className="text-neutral-500 mt-1">Real-time statistics for today&apos;s service</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

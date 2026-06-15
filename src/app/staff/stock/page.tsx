@@ -24,7 +24,7 @@ export default function StockManagementPage() {
   const isFoodOnly = role === 'chef' || role === 'cook';
   const isJuiceOnly = role === 'juice_maker' || role === 'juice';
   
-  const themeColor = isFoodOnly ? 'red' : isJuiceOnly ? 'orange' : 'blue';
+  const themeColor = isFoodOnly ? 'red' : isJuiceOnly ? 'green' : 'blue';
 
   const fetchMenu = useCallback(async () => {
     if (!currentSession) return;

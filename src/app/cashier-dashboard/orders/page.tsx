@@ -41,6 +41,10 @@ export default function CashierOrdersPage() {
     if (filter === 'pending_payment') {
       return o.payment_status === 'pending';
     }
+    if (filter === 'ready_takeaway') {
+      const parsedOrderType = o.order_type || o.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (o.table_id ? 'eat_here' : 'takeaway');
+      return parsedOrderType === 'takeaway' && o.status === 'ready';
+    }
     return true;
   });
 
@@ -80,6 +84,7 @@ export default function CashierOrdersPage() {
           >
             <option value="all">All Active Orders</option>
             <option value="pending_payment">Pending Payments Only</option>
+            <option value="ready_takeaway">Ready Takeaways</option>
           </select>
         </div>
       </div>
@@ -106,7 +111,7 @@ export default function CashierOrdersPage() {
                       #{order.daily_order_number}
                     </h3>
                     <p className="text-sm font-bold text-indigo-700 mt-1">
-                      {order.tables ? `Table ${order.tables.table_number}` : (order.order_type === 'takeaway' ? 'Takeaway' : 'Dine In')}
+                      {order.tables ? `Table ${order.tables.table_number}` : (order.order_type === 'takeaway' ? 'Takeaway' : 'Eat Here')}
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
@@ -144,12 +149,33 @@ export default function CashierOrdersPage() {
                         <CheckCircle2 className="h-4 w-4" /> Paid
                       </div>
                     )}
-                    <button 
-                      onClick={() => window.open(`/cashier-dashboard/bills?order=${order.id}`, '_self')}
-                      className="px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center transition-colors"
-                    >
-                      <Printer className="h-4 w-4" />
-                    </button>
+                    {(order.order_type === 'takeaway' || (!order.table_id && order.order_type !== 'eat_here')) && order.status === 'ready' ? (
+                      <button 
+                        onClick={async () => {
+                          try {
+                            const res = await fetch('/api/update-order-status', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json', 'x-kitchen-session': currentSession?.fingerprint || '', 'x-staff-id': currentSession?.staffId || '' },
+                              body: JSON.stringify({ type: 'order', id: order.id, status: 'served', restaurantId })
+                            });
+                            if (!res.ok) throw new Error("Failed to update status");
+                            toast.success("Order handed to customer");
+                          } catch(err: any) {
+                            toast.error(err.message || "Error updating order");
+                          }
+                        }}
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-sm font-bold shadow-sm flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <ShoppingBag className="h-4 w-4" /> Hand To Customer
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => window.open(`/cashier-dashboard/bills?order=${order.id}`, '_self')}
+                        className="px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center transition-colors"
+                      >
+                        <Printer className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

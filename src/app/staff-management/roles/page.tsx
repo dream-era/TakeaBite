@@ -120,9 +120,9 @@ export default function RolesPermissionsPage() {
                 >
                 <item.icon className={`h-5 w-5 ${item.active ? "text-white" : "text-neutral-400"}`} />
                 <span className="flex-1 text-left">{item.label}</span>
-                {item.locked && <Lock className="h-3.5 w-3.5 text-neutral-400 opacity-60 ml-2" />} {item.badge && !item.locked && (
+                {(item as any).locked && <Lock className="h-3.5 w-3.5 text-neutral-400 opacity-60 ml-2" />} {(item as any).badge && !(item as any).locked && (
                     <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${item.active ? "bg-white text-brand-600" : "bg-brand-600 text-white"}`}>
-                    {item.badge}
+                    {(item as any).badge}
                     </span>
                 )}
                 {item.subItems && (

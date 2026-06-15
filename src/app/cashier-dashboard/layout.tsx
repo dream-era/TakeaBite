@@ -17,7 +17,7 @@ interface CashierLayoutProps {
 export default function CashierLayout({ children }: CashierLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { currentSession, clearSession } = useStaffStore();
+  const { currentSession, logout } = useStaffStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -42,7 +42,7 @@ export default function CashierLayout({ children }: CashierLayoutProps) {
   ];
 
   const handleLogout = () => {
-    clearSession();
+    logout();
     router.push('/staff-login');
   };
 

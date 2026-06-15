@@ -11,7 +11,7 @@ import { toast } from "react-hot-toast";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<'business' | 'account' | 'notifications' | 'support'>('business');
-  const { user, restaurant, setRestaurant } = useAuthStore();
+  const { owner, restaurant, updateRestaurant } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
 
   // Form states
@@ -27,10 +27,10 @@ export default function SettingsPage() {
       setShopName(restaurant.name || "");
       setPhone(restaurant.phone || "");
       setAddress(restaurant.address || "");
-      setEmail(restaurant.contact_email || user?.email || "");
+      setEmail(restaurant.contact_email || owner?.email || "");
       setLogoPreview(restaurant.logo_url || null);
     }
-  }, [restaurant, user]);
+  }, [restaurant, owner]);
 
   const handleSaveBusiness = async () => {
     setIsSaving(true);
@@ -114,7 +114,7 @@ export default function SettingsPage() {
          updatedData.logo_url = finalLogoUrl;
       }
 
-      setRestaurant(updatedData);
+      updateRestaurant(updatedData);
       if (result.data.slugChanged) {
         toast.success("Business profile saved! Note: QR codes might need to be regenerated due to name change.");
       } else {
@@ -234,7 +234,7 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 mb-1">Email</label>
-                      <input type="email" value={user?.email || ''} disabled className="w-full border border-neutral-200 bg-neutral-50 text-neutral-500 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none" />
+                      <input type="email" value={owner?.email || ''} disabled className="w-full border border-neutral-200 bg-neutral-50 text-neutral-500 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-50 focus:border-brand-500 outline-none" />
                     </div>
                   </div>
                   
@@ -285,7 +285,7 @@ export default function SettingsPage() {
                   <h4 className="text-lg font-bold text-neutral-900 mb-2">Need Help?</h4>
                   <p className="text-sm text-neutral-600 mb-6 max-w-sm">
                     Hi, how can we help? <br />
-                    From product support to career opportunities, we've got you covered.
+                    From product support to career opportunities, we&apos;ve got you covered.
                   </p>
                   
                   <button 

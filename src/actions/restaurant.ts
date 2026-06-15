@@ -338,7 +338,6 @@ export async function saveBusinessSetup(
       gstNumber,
       fssaiNumber,
       panNumber,
-      contactEmail,
       workingHours,
     } = parsed.data
 

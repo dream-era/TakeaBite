@@ -64,7 +64,7 @@ export default function SearchPage() {
   // Fetch menu items
   const { data: menuData, isLoading: isMenuLoading } = useQuery({
     queryKey: ['menu', workspaceId],
-    queryFn: () => getMenuItems(workspaceId).then(res => {
+    queryFn: () => getPublicMenuItems(workspaceId).then((res: any) => {
       if (!res.success) throw new Error(res.error);
       return res.data;
     }),

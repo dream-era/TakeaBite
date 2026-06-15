@@ -80,7 +80,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
               Check Your Email
             </h3>
             <p className="mt-2 text-sm text-neutral-500">
-              We've sent a password reset link to <span className="font-semibold text-neutral-900">{email}</span>.
+              We&apos;ve sent a password reset link to <span className="font-semibold text-neutral-900">{email}</span>.
             </p>
             <button
               onClick={resetStateAndClose}
@@ -99,7 +99,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
                 Reset Password
               </h3>
               <p className="mt-2 text-sm text-neutral-500">
-                Enter your email and we'll send you a link to reset your password.
+                Enter your email and we&apos;ll send you a link to reset your password.
               </p>
             </div>
 

@@ -124,10 +124,12 @@ export async function POST(request: Request) {
       )
     }
 
-    let {
-      restaurantId, tableId, items, totalAmount, paymentMethod, specialInstructions,
+    const {
+      restaurantId, items, totalAmount, paymentMethod, specialInstructions,
       customerName, customerPhone, orderType, deviceCookie, phone
     } = parsed.data
+
+    let tableId = parsed.data.tableId;
 
     if (orderType === 'takeaway') {
       tableId = null;
@@ -257,7 +259,7 @@ export async function POST(request: Request) {
         razorpay_payment_id: null,
         special_instructions: encodedSpecialInstructions || null,
         order_hash: orderHash,
-        order_type: orderType === 'eat_here' ? 'dine_in' : orderType,
+        order_type: orderType,
       }
 
       let dailyOrderNumber = await getNextDailyOrderNumber(restaurantId, supabase)
@@ -384,7 +386,7 @@ export async function POST(request: Request) {
         razorpay_payment_id: null,
         special_instructions: encodedSpecialInstructions || null,
         order_hash: orderHash,
-        order_type: orderType === 'eat_here' ? 'dine_in' : orderType,
+        order_type: orderType,
       }
 
       let dailyOrderNumber = await getNextDailyOrderNumber(restaurantId, supabase)

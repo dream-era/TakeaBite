@@ -448,7 +448,7 @@ export default function FoodLibraryPicker({
                 )}
                 {searchQuery && searchResults.length === 0 && (
                   <div style={{ textAlign: 'center', color: '#9ca3af', padding: '40px 0', fontSize: 13 }}>
-                    No items found for "{searchQuery}". Add it manually with the Add New Item button.
+                    No items found for &quot;{searchQuery}&quot;. Add it manually with the Add New Item button.
                   </div>
                 )}
                 {searchResults.map(item => (

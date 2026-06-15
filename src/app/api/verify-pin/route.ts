@@ -316,6 +316,10 @@ function getRoleRedirect(role: StaffRole): string {
     chef: '/kitchen/chef',
     juice: '/kitchen/juice',
     server: '/kitchen/server',
+    cook: '/staff/cook',
+    juice_maker: '/staff/juice-maker',
+    cashier: '/cashier-dashboard',
+    servant: '/servant-dashboard',
     // Owner should never use PIN login — they use
     // Supabase Auth. But handle gracefully if somehow
     // an owner role PIN was set.

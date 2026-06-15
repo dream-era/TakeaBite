@@ -9,7 +9,8 @@ import { PLAN_PRICING } from "@/config/plans";
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
 
-  const plans = [
+  type PlanType = { name: string; id: string; icon: any; price: string; description: string; features: string[]; current: boolean; buttonText: string; popular?: boolean; betaFree?: boolean; originalPrice?: number; };
+  const plans: PlanType[] = [
     {
       name: "Starter",
       id: "starter",

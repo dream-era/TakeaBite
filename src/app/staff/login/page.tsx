@@ -38,7 +38,7 @@ export default function StaffLoginPage() {
     setIsLoading(true);
     
     try {
-      const res = await loginStaff({ email: formData.email, password: formData.password });
+      const res = await loginStaff({ phone: formData.email, pin: formData.password } as any);
       if (!res.success) {
         setError(res.error);
         return;

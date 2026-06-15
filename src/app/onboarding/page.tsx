@@ -41,8 +41,8 @@ export default function OnboardingPage() {
   const [shopName, setShopName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [tableCount, setTableCount] = useState<number | "">("");
-  const { user, updateRestaurant, restaurant } = useAuthStore();
-  const userName = user?.email ? user.email.split('@')[0] : "Owner";
+  const { owner, updateRestaurant, restaurant } = useAuthStore();
+  const userName = owner?.email ? owner.email.split('@')[0] : "Owner";
 
   useEffect(() => {
     // Resume onboarding logic
