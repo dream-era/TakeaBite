@@ -159,8 +159,8 @@ function OrderConfirmationContent() {
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-surface-variant rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm border border-outline-variant">
                       <FoodImage 
-                        name={item.name || item.menu_items?.name || ''} 
-                        slug={nameToImageSlug(item.name || item.menu_items?.name || '')} 
+                        itemName={item.name || item.menu_items?.name || ''} 
+                        imageSlug={nameToImageSlug(item.name || item.menu_items?.name || '')} 
                       />
                     </div>
                     <div>
