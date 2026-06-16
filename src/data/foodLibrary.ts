@@ -1097,6 +1097,1268 @@ export const FOOD_LIBRARY: FoodLibraryItem[] = [
     tags: ['combo', 'veg', 'meal', 'value'],
     imageSlug: 'veg-combo.jpg'
   },
+
+  // === AUTO-GENERATED FROM IMAGES ===
+  {
+    id: ' pongal', name: 'Pongal', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Pongal',
+    tags: ['pongal'],
+    imageSlug: ' pongal.jpg'
+  },
+  {
+    id: 'abc-juice', name: 'Abc Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Abc Juice',
+    tags: ['abc', 'juice'],
+    imageSlug: 'abc-juice.jpg'
+  },
+  {
+    id: 'acp-juice', name: 'Acp Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Acp Juice',
+    tags: ['acp', 'juice'],
+    imageSlug: 'acp-juice.jpg'
+  },
+  {
+    id: 'amla-juice', name: 'Amla Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Amla Juice',
+    tags: ['amla', 'juice'],
+    imageSlug: 'amla-juice.jpg'
+  },
+  {
+    id: 'apple-shake', name: 'Apple Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Apple Shake',
+    tags: ['apple', 'shake'],
+    imageSlug: 'apple-shake.jpg'
+  },
+  {
+    id: 'banana-lassi', name: 'Banana Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Banana Lassi',
+    tags: ['banana', 'lassi'],
+    imageSlug: 'banana-lassi.jpg'
+  },
+  {
+    id: 'banana-oreo', name: 'Banana Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Banana Oreo',
+    tags: ['banana', 'oreo'],
+    imageSlug: 'banana-oreo.jpg'
+  },
+  {
+    id: 'beetroot-juice', name: 'Beetroot Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Beetroot Juice',
+    tags: ['beetroot', 'juice'],
+    imageSlug: 'beetroot-juice.jpg'
+  },
+  {
+    id: 'bio-c-juice', name: 'Bio C Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Bio C Juice',
+    tags: ['bio', 'c', 'juice'],
+    imageSlug: 'bio-c-juice.jpg'
+  },
+  {
+    id: 'blackcurrant-bonanza', name: 'Blackcurrant Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blackcurrant Bonanza',
+    tags: ['blackcurrant', 'bonanza'],
+    imageSlug: 'blackcurrant-bonanza.jpg'
+  },
+  {
+    id: 'blackcurrant-falooda', name: 'Blackcurrant Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blackcurrant Falooda',
+    tags: ['blackcurrant', 'falooda'],
+    imageSlug: 'blackcurrant-falooda.jpg'
+  },
+  {
+    id: 'blackcurrant-ice-cream-shake', name: 'Blackcurrant Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blackcurrant Ice Cream Shake',
+    tags: ['blackcurrant', 'ice', 'cream', 'shake'],
+    imageSlug: 'blackcurrant-ice-cream-shake.jpg'
+  },
+  {
+    id: 'blackcurrant-oreo', name: 'Blackcurrant Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blackcurrant Oreo',
+    tags: ['blackcurrant', 'oreo'],
+    imageSlug: 'blackcurrant-oreo.jpg'
+  },
+  {
+    id: 'blue-mint-soda', name: 'Blue Mint Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blue Mint Soda',
+    tags: ['blue', 'mint', 'soda'],
+    imageSlug: 'blue-mint-soda.jpg'
+  },
+  {
+    id: 'blue-mojito', name: 'Blue Mojito', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blue Mojito',
+    tags: ['blue', 'mojito'],
+    imageSlug: 'blue-mojito.jpg'
+  },
+  {
+    id: 'blue-sea-juice', name: 'Blue Sea Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blue Sea Juice',
+    tags: ['blue', 'sea', 'juice'],
+    imageSlug: 'blue-sea-juice.jpg'
+  },
+  {
+    id: 'blueberry-ice-cream-shake', name: 'Blueberry Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Blueberry Ice Cream Shake',
+    tags: ['blueberry', 'ice', 'cream', 'shake'],
+    imageSlug: 'blueberry-ice-cream-shake.jpg'
+  },
+  {
+    id: 'bread-butter-jam-toast', name: 'Bread Butter Jam Toast', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Bread Butter Jam Toast',
+    tags: ['bread', 'butter', 'jam', 'toast'],
+    imageSlug: 'bread-butter-jam-toast.jpg'
+  },
+  {
+    id: 'bread-omelette-cheese', name: 'Bread Omelette Cheese', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Bread Omelette Cheese',
+    tags: ['bread', 'omelette', 'cheese'],
+    imageSlug: 'bread-omelette-cheese.jpg'
+  },
+  {
+    id: 'brownie-oreo-shake', name: 'Brownie Oreo Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Brownie Oreo Shake',
+    tags: ['brownie', 'oreo', 'shake'],
+    imageSlug: 'brownie-oreo-shake.jpg'
+  },
+  {
+    id: 'brownie-shake', name: 'Brownie Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Brownie Shake',
+    tags: ['brownie', 'shake'],
+    imageSlug: 'brownie-shake.jpg'
+  },
+  {
+    id: 'butter-bonanza', name: 'Butter Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Butter Bonanza',
+    tags: ['butter', 'bonanza'],
+    imageSlug: 'butter-bonanza.jpg'
+  },
+  {
+    id: 'butter-fruit-shake', name: 'Butter Fruit Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Butter Fruit Shake',
+    tags: ['butter', 'fruit', 'shake'],
+    imageSlug: 'butter-fruit-shake.jpg'
+  },
+  {
+    id: 'butterscotch-falooda', name: 'Butterscotch Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Butterscotch Falooda',
+    tags: ['butterscotch', 'falooda'],
+    imageSlug: 'butterscotch-falooda.jpg'
+  },
+  {
+    id: 'butterscotch-ice-cream-shake', name: 'Butterscotch Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Butterscotch Ice Cream Shake',
+    tags: ['butterscotch', 'ice', 'cream', 'shake'],
+    imageSlug: 'butterscotch-ice-cream-shake.jpg'
+  },
+  {
+    id: 'carrot-beetroot-juice', name: 'Carrot Beetroot Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Carrot Beetroot Juice',
+    tags: ['carrot', 'beetroot', 'juice'],
+    imageSlug: 'carrot-beetroot-juice.jpg'
+  },
+  {
+    id: 'carrot-juice', name: 'Carrot Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Carrot Juice',
+    tags: ['carrot', 'juice'],
+    imageSlug: 'carrot-juice.jpg'
+  },
+  {
+    id: 'carrot-lime', name: 'Carrot Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Carrot Lime',
+    tags: ['carrot', 'lime'],
+    imageSlug: 'carrot-lime.jpg'
+  },
+  {
+    id: 'cassata-shake', name: 'Cassata Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Cassata Shake',
+    tags: ['cassata', 'shake'],
+    imageSlug: 'cassata-shake.jpg'
+  },
+  {
+    id: 'cheese-maggi', name: 'Cheese Maggi', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Cheese Maggi',
+    tags: ['cheese', 'maggi'],
+    imageSlug: 'cheese-maggi.jpg'
+  },
+  {
+    id: 'cheese-pasta', name: 'Cheese Pasta', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Cheese Pasta',
+    tags: ['cheese', 'pasta'],
+    imageSlug: 'cheese-pasta.jpg'
+  },
+  {
+    id: 'cheese-sandwich-toast', name: 'Cheese Sandwich Toast', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Cheese Sandwich Toast',
+    tags: ['cheese', 'sandwich', 'toast'],
+    imageSlug: 'cheese-sandwich-toast.jpg'
+  },
+  {
+    id: 'cheese-veg-momos', name: 'Cheese Veg Momos', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Cheese Veg Momos',
+    tags: ['cheese', 'veg', 'momos'],
+    imageSlug: 'cheese-veg-momos.jpg'
+  },
+  {
+    id: 'cherry-shake', name: 'Cherry Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Cherry Shake',
+    tags: ['cherry', 'shake'],
+    imageSlug: 'cherry-shake.jpg'
+  },
+  {
+    id: 'chicken-cheese-burger', name: 'Chicken Cheese Burger', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Cheese Burger',
+    tags: ['chicken', 'cheese', 'burger'],
+    imageSlug: 'chicken-cheese-burger.jpg'
+  },
+  {
+    id: 'chicken-finger', name: 'Chicken Finger', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Finger',
+    tags: ['chicken', 'finger'],
+    imageSlug: 'chicken-finger.jpg'
+  },
+  {
+    id: 'chicken-maggi', name: 'Chicken Maggi', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Maggi',
+    tags: ['chicken', 'maggi'],
+    imageSlug: 'chicken-maggi.jpg'
+  },
+  {
+    id: 'chicken-momos', name: 'Chicken Momos', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Momos',
+    tags: ['chicken', 'momos'],
+    imageSlug: 'chicken-momos.jpg'
+  },
+  {
+    id: 'chicken-nuggets', name: 'Chicken Nuggets', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Nuggets',
+    tags: ['chicken', 'nuggets'],
+    imageSlug: 'chicken-nuggets.jpg'
+  },
+  {
+    id: 'chicken-omelette', name: 'Chicken Omelette', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Omelette',
+    tags: ['chicken', 'omelette'],
+    imageSlug: 'chicken-omelette.jpg'
+  },
+  {
+    id: 'chicken-pasta', name: 'Chicken Pasta', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Chicken Pasta',
+    tags: ['chicken', 'pasta'],
+    imageSlug: 'chicken-pasta.jpg'
+  },
+  {
+    id: 'chikku-lassi', name: 'Chikku Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chikku Lassi',
+    tags: ['chikku', 'lassi'],
+    imageSlug: 'chikku-lassi.jpg'
+  },
+  {
+    id: 'chikku-oreo', name: 'Chikku Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chikku Oreo',
+    tags: ['chikku', 'oreo'],
+    imageSlug: 'chikku-oreo.jpg'
+  },
+  {
+    id: 'chikku-shake', name: 'Chikku Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chikku Shake',
+    tags: ['chikku', 'shake'],
+    imageSlug: 'chikku-shake.jpg'
+  },
+  {
+    id: 'chikoo-bonanza', name: 'Chikoo Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chikoo Bonanza',
+    tags: ['chikoo', 'bonanza'],
+    imageSlug: 'chikoo-bonanza.jpg'
+  },
+  {
+    id: 'chilli-soda', name: 'Chilli Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chilli Soda',
+    tags: ['chilli', 'soda'],
+    imageSlug: 'chilli-soda.jpg'
+  },
+  {
+    id: 'chilly-cheese-toast', name: 'Chilly Cheese Toast', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Chilly Cheese Toast',
+    tags: ['chilly', 'cheese', 'toast'],
+    imageSlug: 'chilly-cheese-toast.jpg'
+  },
+  {
+    id: 'choco-chikku', name: 'Choco Chikku', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Choco Chikku',
+    tags: ['choco', 'chikku'],
+    imageSlug: 'choco-chikku.jpg'
+  },
+  {
+    id: 'choco-custard', name: 'Choco Custard', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Choco Custard',
+    tags: ['choco', 'custard'],
+    imageSlug: 'choco-custard.jpg'
+  },
+  {
+    id: 'choco-fig', name: 'Choco Fig', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Choco Fig',
+    tags: ['choco', 'fig'],
+    imageSlug: 'choco-fig.jpg'
+  },
+  {
+    id: 'choco-mango', name: 'Choco Mango', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Choco Mango',
+    tags: ['choco', 'mango'],
+    imageSlug: 'choco-mango.jpg'
+  },
+  {
+    id: 'chocolate-falooda', name: 'Chocolate Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chocolate Falooda',
+    tags: ['chocolate', 'falooda'],
+    imageSlug: 'chocolate-falooda.jpg'
+  },
+  {
+    id: 'chocolate-ice-cream-shake', name: 'Chocolate Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chocolate Ice Cream Shake',
+    tags: ['chocolate', 'ice', 'cream', 'shake'],
+    imageSlug: 'chocolate-ice-cream-shake.jpg'
+  },
+  {
+    id: 'chocolate-oreo', name: 'Chocolate Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Chocolate Oreo',
+    tags: ['chocolate', 'oreo'],
+    imageSlug: 'chocolate-oreo.jpg'
+  },
+  {
+    id: 'club-sandwich', name: 'Club Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Club Sandwich',
+    tags: ['club', 'sandwich'],
+    imageSlug: 'club-sandwich.jpg'
+  },
+  {
+    id: 'cold-bournvita', name: 'Cold Bournvita', category: 'Hot Beverages',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Cold Bournvita',
+    tags: ['cold', 'bournvita'],
+    imageSlug: 'cold-bournvita.jpg'
+  },
+  {
+    id: 'cold-coffee', name: 'Cold Coffee', category: 'Hot Beverages',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Cold Coffee',
+    tags: ['cold', 'coffee'],
+    imageSlug: 'cold-coffee.jpg'
+  },
+  {
+    id: 'cold-horlicks', name: 'Cold Horlicks', category: 'Hot Beverages',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Cold Horlicks',
+    tags: ['cold', 'horlicks'],
+    imageSlug: 'cold-horlicks.jpg'
+  },
+  {
+    id: 'corn-bread-omelette', name: 'Corn Bread Omelette', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Corn Bread Omelette',
+    tags: ['corn', 'bread', 'omelette'],
+    imageSlug: 'corn-bread-omelette.jpg'
+  },
+  {
+    id: 'corn-sandwich', name: 'Corn Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Corn Sandwich',
+    tags: ['corn', 'sandwich'],
+    imageSlug: 'corn-sandwich.jpg'
+  },
+  {
+    id: 'cucumber-juice', name: 'Cucumber Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Cucumber Juice',
+    tags: ['cucumber', 'juice'],
+    imageSlug: 'cucumber-juice.jpg'
+  },
+  {
+    id: 'custard-apple-shake', name: 'Custard Apple Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Custard Apple Shake',
+    tags: ['custard', 'apple', 'shake'],
+    imageSlug: 'custard-apple-shake.jpg'
+  },
+  {
+    id: 'custard-bonanza', name: 'Custard Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Custard Bonanza',
+    tags: ['custard', 'bonanza'],
+    imageSlug: 'custard-bonanza.jpg'
+  },
+  {
+    id: 'dairymilk-shake', name: 'Dairymilk Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Dairymilk Shake',
+    tags: ['dairymilk', 'shake'],
+    imageSlug: 'dairymilk-shake.jpg'
+  },
+  {
+    id: 'dragon-fruit-juice', name: 'Dragon Fruit Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Dragon Fruit Juice',
+    tags: ['dragon', 'fruit', 'juice'],
+    imageSlug: 'dragon-fruit-juice.jpg'
+  },
+  {
+    id: 'egg-pasta', name: 'Egg Pasta', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Egg Pasta',
+    tags: ['egg', 'pasta'],
+    imageSlug: 'egg-pasta.jpg'
+  },
+  {
+    id: 'fig-bonanza', name: 'Fig Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Fig Bonanza',
+    tags: ['fig', 'bonanza'],
+    imageSlug: 'fig-bonanza.jpg'
+  },
+  {
+    id: 'fig-shake', name: 'Fig Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Fig Shake',
+    tags: ['fig', 'shake'],
+    imageSlug: 'fig-shake.jpg'
+  },
+  {
+    id: 'fivestar-milkshake', name: 'Fivestar Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Fivestar Milkshake',
+    tags: ['fivestar', 'milkshake'],
+    imageSlug: 'fivestar-milkshake.jpg'
+  },
+  {
+    id: 'galaxy-milkshake', name: 'Galaxy Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Galaxy Milkshake',
+    tags: ['galaxy', 'milkshake'],
+    imageSlug: 'galaxy-milkshake.jpg'
+  },
+  {
+    id: 'ginger-lassi', name: 'Ginger Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Ginger Lassi',
+    tags: ['ginger', 'lassi'],
+    imageSlug: 'ginger-lassi.jpg'
+  },
+  {
+    id: 'ginger-lime', name: 'Ginger Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Ginger Lime',
+    tags: ['ginger', 'lime'],
+    imageSlug: 'ginger-lime.jpg'
+  },
+  {
+    id: 'ginger-soda', name: 'Ginger Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Ginger Soda',
+    tags: ['ginger', 'soda'],
+    imageSlug: 'ginger-soda.jpg'
+  },
+  {
+    id: 'gobi-sandwich', name: 'Gobi Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Gobi Sandwich',
+    tags: ['gobi', 'sandwich'],
+    imageSlug: 'gobi-sandwich.jpg'
+  },
+  {
+    id: 'grape-lassi', name: 'Grape Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Grape Lassi',
+    tags: ['grape', 'lassi'],
+    imageSlug: 'grape-lassi.jpg'
+  },
+  {
+    id: 'grape-lime', name: 'Grape Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Grape Lime',
+    tags: ['grape', 'lime'],
+    imageSlug: 'grape-lime.jpg'
+  },
+  {
+    id: 'grape-shake', name: 'Grape Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Grape Shake',
+    tags: ['grape', 'shake'],
+    imageSlug: 'grape-shake.jpg'
+  },
+  {
+    id: 'grape-soda', name: 'Grape Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Grape Soda',
+    tags: ['grape', 'soda'],
+    imageSlug: 'grape-soda.jpg'
+  },
+  {
+    id: 'green-paneer-juice', name: 'Green Paneer Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Green Paneer Juice',
+    tags: ['green', 'paneer', 'juice'],
+    imageSlug: 'green-paneer-juice.jpg'
+  },
+  {
+    id: 'guava-shake', name: 'Guava Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Guava Shake',
+    tags: ['guava', 'shake'],
+    imageSlug: 'guava-shake.jpg'
+  },
+  {
+    id: 'jackfruit-juice', name: 'Jackfruit Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Jackfruit Juice',
+    tags: ['jackfruit', 'juice'],
+    imageSlug: 'jackfruit-juice.jpg'
+  },
+  {
+    id: 'jaljeera-lime', name: 'Jaljeera Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Jaljeera Lime',
+    tags: ['jaljeera', 'lime'],
+    imageSlug: 'jaljeera-lime.jpg'
+  },
+  {
+    id: 'kitkat-milkshake', name: 'Kitkat Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Kitkat Milkshake',
+    tags: ['kitkat', 'milkshake'],
+    imageSlug: 'kitkat-milkshake.jpg'
+  },
+  {
+    id: 'kitkat-oreo', name: 'Kitkat Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Kitkat Oreo',
+    tags: ['kitkat', 'oreo'],
+    imageSlug: 'kitkat-oreo.jpg'
+  },
+  {
+    id: 'kiwi-juice', name: 'Kiwi Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Kiwi Juice',
+    tags: ['kiwi', 'juice'],
+    imageSlug: 'kiwi-juice.jpg'
+  },
+  {
+    id: 'kulfi-oreo', name: 'Kulfi Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Kulfi Oreo',
+    tags: ['kulfi', 'oreo'],
+    imageSlug: 'kulfi-oreo.jpg'
+  },
+  {
+    id: 'kulfi-shake', name: 'Kulfi Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Kulfi Shake',
+    tags: ['kulfi', 'shake'],
+    imageSlug: 'kulfi-shake.jpg'
+  },
+  {
+    id: 'lavender-oreo-shake', name: 'Lavender Oreo Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Lavender Oreo Shake',
+    tags: ['lavender', 'oreo', 'shake'],
+    imageSlug: 'lavender-oreo-shake.jpg'
+  },
+  {
+    id: 'lavender-shake', name: 'Lavender Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Lavender Shake',
+    tags: ['lavender', 'shake'],
+    imageSlug: 'lavender-shake.jpg'
+  },
+  {
+    id: 'lime-soda', name: 'Lime Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Lime Soda',
+    tags: ['lime', 'soda'],
+    imageSlug: 'lime-soda.jpg'
+  },
+  {
+    id: 'maggi-babycorn-sandwich', name: 'Maggi Babycorn Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Maggi Babycorn Sandwich',
+    tags: ['maggi', 'babycorn', 'sandwich'],
+    imageSlug: 'maggi-babycorn-sandwich.jpg'
+  },
+  {
+    id: 'maggi-bread-omelette', name: 'Maggi Bread Omelette', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Maggi Bread Omelette',
+    tags: ['maggi', 'bread', 'omelette'],
+    imageSlug: 'maggi-bread-omelette.jpg'
+  },
+  {
+    id: 'maggi-cheese-bread-omelette', name: 'Maggi Cheese Bread Omelette', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Maggi Cheese Bread Omelette',
+    tags: ['maggi', 'cheese', 'bread', 'omelette'],
+    imageSlug: 'maggi-cheese-bread-omelette.jpg'
+  },
+  {
+    id: 'maggi-chicken-sandwich', name: 'Maggi Chicken Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Maggi Chicken Sandwich',
+    tags: ['maggi', 'chicken', 'sandwich'],
+    imageSlug: 'maggi-chicken-sandwich.jpg'
+  },
+  {
+    id: 'maggi-corn-cheese-sandwich', name: 'Maggi Corn Cheese Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Maggi Corn Cheese Sandwich',
+    tags: ['maggi', 'corn', 'cheese', 'sandwich'],
+    imageSlug: 'maggi-corn-cheese-sandwich.jpg'
+  },
+  {
+    id: 'maggi-egg-cheese-sandwich', name: 'Maggi Egg Cheese Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Maggi Egg Cheese Sandwich',
+    tags: ['maggi', 'egg', 'cheese', 'sandwich'],
+    imageSlug: 'maggi-egg-cheese-sandwich.jpg'
+  },
+  {
+    id: 'maggi-paneer-sandwich', name: 'Maggi Paneer Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Maggi Paneer Sandwich',
+    tags: ['maggi', 'paneer', 'sandwich'],
+    imageSlug: 'maggi-paneer-sandwich.jpg'
+  },
+  {
+    id: 'maggi-sandwich', name: 'Maggi Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Maggi Sandwich',
+    tags: ['maggi', 'sandwich'],
+    imageSlug: 'maggi-sandwich.jpg'
+  },
+  {
+    id: 'mango-bonanza', name: 'Mango Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mango Bonanza',
+    tags: ['mango', 'bonanza'],
+    imageSlug: 'mango-bonanza.jpg'
+  },
+  {
+    id: 'mango-ice-cream-shake', name: 'Mango Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mango Ice Cream Shake',
+    tags: ['mango', 'ice', 'cream', 'shake'],
+    imageSlug: 'mango-ice-cream-shake.jpg'
+  },
+  {
+    id: 'mango-lime', name: 'Mango Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mango Lime',
+    tags: ['mango', 'lime'],
+    imageSlug: 'mango-lime.jpg'
+  },
+  {
+    id: 'mango-oreo', name: 'Mango Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mango Oreo',
+    tags: ['mango', 'oreo'],
+    imageSlug: 'mango-oreo.jpg'
+  },
+  {
+    id: 'masala-bread-omelette', name: 'Masala Bread Omelette', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Masala Bread Omelette',
+    tags: ['masala', 'bread', 'omelette'],
+    imageSlug: 'masala-bread-omelette.jpg'
+  },
+  {
+    id: 'masala-cheese-toast', name: 'Masala Cheese Toast', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Masala Cheese Toast',
+    tags: ['masala', 'cheese', 'toast'],
+    imageSlug: 'masala-cheese-toast.jpg'
+  },
+  {
+    id: 'melon-lime', name: 'Melon Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Melon Lime',
+    tags: ['melon', 'lime'],
+    imageSlug: 'melon-lime.jpg'
+  },
+  {
+    id: 'melon-smash-juice', name: 'Melon Smash Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Melon Smash Juice',
+    tags: ['melon', 'smash', 'juice'],
+    imageSlug: 'melon-smash-juice.jpg'
+  },
+  {
+    id: 'milk-lime', name: 'Milk Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Milk Lime',
+    tags: ['milk', 'lime'],
+    imageSlug: 'milk-lime.jpg'
+  },
+  {
+    id: 'milkybar-milkshake', name: 'Milkybar Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Milkybar Milkshake',
+    tags: ['milkybar', 'milkshake'],
+    imageSlug: 'milkybar-milkshake.jpg'
+  },
+  {
+    id: 'mint-lime', name: 'Mint Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mint Lime',
+    tags: ['mint', 'lime'],
+    imageSlug: 'mint-lime.jpg'
+  },
+  {
+    id: 'mint-mojito', name: 'Mint Mojito', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mint Mojito',
+    tags: ['mint', 'mojito'],
+    imageSlug: 'mint-mojito.jpg'
+  },
+  {
+    id: 'mix-maggi', name: 'Mix Maggi', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Mix Maggi',
+    tags: ['mix', 'maggi'],
+    imageSlug: 'mix-maggi.jpg'
+  },
+  {
+    id: 'mixed-fruit-lassi', name: 'Mixed Fruit Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Mixed Fruit Lassi',
+    tags: ['mixed', 'fruit', 'lassi'],
+    imageSlug: 'mixed-fruit-lassi.jpg'
+  },
+  {
+    id: 'munch chocolate milkshake', name: 'Munch Chocolate Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Munch Chocolate Milkshake',
+    tags: ['munch', 'chocolate', 'milkshake'],
+    imageSlug: 'munch chocolate milkshake.jpg'
+  },
+  {
+    id: 'munch-milkshake', name: 'Munch Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Munch Milkshake',
+    tags: ['munch', 'milkshake'],
+    imageSlug: 'munch-milkshake.jpg'
+  },
+  {
+    id: 'mushroom-maggi', name: 'Mushroom Maggi', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Mushroom Maggi',
+    tags: ['mushroom', 'maggi'],
+    imageSlug: 'mushroom-maggi.jpg'
+  },
+  {
+    id: 'mushroom-roll', name: 'Mushroom Roll', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Mushroom Roll',
+    tags: ['mushroom', 'roll'],
+    imageSlug: 'mushroom-roll.jpg'
+  },
+  {
+    id: 'mushroom-sandwich', name: 'Mushroom Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Mushroom Sandwich',
+    tags: ['mushroom', 'sandwich'],
+    imageSlug: 'mushroom-sandwich.jpg'
+  },
+  {
+    id: 'muskmelon-shake', name: 'Muskmelon Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Muskmelon Shake',
+    tags: ['muskmelon', 'shake'],
+    imageSlug: 'muskmelon-shake.jpg'
+  },
+  {
+    id: 'nannari-soda', name: 'Nannari Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Nannari Soda',
+    tags: ['nannari', 'soda'],
+    imageSlug: 'nannari-soda.jpg'
+  },
+  {
+    id: 'oca-juice', name: 'Oca Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Oca Juice',
+    tags: ['oca', 'juice'],
+    imageSlug: 'oca-juice.jpg'
+  },
+  {
+    id: 'paneer-burger', name: 'Paneer Burger', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Paneer Burger',
+    tags: ['paneer', 'burger'],
+    imageSlug: 'paneer-burger.jpg'
+  },
+  {
+    id: 'paneer-maggi', name: 'Paneer Maggi', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Paneer Maggi',
+    tags: ['paneer', 'maggi'],
+    imageSlug: 'paneer-maggi.jpg'
+  },
+  {
+    id: 'paneer-masala-bread-omelette', name: 'Paneer Masala Bread Omelette', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: false,
+    description: 'Paneer Masala Bread Omelette',
+    tags: ['paneer', 'masala', 'bread', 'omelette'],
+    imageSlug: 'paneer-masala-bread-omelette.jpg'
+  },
+  {
+    id: 'paneer-momos', name: 'Paneer Momos', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Paneer Momos',
+    tags: ['paneer', 'momos'],
+    imageSlug: 'paneer-momos.jpg'
+  },
+  {
+    id: 'paneer-pasta', name: 'Paneer Pasta', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Paneer Pasta',
+    tags: ['paneer', 'pasta'],
+    imageSlug: 'paneer-pasta.jpg'
+  },
+  {
+    id: 'paneer-sandwich', name: 'Paneer Sandwich', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Paneer Sandwich',
+    tags: ['paneer', 'sandwich'],
+    imageSlug: 'paneer-sandwich.jpg'
+  },
+  {
+    id: 'papaya-shake', name: 'Papaya Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Papaya Shake',
+    tags: ['papaya', 'shake'],
+    imageSlug: 'papaya-shake.jpg'
+  },
+  {
+    id: 'papaya-smash', name: 'Papaya Smash', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Papaya Smash',
+    tags: ['papaya', 'smash'],
+    imageSlug: 'papaya-smash.jpg'
+  },
+  {
+    id: 'passion-fruit-mojito', name: 'Passion Fruit Mojito', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Passion Fruit Mojito',
+    tags: ['passion', 'fruit', 'mojito'],
+    imageSlug: 'passion-fruit-mojito.jpg'
+  },
+  {
+    id: 'passion-fruit-soda', name: 'Passion Fruit Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Passion Fruit Soda',
+    tags: ['passion', 'fruit', 'soda'],
+    imageSlug: 'passion-fruit-soda.jpg'
+  },
+  {
+    id: 'peri-peri-fries', name: 'Peri Peri Fries', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Peri Peri Fries',
+    tags: ['peri', 'peri', 'fries'],
+    imageSlug: 'peri-peri-fries.jpg'
+  },
+  {
+    id: 'pineapple-lime', name: 'Pineapple Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pineapple Lime',
+    tags: ['pineapple', 'lime'],
+    imageSlug: 'pineapple-lime.jpg'
+  },
+  {
+    id: 'pineapple-mint-spark', name: 'Pineapple Mint Spark', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Pineapple Mint Spark',
+    tags: ['pineapple', 'mint', 'spark'],
+    imageSlug: 'pineapple-mint-spark.jpg'
+  },
+  {
+    id: 'pineapple-oreo', name: 'Pineapple Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pineapple Oreo',
+    tags: ['pineapple', 'oreo'],
+    imageSlug: 'pineapple-oreo.jpg'
+  },
+  {
+    id: 'pineapple-shake', name: 'Pineapple Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pineapple Shake',
+    tags: ['pineapple', 'shake'],
+    imageSlug: 'pineapple-shake.jpg'
+  },
+  {
+    id: 'pineapple-soda', name: 'Pineapple Soda', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pineapple Soda',
+    tags: ['pineapple', 'soda'],
+    imageSlug: 'pineapple-soda.jpg'
+  },
+  {
+    id: 'pista-bonanza', name: 'Pista Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pista Bonanza',
+    tags: ['pista', 'bonanza'],
+    imageSlug: 'pista-bonanza.jpg'
+  },
+  {
+    id: 'pista-falooda', name: 'Pista Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pista Falooda',
+    tags: ['pista', 'falooda'],
+    imageSlug: 'pista-falooda.jpg'
+  },
+  {
+    id: 'pista-ice-cream-shake', name: 'Pista Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pista Ice Cream Shake',
+    tags: ['pista', 'ice', 'cream', 'shake'],
+    imageSlug: 'pista-ice-cream-shake.jpg'
+  },
+  {
+    id: 'pista-oreo', name: 'Pista Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pista Oreo',
+    tags: ['pista', 'oreo'],
+    imageSlug: 'pista-oreo.jpg'
+  },
+  {
+    id: 'plain-lassi', name: 'Plain Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Plain Lassi',
+    tags: ['plain', 'lassi'],
+    imageSlug: 'plain-lassi.jpg'
+  },
+  {
+    id: 'pomegranate-shake', name: 'Pomegranate Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Pomegranate Shake',
+    tags: ['pomegranate', 'shake'],
+    imageSlug: 'pomegranate-shake.jpg'
+  },
+  {
+    id: 'power-booster-juice', name: 'Power Booster Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Power Booster Juice',
+    tags: ['power', 'booster', 'juice'],
+    imageSlug: 'power-booster-juice.jpg'
+  },
+  {
+    id: 'red-banana-shake', name: 'Red Banana Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Red Banana Shake',
+    tags: ['red', 'banana', 'shake'],
+    imageSlug: 'red-banana-shake.jpg'
+  },
+  {
+    id: 'red-mojito', name: 'Red Mojito', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Red Mojito',
+    tags: ['red', 'mojito'],
+    imageSlug: 'red-mojito.jpg'
+  },
+  {
+    id: 'red-velvet-oreo-shake', name: 'Red Velvet Oreo Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Red Velvet Oreo Shake',
+    tags: ['red', 'velvet', 'oreo', 'shake'],
+    imageSlug: 'red-velvet-oreo-shake.jpg'
+  },
+  {
+    id: 'red-velvet-shake', name: 'Red Velvet Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Red Velvet Shake',
+    tags: ['red', 'velvet', 'shake'],
+    imageSlug: 'red-velvet-shake.jpg'
+  },
+  {
+    id: 'royal-falooda', name: 'Royal Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Royal Falooda',
+    tags: ['royal', 'falooda'],
+    imageSlug: 'royal-falooda.jpg'
+  },
+  {
+    id: 'scotch-oreo', name: 'Scotch Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Scotch Oreo',
+    tags: ['scotch', 'oreo'],
+    imageSlug: 'scotch-oreo.jpg'
+  },
+  {
+    id: 'snickers-milkshake', name: 'Snickers Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Snickers Milkshake',
+    tags: ['snickers', 'milkshake'],
+    imageSlug: 'snickers-milkshake.jpg'
+  },
+  {
+    id: 'strawberry-bonanza', name: 'Strawberry Bonanza', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Bonanza',
+    tags: ['strawberry', 'bonanza'],
+    imageSlug: 'strawberry-bonanza.jpg'
+  },
+  {
+    id: 'strawberry-falooda', name: 'Strawberry Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Falooda',
+    tags: ['strawberry', 'falooda'],
+    imageSlug: 'strawberry-falooda.jpg'
+  },
+  {
+    id: 'strawberry-ice-cream-shake', name: 'Strawberry Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Ice Cream Shake',
+    tags: ['strawberry', 'ice', 'cream', 'shake'],
+    imageSlug: 'strawberry-ice-cream-shake.jpg'
+  },
+  {
+    id: 'strawberry-juice', name: 'Strawberry Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Juice',
+    tags: ['strawberry', 'juice'],
+    imageSlug: 'strawberry-juice.jpg'
+  },
+  {
+    id: 'strawberry-lassi', name: 'Strawberry Lassi', category: 'Lassi',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Lassi',
+    tags: ['strawberry', 'lassi'],
+    imageSlug: 'strawberry-lassi.jpg'
+  },
+  {
+    id: 'strawberry-lime', name: 'Strawberry Lime', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Lime',
+    tags: ['strawberry', 'lime'],
+    imageSlug: 'strawberry-lime.jpg'
+  },
+  {
+    id: 'strawberry-mojito', name: 'Strawberry Mojito', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Mojito',
+    tags: ['strawberry', 'mojito'],
+    imageSlug: 'strawberry-mojito.jpg'
+  },
+  {
+    id: 'strawberry-oreo', name: 'Strawberry Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Strawberry Oreo',
+    tags: ['strawberry', 'oreo'],
+    imageSlug: 'strawberry-oreo.jpg'
+  },
+  {
+    id: 'summer-dream-juice', name: 'Summer Dream Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Summer Dream Juice',
+    tags: ['summer', 'dream', 'juice'],
+    imageSlug: 'summer-dream-juice.jpg'
+  },
+  {
+    id: 'sunshine-juice', name: 'Sunshine Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Sunshine Juice',
+    tags: ['sunshine', 'juice'],
+    imageSlug: 'sunshine-juice.jpg'
+  },
+  {
+    id: 'tender-butterscotch', name: 'Tender Butterscotch', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Butterscotch',
+    tags: ['tender', 'butterscotch'],
+    imageSlug: 'tender-butterscotch.jpg'
+  },
+  {
+    id: 'tender-choco', name: 'Tender Choco', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Choco',
+    tags: ['tender', 'choco'],
+    imageSlug: 'tender-choco.jpg'
+  },
+  {
+    id: 'tender-coconut-milkshake', name: 'Tender Coconut Milkshake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Tender Coconut Milkshake',
+    tags: ['tender', 'coconut', 'milkshake'],
+    imageSlug: 'tender-coconut-milkshake.jpg'
+  },
+  {
+    id: 'tender-dates', name: 'Tender Dates', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Dates',
+    tags: ['tender', 'dates'],
+    imageSlug: 'tender-dates.jpg'
+  },
+  {
+    id: 'tender-dry-fruits', name: 'Tender Dry Fruits', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Dry Fruits',
+    tags: ['tender', 'dry', 'fruits'],
+    imageSlug: 'tender-dry-fruits.jpg'
+  },
+  {
+    id: 'tender-falooda', name: 'Tender Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Tender Falooda',
+    tags: ['tender', 'falooda'],
+    imageSlug: 'tender-falooda.jpg'
+  },
+  {
+    id: 'tender-fig', name: 'Tender Fig', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Fig',
+    tags: ['tender', 'fig'],
+    imageSlug: 'tender-fig.jpg'
+  },
+  {
+    id: 'tender-kitkat', name: 'Tender Kitkat', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Kitkat',
+    tags: ['tender', 'kitkat'],
+    imageSlug: 'tender-kitkat.jpg'
+  },
+  {
+    id: 'tender-mango', name: 'Tender Mango', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Mango',
+    tags: ['tender', 'mango'],
+    imageSlug: 'tender-mango.jpg'
+  },
+  {
+    id: 'tender-pista', name: 'Tender Pista', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Pista',
+    tags: ['tender', 'pista'],
+    imageSlug: 'tender-pista.jpg'
+  },
+  {
+    id: 'tender-vanilla', name: 'Tender Vanilla', category: 'New Items',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Tender Vanilla',
+    tags: ['tender', 'vanilla'],
+    imageSlug: 'tender-vanilla.jpg'
+  },
+  {
+    id: 'tomato-juice', name: 'Tomato Juice', category: 'Juices',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Tomato Juice',
+    tags: ['tomato', 'juice'],
+    imageSlug: 'tomato-juice.jpg'
+  },
+  {
+    id: 'vanilla-falooda', name: 'Vanilla Falooda', category: 'Desserts',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Vanilla Falooda',
+    tags: ['vanilla', 'falooda'],
+    imageSlug: 'vanilla-falooda.jpg'
+  },
+  {
+    id: 'vanilla-ice-cream-shake', name: 'Vanilla Ice Cream Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Vanilla Ice Cream Shake',
+    tags: ['vanilla', 'ice', 'cream', 'shake'],
+    imageSlug: 'vanilla-ice-cream-shake.jpg'
+  },
+  {
+    id: 'vanilla-oreo', name: 'Vanilla Oreo', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Vanilla Oreo',
+    tags: ['vanilla', 'oreo'],
+    imageSlug: 'vanilla-oreo.jpg'
+  },
+  {
+    id: 'veg-momos', name: 'Veg Momos', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Veg Momos',
+    tags: ['veg', 'momos'],
+    imageSlug: 'veg-momos.jpg'
+  },
+  {
+    id: 'veg-nuggets', name: 'Veg Nuggets', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Veg Nuggets',
+    tags: ['veg', 'nuggets'],
+    imageSlug: 'veg-nuggets.jpg'
+  },
+  {
+    id: 'watermelon-mojito', name: 'Watermelon Mojito', category: 'Coolers',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Watermelon Mojito',
+    tags: ['watermelon', 'mojito'],
+    imageSlug: 'watermelon-mojito.jpg'
+  },
+  {
+    id: 'watermelon-shake', name: 'Watermelon Shake', category: 'Shakes',
+    station: 'juice', defaultPrice: 60, isVeg: true,
+    description: 'Watermelon Shake',
+    tags: ['watermelon', 'shake'],
+    imageSlug: 'watermelon-shake.jpg'
+  },
+  {
+    id: 'zinger-burger', name: 'Zinger Burger', category: 'Snacks',
+    station: 'food', defaultPrice: 60, isVeg: true,
+    description: 'Zinger Burger',
+    tags: ['zinger', 'burger'],
+    imageSlug: 'zinger-burger.jpg'
+  },
 ]
 
 // ─────────────────────────────────────────────
