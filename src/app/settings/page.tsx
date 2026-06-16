@@ -191,7 +191,7 @@ export default function SettingsPage() {
                     <div className="relative h-24 w-24 rounded-2xl bg-neutral-100 border-2 border-dashed border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-50 transition-colors overflow-hidden">
                       <input type="file" accept="image/png, image/jpeg, image/webp" onChange={handleLogoChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                       {logoPreview ? (
-                        <img src={logoPreview} alt="Logo" className="w-full h-full object-cover" />
+                        <img /* eslint-disable-next-line @next/next/no-img-element */ src={logoPreview} alt="Logo" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-xs font-semibold text-neutral-500">Upload Logo</span>
                       )}

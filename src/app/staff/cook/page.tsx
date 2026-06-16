@@ -14,8 +14,7 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 
 export default function CookDashboardPage() {
   const { currentSession: session } = useStaffStore();
-  const router = useRouter();
-  const restaurantId = session?.restaurantId || (session as any)?.workspaceId || "";
+    const restaurantId = session?.restaurantId || (session as any)?.workspaceId || "";
   const station = "food";
 
   const { orders, isLoading, isConnected, secondsAgo, refetch } = useKitchenRealtime(restaurantId, station);

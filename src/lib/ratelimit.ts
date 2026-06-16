@@ -6,7 +6,7 @@ import { Redis } from '@upstash/redis'
 const redis = (() => {
   try {
     return Redis.fromEnv()
-  } catch (e) {
+  } catch { // e unused
     console.warn('[SECURITY] Upstash Redis env vars missing. Rate limiting will be disabled or fallback.')
     // Create a dummy redis client that always fails so checkRateLimit falls back to returning true
     return {
@@ -62,7 +62,7 @@ export async function checkRateLimit(
     // If Redis isn't initialized properly, this will throw
     const { success } = await limiter.limit(identifier)
     return success
-  } catch (err) {
+  } catch { // err unused
     // If Redis is down or missing env vars, allow the request but log
     console.warn('[SECURITY] Rate limit check failed - Redis down or not configured')
     return true

@@ -11,7 +11,6 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
 import { getCustomerOrder } from "@/actions/customer";
-import { createBrowserSupabase } from "@/lib/supabase/client";
 import { generateReceiptPDF } from "@/lib/pdf-generator";
 
 
@@ -20,7 +19,7 @@ function OrderConfirmationContent() {
   const router = useRouter();
   const workspaceId = params.workspaceId as string;
   const tableId = params.tableId as string | undefined;
-
+  
   const confirmedOrder = useCartStore((s) => s.confirmedOrderDetails);
   const placedOrderId = useCartStore((s) => s.placedOrderId);
   const searchParams = useSearchParams();
@@ -229,7 +228,7 @@ function OrderConfirmationContent() {
           <button 
             onClick={() => {
               if (orderData && restaurantData) {
-                generateReceiptPDF(orderData, restaurantData, tableLabel);
+                generateReceiptPDF(orderData, restaurantData, `Table ${tableId}`);
               }
             }}
             className="flex-1 bg-surface-container-high text-on-surface hover:bg-surface-container-highest py-3 px-4 rounded-xl font-label-lg transition-colors flex justify-center items-center gap-2"

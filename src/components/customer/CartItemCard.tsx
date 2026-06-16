@@ -27,7 +27,7 @@ export function CartItemCard({ item, workspaceId, updateQuantity }: CartItemCard
     <div className="flex gap-4">
       <div className="w-20 h-20 rounded-lg bg-surface-container flex items-center justify-center overflow-hidden shrink-0">
         {!imgError && imgSrc ? (
-          <img
+          <img /* eslint-disable-next-line @next/next/no-img-element */
             src={imgSrc}
             alt={item.name}
             onError={() => setImgError(true)}

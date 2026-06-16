@@ -11,7 +11,6 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
 import { getCustomerOrder } from "@/actions/customer";
-import { createBrowserSupabase } from "@/lib/supabase/client";
 import { generateReceiptPDF } from "@/lib/pdf-generator";
 
 
@@ -19,8 +18,7 @@ function OrderConfirmationContent() {
   const params = useParams();
   const router = useRouter();
   const workspaceId = params.workspaceId as string;
-  const tableId = params.tableId as string | undefined;
-
+  
   const confirmedOrder = useCartStore((s) => s.confirmedOrderDetails);
   const placedOrderId = useCartStore((s) => s.placedOrderId);
   const searchParams = useSearchParams();
@@ -62,14 +60,7 @@ function OrderConfirmationContent() {
     }
   });
 
-  const handleTrackOrder = () => {
-    if (token) {
-      router.push(`/shop/${workspaceId}/order-tracking?token=${token}`);
-    } else {
-      router.push(`/shop/${workspaceId}/order-tracking`);
-    }
-  };
-
+  
   if (!mounted) return null;
 
   if (isOrderLoading) {

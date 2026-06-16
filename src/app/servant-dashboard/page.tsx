@@ -92,7 +92,7 @@ export default function ServantDashboard() {
       } else {
         toast.error("Failed to update order");
       }
-    } catch (e) {
+    } catch { // e unused
       toast.error("An error occurred");
     }
   };

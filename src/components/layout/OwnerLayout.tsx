@@ -195,7 +195,7 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
             </button>
             <div className="flex items-center gap-2 md:gap-3 cursor-pointer rounded-full border border-neutral-200 bg-white p-1 md:py-1.5 md:pl-1.5 md:pr-4 shadow-sm hover:bg-neutral-50 transition-colors shrink-0">
               <div className="h-7 w-7 md:h-7 md:w-7 overflow-hidden rounded-full border border-neutral-100">
-                <img src={`https://ui-avatars.com/api/?name=${userName}&background=fef2f2&color=ef4444`} alt="Profile" className="h-full w-full object-cover" />
+                <img /* eslint-disable-next-line @next/next/no-img-element */ src={`https://ui-avatars.com/api/?name=${userName}&background=fef2f2&color=ef4444`} alt="Profile" className="h-full w-full object-cover" />
               </div>
               <span className="hidden md:block text-sm font-medium text-neutral-700">{userName}</span>
             </div>

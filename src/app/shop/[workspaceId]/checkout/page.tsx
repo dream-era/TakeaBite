@@ -120,7 +120,7 @@ export default function CheckoutPage() {
                 preferences: { show_default_blocks: false },
               },
             },
-            handler: (response: any) => {
+            handler: () => { // response unused
               setConfirmedOrderDetails(result.orderDetails);
               setPlacedOrderId(result.orderId || result.id);
               clearCart(workspaceId);

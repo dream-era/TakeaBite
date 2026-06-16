@@ -23,7 +23,7 @@ export default function DeliveredOrdersPage() {
     const fetchDeliveredOrders = async () => {
       const supabase = createBrowserSupabase();
       
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('orders')
         .select(`
           *,

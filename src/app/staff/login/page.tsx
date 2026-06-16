@@ -127,7 +127,7 @@ export default function StaffLoginPage() {
             </div>
           </div>
           <button className="mt-6 w-full flex items-center justify-center gap-3 bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="h-5 w-5" alt="Google" />
+            <img /* eslint-disable-next-line @next/next/no-img-element */ src="https://www.svgrepo.com/show/475656/google-color.svg" className="h-5 w-5" alt="Google" />
             Google
           </button>
         </div>

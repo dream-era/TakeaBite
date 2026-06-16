@@ -27,8 +27,7 @@ type ShopMenuItem = {
 
 export default function SearchPage() {
   const params = useParams();
-  const router = useRouter();
-  const workspaceId = params.workspaceId as string;
+    const workspaceId = params.workspaceId as string;
   const tableId = params.tableId as string | undefined;
   
   const [mounted, setMounted] = useState(false);

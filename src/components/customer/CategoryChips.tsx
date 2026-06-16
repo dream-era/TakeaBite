@@ -37,7 +37,7 @@ export function CategoryChips({ categories, activeCategory, onSelect }: Category
           }`}
         >
           <div className="w-14 h-14 rounded-xl overflow-hidden bg-surface-variant flex-shrink-0">
-            <img
+            <img /* eslint-disable-next-line @next/next/no-img-element */
               src={CATEGORY_IMAGES[cat] ?? '/food-images/veg-combo.jpg'}
               alt={cat}
               className="w-full h-full object-cover"

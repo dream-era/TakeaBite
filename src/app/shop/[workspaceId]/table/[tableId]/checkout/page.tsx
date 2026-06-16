@@ -119,7 +119,7 @@ export default function CheckoutPage() {
                 preferences: { show_default_blocks: false },
               },
             },
-            handler: (response: any) => {
+            handler: () => { // response unused
               clearCart(workspaceId);
               const nextUrl = tableId 
                 ? `/shop/${workspaceId}/table/${tableId}/order-confirmation?id=${result.orderId || result.id}&token=${result.orderToken}` 

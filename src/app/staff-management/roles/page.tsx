@@ -179,7 +179,7 @@ export default function RolesPermissionsPage() {
           <div className="flex items-center gap-3">
              <div className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-1.5 shadow-sm cursor-pointer hover:bg-neutral-50 transition-colors">
                  <div className="h-6 w-6 overflow-hidden rounded-md bg-orange-100 flex items-center justify-center shrink-0 border border-neutral-200">
-                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=150&q=80" alt="Shop" className="h-full w-full object-cover" />
+                    <img /* eslint-disable-next-line @next/next/no-img-element */ src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=150&q=80" alt="Shop" className="h-full w-full object-cover" />
                  </div>
                  <div className="flex flex-col">
                     <span className="text-sm font-bold text-neutral-900 leading-none">{shopName}</span>
