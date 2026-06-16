@@ -9,18 +9,11 @@ interface LogoProps {
 }
 
 export function Logo({
-  className = "",
+  className = "w-auto h-8", // Default to h-8 (32px) if no class provided
   size = "md",
   variant = "full",
   withBackground = false,
 }: LogoProps) {
-  // Enforce responsive width as requested:
-  // Mobile: 100-130px -> w-[110px]
-  // Tablet: 120-150px -> md:w-[135px]
-  // Desktop: 140-180px -> lg:w-[160px]
-  const widthClass = "w-[110px] md:w-[135px] lg:w-[160px]";
-  const heightClass = "h-auto";
-
   return (
     <div className={`flex items-center justify-center transition-opacity duration-200 hover:opacity-90 ${className}`}>
       <Image
@@ -28,7 +21,7 @@ export function Logo({
         alt="TakeaBite Logo"
         width={320}
         height={320}
-        className={`${widthClass} ${heightClass} object-contain shrink-0`}
+        className="w-full h-full object-contain shrink-0"
         priority
       />
     </div>

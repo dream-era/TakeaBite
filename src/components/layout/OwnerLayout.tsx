@@ -70,12 +70,12 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
       )}
 
       {/* ── Left Sidebar ── */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 flex-col border-r border-neutral-200 bg-white/95 backdrop-blur-md shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-transform duration-300 lg:static lg:flex lg:translate-x-0 ${
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 flex-col border-r border-ui-border bg-ui-sidebar transition-transform duration-300 lg:static lg:flex lg:translate-x-0 ${
         isSidebarOpen ? 'translate-x-0 flex' : '-translate-x-full hidden'
       }`}>
-        <div className="flex h-20 shrink-0 items-center justify-between px-6">
+        <div className="flex pt-6 pb-4 shrink-0 items-center justify-between px-6">
           <Link href="/" className="group">
-            <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
+            <Logo className="w-[130px] h-auto transition-transform duration-300 group-hover:opacity-80" />
           </Link>
           <button 
             className="lg:hidden p-2 text-neutral-500 hover:bg-neutral-100 rounded-lg"
@@ -95,10 +95,10 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
                 className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? "bg-brand-50 text-brand-600 shadow-sm"
-                    : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                    : "text-ui-primary hover:bg-white hover:shadow-sm"
                 }`}
               >
-                <item.icon className={`h-5 w-5 ${isActive ? "text-brand-600" : "text-neutral-400"}`} />
+                <item.icon className={`h-5 w-5 ${isActive ? "text-brand-600" : "text-neutral-500"}`} />
                 <span className="flex-1 text-left">{item.label}</span>
               </Link>
             );

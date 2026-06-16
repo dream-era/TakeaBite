@@ -102,7 +102,7 @@ export default function CookDashboardPage() {
       <div className="bg-white px-6 py-4 shadow-sm sticky top-0 z-10 space-y-3">
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-2">
-            <Logo size="sm" />
+            <Logo className="w-[120px] h-auto" />
             <h1 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
               <ChefHat className="text-[#D32F2F] h-6 w-6" />
               Cook Dashboard

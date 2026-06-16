@@ -23,6 +23,13 @@ const config: Config = {
           800: "#811D23",
           900: "#69171D",
         },
+        ui: {
+          primary: "#0C0E0B",
+          accent: "#D7303B",
+          background: "#FFFFFF",
+          sidebar: "#FAFAFA",
+          border: "#ECECEC",
+        },
         fox: {
           dark: "#0B1020", // Dark Background
           light: "#D6E8F4", // Secondary Light Blue

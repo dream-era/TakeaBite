@@ -11,11 +11,11 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0c0e0b;
   --brand-primary: #dc2626;
   --brand-primary-hover: #b91c1c;
   --brand-light: #fef2f2;
-  --border-color: #e5e5e5;
+  --border-color: #ececec;
   --text-muted: #737373;
   --text-secondary: #525252;
   --card-bg: #ffffff;
@@ -30,6 +30,11 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
+  font-weight: 500; /* Medium weight body */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700; /* Bold headings */
 }
 
 /* Custom scrollbar */

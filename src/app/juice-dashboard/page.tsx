@@ -103,7 +103,7 @@ export default function JuiceDashboardPage() {
       <div className="bg-white px-6 py-4 shadow-sm sticky top-0 z-10 space-y-3">
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-2">
-            <Logo size="sm" />
+            <Logo className="w-[120px] h-auto" />
             <div className="flex items-center gap-2">
               <button onClick={() => router.back()} className="p-2 -ml-2 text-neutral-500 hover:text-neutral-900 transition-colors active:scale-95">
                 <ArrowLeft className="w-6 h-6" />
