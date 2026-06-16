@@ -75,7 +75,7 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
       }`}>
         <div className="flex pt-6 pb-4 shrink-0 items-center justify-between px-6">
           <Link href="/" className="group">
-            <Logo className="h-8 w-auto transition-transform duration-300 group-hover:opacity-80" />
+            <Logo className="h-8 md:h-9 text-xl w-auto transition-transform duration-300 group-hover:opacity-80" />
           </Link>
           <button 
             className="lg:hidden p-2 text-neutral-500 hover:bg-neutral-100 rounded-lg"

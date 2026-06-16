@@ -206,7 +206,7 @@ function OrderConfirmationContent() {
                   </span>
                 ) : (
                   <span className="bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                    🟠 ONLINE - PROCESSING
+                    🟠 ONLINE - PENDING
                   </span>
                 )}
               </div>

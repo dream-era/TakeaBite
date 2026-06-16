@@ -7,7 +7,7 @@ const UpdateStatusSchema = z.object({
   type: z.enum(['item', 'order', 'payment']),
   id: z.string().uuid(),
   status: z.enum(['pending', 'preparing', 'done', 'ready', 'served', 'cancelled', 'paid']),
-  restaurantId: z.string().uuid().optional(),
+  restaurantId: z.string().optional(),
 })
 
 export async function POST(request: Request) {

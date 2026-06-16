@@ -11,8 +11,8 @@ export async function downloadReceiptImage(elementId: string, orderNumber: strin
     const canvas = await html2canvas(element, {
       scale: 3, // High resolution for mobile sharing
       useCORS: true,
-      allowTaint: true,
-      backgroundColor: null, // preserve background transparency or element's own bg
+      allowTaint: false, // Must be false to allow toDataURL
+      backgroundColor: "#FFFFFF", // Give a white background instead of null to prevent black transparency bugs
     });
     
     const image = canvas.toDataURL("image/png");

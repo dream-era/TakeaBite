@@ -26,7 +26,7 @@ export default function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-1">
             <Link href="/" className="group">
-              <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
+              <Logo className="h-9 md:h-11 w-auto transition-transform duration-300 group-hover:scale-105" />
             </Link>
           </div>
 

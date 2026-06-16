@@ -89,7 +89,7 @@ export default function SignUpPage() {
       {/* ── Top navbar ── */}
       <nav className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="group" id="signup-nav-logo">
-          <Logo size="md" className="transition-transform duration-300 group-hover:scale-105" />
+          <Logo className="h-8 md:h-9 w-auto transition-transform duration-300 group-hover:scale-105" />
         </Link>
         <Link
           href="/login"
@@ -130,10 +130,8 @@ export default function SignUpPage() {
                 </div>
 
                 {/* Logo */}
-                <div className="relative mb-8">
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-4 backdrop-blur-sm border border-white/20 shadow-xl">
-                    <Logo size="lg" />
-                  </div>
+                <div className="relative mb-10 flex justify-center lg:justify-start">
+                  <Logo className="h-10 md:h-12 w-auto drop-shadow-sm" />
                 </div>
 
                 {/* Welcome text */}

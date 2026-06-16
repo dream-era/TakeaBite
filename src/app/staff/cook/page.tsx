@@ -25,7 +25,7 @@ export default function CookDashboardPage() {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-        body: JSON.stringify({ type: 'item', id: itemId, status, restaurantId })
+        body: JSON.stringify({ type: 'item', id: itemId, status, ...(restaurantId ? { restaurantId } : {}) })
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
@@ -43,7 +43,7 @@ export default function CookDashboardPage() {
         const res = await fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-          body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId })
+          body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', ...(restaurantId ? { restaurantId } : {}) })
         });
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
@@ -62,7 +62,7 @@ export default function CookDashboardPage() {
         const res = await fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-          body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId })
+          body: JSON.stringify({ type: 'item', id: item.id, status: 'done', ...(restaurantId ? { restaurantId } : {}) })
         });
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));
