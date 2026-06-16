@@ -257,9 +257,15 @@ export default function ServantDashboard() {
 
                   <div className="flex justify-between items-center p-3 border border-neutral-100 rounded-lg">
                     <span className="text-sm font-bold text-neutral-500">Payment</span>
-                    <span className={`text-xs font-bold uppercase px-2.5 py-1 rounded-md ${selectedOrder.payment_status === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                      {selectedOrder.payment_method} - {selectedOrder.payment_status}
-                    </span>
+                    {selectedOrder.payment_method === 'online' && selectedOrder.payment_status === 'paid' ? (
+                      <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md bg-green-100 text-green-800 border border-green-200">🟢 ONLINE - PAID</span>
+                    ) : selectedOrder.payment_method === 'cash' && selectedOrder.payment_status === 'pending' ? (
+                      <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md bg-orange-100 text-orange-800 border border-orange-200">🟠 CASH - PENDING</span>
+                    ) : selectedOrder.payment_method === 'online' && selectedOrder.payment_status === 'pending' ? (
+                      <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md bg-orange-100 text-orange-800 border border-orange-200">🟠 ONLINE - PROCESSING</span>
+                    ) : (
+                      <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md bg-neutral-100 text-neutral-800 border border-neutral-200">{selectedOrder.payment_method} {selectedOrder.payment_status}</span>
+                    )}
                   </div>
 
                   <div className="flex justify-between items-center p-3 border border-neutral-100 rounded-lg">

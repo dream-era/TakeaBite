@@ -10,7 +10,9 @@ import FoodImage from "@/components/shared/FoodImage";
 import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
+import { getCustomerOrder } from "@/actions/customer";
 import { createBrowserSupabase } from "@/lib/supabase/client";
+import { generateReceiptPDF } from "@/lib/pdf-generator";
 
 
 function OrderConfirmationContent() {
@@ -42,27 +44,12 @@ function OrderConfirmationContent() {
   });
 
   const { data: orderData, isLoading: isOrderLoading } = useQuery({
-    queryKey: ['order-status', activeOrderId],
+    queryKey: ['order-status', activeOrderId, token],
     queryFn: async () => {
       if (!activeOrderId) return null;
-      const supabase = createBrowserSupabase();
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          status, 
-          payment_status, 
-          payment_method, 
-          daily_order_number,
-          order_items (
-            quantity,
-            price,
-            menu_items ( name )
-          )
-        `)
-        .eq('id', activeOrderId)
-        .single();
-      if (error) throw error;
-      return data;
+      const res = await getCustomerOrder(activeOrderId as string, (token as string) || undefined);
+      if (!res.success) throw new Error(res.error);
+      return res.data;
     },
     enabled: !!activeOrderId,
     refetchInterval: (query) => {
@@ -196,19 +183,34 @@ function OrderConfirmationContent() {
               </div>
             </div>
             
-            <div className="mt-6 pt-4 border-t border-dashed border-surface-variant flex items-center gap-2 justify-between">
-              <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Payment Method: <span className="font-bold text-primary">{orderData?.payment_method === 'cash' ? 'Cash at Counter' : 'Online'}</span></span>
-              {orderData?.payment_status === 'paid' ? (
-                <div className="flex items-center text-green-600 gap-1">
-                  <span className="material-symbols-outlined text-[18px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  <span className="text-xs font-bold uppercase">Success</span>
-                </div>
-              ) : (
-                <div className="flex items-center text-orange-600 gap-1">
-                  <span className="material-symbols-outlined text-[18px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
-                  <span className="text-xs font-bold uppercase">Pending</span>
-                </div>
-              )}
+            <div className="mt-6 pt-4 border-t border-dashed border-surface-variant flex flex-col gap-3">
+              <div className="flex justify-between items-center">
+                <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Payment Method:</span>
+                <span className="font-bold text-primary uppercase">{orderData?.payment_method || '...'}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Status:</span>
+                <span className="font-bold text-primary uppercase">
+                  {orderData?.payment_method === 'cash' 
+                    ? 'PENDING PAYMENT' 
+                    : (orderData?.payment_status === 'paid' ? 'PAID' : 'PAYMENT PROCESSING')}
+                </span>
+              </div>
+              <div className="flex justify-end mt-1">
+                {orderData?.payment_method === 'cash' ? (
+                  <span className="bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    🟠 CASH - PENDING
+                  </span>
+                ) : orderData?.payment_status === 'paid' ? (
+                  <span className="bg-green-100 text-green-800 border border-green-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    🟢 ONLINE - PAID
+                  </span>
+                ) : (
+                  <span className="bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    🟠 ONLINE - PROCESSING
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           
@@ -224,8 +226,15 @@ function OrderConfirmationContent() {
         <div className="mt-section-margin max-w-md mx-auto space-y-4">
 
           {/* Track order removed for now */}
-          <button className="w-full flex items-center justify-center gap-2 py-3 text-secondary hover:text-on-surface transition-colors font-label-md">
-            <span className="material-symbols-outlined text-[20px]">download</span>
+          <button 
+            onClick={() => {
+              if (orderData && restaurantData) {
+                generateReceiptPDF(orderData, restaurantData);
+              }
+            }}
+            className="flex-1 bg-surface-container-high text-on-surface hover:bg-surface-container-highest py-3 px-4 rounded-xl font-label-lg transition-colors flex justify-center items-center gap-2"
+          >
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>receipt_long</span>
             Download Receipt
           </button>
         </div>

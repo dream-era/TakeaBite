@@ -51,3 +51,40 @@ export async function recoverCustomerId(phone: string) {
 
   return { success: true, data: { customerId: data.id } };
 }
+
+export async function getCustomerOrder(orderId: string, orderToken?: string) {
+  if (!orderId) return { success: false, error: "Order ID required" };
+
+  const supabase = createAdminSupabase();
+  
+  let query = supabase
+    .from('orders')
+    .select(`
+      id,
+      status, 
+      payment_status, 
+      payment_method, 
+      daily_order_number,
+      created_at,
+      tables ( table_number, table_name ),
+      order_items (
+        id,
+        quantity,
+        price,
+        menu_items ( name )
+      )
+    `)
+    .eq('id', orderId);
+
+  if (orderToken) {
+    query = query.eq('order_token', orderToken);
+  }
+
+  const { data, error } = await query.single();
+
+  if (error || !data) {
+    return { success: false, error: "Order not found or unauthorized" };
+  }
+
+  return { success: true, data };
+}

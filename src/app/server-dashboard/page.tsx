@@ -138,11 +138,11 @@ export default function ServantDashboardPage() {
             
             let paymentBadge = null;
             if (order.payment_method === 'online' && order.payment_status === 'paid') {
-              paymentBadge = <span className="bg-green-100 text-green-800 border border-green-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Online Paid</span>;
+              paymentBadge = <span className="bg-green-100 text-green-800 border border-green-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">🟢 ONLINE - PAID</span>;
             } else if (order.payment_method === 'cash' && order.payment_status === 'pending') {
-              paymentBadge = <span className="bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Cash Pending</span>;
-            } else if (order.payment_method === 'cash' && order.payment_status === 'paid') {
-              paymentBadge = <span className="bg-blue-100 text-blue-800 border border-blue-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Cash Paid</span>;
+              paymentBadge = <span className="bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">🟠 CASH - PENDING</span>;
+            } else if (order.payment_method === 'online' && order.payment_status === 'pending') {
+              paymentBadge = <span className="bg-orange-100 text-orange-800 border border-orange-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">🟠 ONLINE - PROCESSING</span>;
             } else {
               paymentBadge = <span className="bg-neutral-100 text-neutral-800 border border-neutral-200 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{order.payment_method} {order.payment_status}</span>;
             }

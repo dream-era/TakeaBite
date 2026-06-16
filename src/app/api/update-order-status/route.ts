@@ -61,6 +61,16 @@ export async function POST(request: Request) {
     const { type, id, status } = parsed.data
 
     if (type === 'item') {
+      const { data: itemData } = await supabase.from('order_items').select('order_id').eq('id', id).single()
+      if (!itemData) return NextResponse.json({ error: 'Item not found' }, { status: 404 })
+
+      if (currentStaffId && (status === 'preparing' || status === 'done')) {
+        const { data: currentOrderData } = await supabase.from('orders').select('assigned_staff_id').eq('id', itemData.order_id).single()
+        if (currentOrderData?.assigned_staff_id && currentOrderData.assigned_staff_id !== currentStaffId) {
+          return NextResponse.json({ error: 'Order is already assigned to another cook' }, { status: 409 })
+        }
+      }
+
       // Update item status
       const { error: updateError } = await supabase
         .from('order_items')
@@ -70,7 +80,6 @@ export async function POST(request: Request) {
       if (updateError) throw updateError
 
       // Check if all items in this order are done
-      const { data: itemData } = await supabase.from('order_items').select('order_id').eq('id', id).single()
       if (itemData) {
         const { data: siblingItems } = await supabase.from('order_items').select('status').eq('order_id', itemData.order_id)
         if (siblingItems) {

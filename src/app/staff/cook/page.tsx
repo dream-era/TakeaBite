@@ -83,11 +83,6 @@ export default function CookDashboardPage() {
     return items.some((i: any) => i.status === 'preparing') && !items.every((i: any) => i.status === 'done');
   }).length;
 
-  const readyOrdersCount = visibleOrders.filter(o => {
-    const items = o.order_items.filter((i: any) => i.station === station || i.station === 'both');
-    return items.every((i: any) => i.status === 'done') && items.length > 0;
-  }).length;
-
   return (
     <StaffLayout allowedRoles={['cook', 'chef']} themeColor="red">
       <style>{`
@@ -125,9 +120,6 @@ export default function CookDashboardPage() {
           <div className="bg-orange-50 border border-orange-100 text-orange-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">
             [ {prepOrdersCount} Preparing ]
           </div>
-          <div className="bg-green-50 border border-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">
-            [ {readyOrdersCount} Ready ]
-          </div>
         </div>
       </div>
 
@@ -163,8 +155,18 @@ export default function CookDashboardPage() {
             const orderAgeMinutes = Math.floor((Date.now() - new Date(order.created_at).getTime()) / 60000);
             const isUrgent = orderAgeMinutes >= 15;
 
-            const parsedOrderType = (order as any).order_type || order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
-            const paymentMethodLabel = order.payment_method === 'cash' ? '💵 Cash' : '📱 Online';
+            const parsedOrderType = order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.table_id ? 'eat_here' : 'takeaway');
+            
+            let paymentBadge = null;
+            if (order.payment_method === 'online' && order.payment_status === 'paid') {
+              paymentBadge = <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-green-100 text-green-800 border border-green-200">🟢 ONLINE - PAID</span>;
+            } else if (order.payment_method === 'cash' && order.payment_status === 'pending') {
+              paymentBadge = <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-800 border border-orange-200">🟠 CASH - PENDING</span>;
+            } else if (order.payment_method === 'online' && order.payment_status === 'pending') {
+              paymentBadge = <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-800 border border-orange-200">🟠 ONLINE - PROCESSING</span>;
+            } else {
+              paymentBadge = <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface">{order.payment_method} {order.payment_status}</span>;
+            }
             const orderTypeLabel = parsedOrderType === 'takeaway' ? '🛍 Takeaway' : '🍽 Eat Here';
 
             return (
@@ -191,9 +193,7 @@ export default function CookDashboardPage() {
                       <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface">
                         {orderTypeLabel}
                       </span>
-                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface">
-                        {paymentMethodLabel}
-                      </span>
+                      {paymentBadge}
                     </div>
                     {(order as any).assigned_staff_name && (
                       <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-bold uppercase border border-blue-100">
@@ -265,15 +265,14 @@ export default function CookDashboardPage() {
                     Total Items: {relevantItems.length}
                   </span>
                   
-                  {isAllNew && (
+                  {isAllNew ? (
                     <button 
                       onClick={() => handleStartPreparing(relevantItems)}
                       className="bg-rose-600 active:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-transform active:scale-95"
                     >
                       Start Preparing
                     </button>
-                  )}
-                  {!isAllNew && !isAllReady && (
+                  ) : (
                     <button 
                       onClick={() => handleMarkReady(relevantItems)}
                       disabled={(order as any).assigned_staff_id && (order as any).assigned_staff_id !== session?.staffId}
@@ -283,7 +282,7 @@ export default function CookDashboardPage() {
                           : 'bg-orange-500 active:bg-orange-600 active:scale-95 text-white'
                       }`}
                     >
-                      { (order as any).assigned_staff_id && (order as any).assigned_staff_id !== session?.staffId ? 'Locked' : 'Mark Ready' }
+                      { (order as any).assigned_staff_id && (order as any).assigned_staff_id !== session?.staffId ? '🔒 Locked' : 'Mark Ready' }
                     </button>
                   )}
                   {/* Moved to Completed button removed as per requirements */}

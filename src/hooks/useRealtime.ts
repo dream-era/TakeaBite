@@ -154,7 +154,7 @@ async function fetchActiveOrders(
     `)
     .eq('restaurant_id', restaurantId)
     .not('status', 'in', '("served","cancelled")')
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
 
   if (error) {
     throw new Error(`Failed to fetch orders: ${error.message}`)
@@ -335,11 +335,11 @@ export function useRealtime({
             // Idempotency — don't add if already exists
             const exists = prev.some((o) => o.id === fullOrder.id)
             if (exists) return prev
-            // Insert in chronological order
+            // Insert in chronological order (newest first)
             return [...prev, fullOrder].sort(
               (a, b) =>
-                new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime()
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
             )
           })
         }
@@ -367,6 +367,9 @@ export function useRealtime({
             status: string
             payment_status: string
             updated_at: string
+            assigned_staff_id?: string | null
+            assigned_staff_name?: string | null
+            assigned_at?: string | null
           }
 
           const newStatus = updatedRaw.status as OrderStatus
@@ -398,6 +401,9 @@ export function useRealtime({
               status: newStatus,
               payment_status: updatedRaw.payment_status as never,
               updated_at: updatedRaw.updated_at,
+              assigned_staff_id: updatedRaw.assigned_staff_id as never,
+              assigned_staff_name: updatedRaw.assigned_staff_name as never,
+              assigned_at: updatedRaw.assigned_at as never,
             }
             return updated
           })
@@ -415,8 +421,8 @@ export function useRealtime({
                   if (alreadyAdded) return current
                   return [...current, fullOrder].sort(
                     (a, b) =>
-                      new Date(a.created_at).getTime() -
-                      new Date(b.created_at).getTime()
+                      new Date(b.created_at).getTime() -
+                      new Date(a.created_at).getTime()
                   )
                 })
               })
