@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { StaffLayout } from "@/components/staff/StaffLayout";
-import { CheckCircle2, AlertCircle, CupSoda, ArrowLeft } from "lucide-react";
+import { Clock, CheckCircle2, AlertCircle, ArrowLeft, CupSoda, Play, CheckCircle } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useKitchenRealtime } from "@/hooks/useRealtime";
 import { useStaffStore } from "@/store/useStaffStore";
@@ -100,15 +101,18 @@ export default function JuiceDashboardPage() {
         }
       `}</style>
       <div className="bg-white px-6 py-4 shadow-sm sticky top-0 z-10 space-y-3">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <button onClick={() => router.back()} className="p-2 -ml-2 text-neutral-500 hover:text-neutral-900 transition-colors active:scale-95">
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <h1 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
-              <CupSoda className="text-[#1B5E20] h-6 w-6" />
-              Juice Dashboard
-            </h1>
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col gap-2">
+            <Logo size="sm" />
+            <div className="flex items-center gap-2">
+              <button onClick={() => router.back()} className="p-2 -ml-2 text-neutral-500 hover:text-neutral-900 transition-colors active:scale-95">
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+              <h1 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
+                <CupSoda className="text-[#1B5E20] h-6 w-6" />
+                Juice Dashboard
+              </h1>
+            </div>
           </div>
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-wider border border-green-100">
             <span className="relative flex h-2 w-2">

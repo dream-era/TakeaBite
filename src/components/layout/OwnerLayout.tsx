@@ -168,9 +168,6 @@ export function OwnerLayout({ children }: OwnerLayoutProps) {
             >
               <Menu className="h-5 w-5" />
             </button>
-            <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-50 border border-neutral-200 shadow-inner overflow-hidden">
-               <Logo size="lg" variant="icon" />
-            </div>
             <div 
               onClick={() => {
                 // If they had the plan, this would open a modal to add a workspace.

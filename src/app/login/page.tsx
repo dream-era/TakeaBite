@@ -143,8 +143,8 @@ export default function LoginPage() {
 
                 {/* Logo */}
                 <div className="relative mb-8">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl">
-                    <Logo size="lg" variant="icon" />
+                  <div className="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-4 backdrop-blur-sm border border-white/20 shadow-xl">
+                    <Logo size="lg" />
                   </div>
                 </div>
 

@@ -123,9 +123,9 @@ export default function ServantDashboard() {
         {/* Header */}
         <header className="bg-[#1a1a1a] text-white px-4 py-4 sticky top-0 z-40">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="bg-white p-1.5 rounded-lg shadow-sm">
-                <Logo size="sm" variant="icon" />
+            <div className="flex flex-col items-start gap-3">
+              <div className="bg-white/10 p-2 rounded-xl backdrop-blur-sm border border-white/20 inline-flex">
+                <Logo size="sm" />
               </div>
               <div className="flex flex-col">
                 <h1 className="font-bold text-[17px] leading-tight tracking-wide flex items-center gap-2">

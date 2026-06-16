@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { StaffLayout } from "@/components/staff/StaffLayout";
-import { CheckCircle2, AlertCircle, ChefHat, ArrowLeft } from "lucide-react";
+import { Clock, CheckCircle2, ChefHat, Play, CheckCircle, ArrowLeft } from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useKitchenRealtime } from "@/hooks/useRealtime";
 import { useStaffStore } from "@/store/useStaffStore";
@@ -99,11 +100,14 @@ export default function CookDashboardPage() {
         }
       `}</style>
       <div className="bg-white px-6 py-4 shadow-sm sticky top-0 z-10 space-y-3">
-        <div className="flex justify-between items-center">
-          <h1 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
-            <ChefHat className="text-[#D32F2F] h-6 w-6" />
-            Cook Dashboard
-          </h1>
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col gap-2">
+            <Logo size="sm" />
+            <h1 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
+              <ChefHat className="text-[#D32F2F] h-6 w-6" />
+              Cook Dashboard
+            </h1>
+          </div>
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-wider border border-green-100">
             <span className="relative flex h-2 w-2">
               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'} opacity-75`}></span>
