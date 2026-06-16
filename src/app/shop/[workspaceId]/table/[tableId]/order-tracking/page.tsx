@@ -224,7 +224,7 @@ export default function OrderTrackingPage() {
                   <div className="flex justify-between items-center border-b border-surface-variant pb-4 mb-6">
                     <div>
                       <p className="font-label-md text-secondary uppercase tracking-wider text-[10px]">Order No</p>
-                      <p className="font-headline-md text-[32px] font-black text-on-surface">#{order.daily_order_number}</p>
+                      <p className="font-headline-md text-on-surface">#{order.daily_order_number}</p>
                     </div>
                     <div className="bg-surface-container-high px-3 py-1 rounded-md">
                       <span className="font-label-md text-primary flex items-center gap-1">

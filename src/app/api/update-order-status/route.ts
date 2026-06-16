@@ -44,7 +44,11 @@ export async function POST(request: Request) {
     if (!isAuthorized) {
       const serverSupabase = createServerSupabase()
       const { data: { user } } = await serverSupabase.auth.getUser()
-      if (user) isAuthorized = true
+      if (user) {
+        isAuthorized = true
+        currentStaffId = user.id
+        currentStaffName = 'Owner / Admin'
+      }
     }
 
     if (!isAuthorized) {
