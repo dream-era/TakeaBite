@@ -11,7 +11,7 @@ import { nameToImageSlug } from "@/data/foodLibrary";
 import { useQuery } from "@tanstack/react-query";
 import { getRestaurantProfile } from "@/actions/restaurant";
 import { getCustomerOrder } from "@/actions/customer";
-import { generateReceiptPDF } from "@/lib/pdf-generator";
+import { downloadReceiptImage } from "@/lib/pdf-generator";
 
 
 function OrderConfirmationContent() {
@@ -115,7 +115,7 @@ function OrderConfirmationContent() {
         </div>
 
         {/* Receipt Card */}
-        <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden max-w-md mx-auto select-none pointer-events-none" style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}>
+        <div id="receipt-content" className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden max-w-md mx-auto select-none pointer-events-none" style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}>
           {/* Order Meta */}
           <div className="p-6">
             <div className="flex justify-between items-start mb-element-gap-md">
@@ -219,8 +219,8 @@ function OrderConfirmationContent() {
           {/* Track order removed for now */}
           <button 
             onClick={() => {
-              if (orderData && restaurantData) {
-                generateReceiptPDF(orderData, restaurantData);
+              if (orderData) {
+                downloadReceiptImage('receipt-content', String(orderData?.daily_order_number || orderData?.id));
               }
             }}
             className="flex-1 bg-surface-container-high text-on-surface hover:bg-surface-container-highest py-3 px-4 rounded-xl font-label-lg transition-colors flex justify-center items-center gap-2"
