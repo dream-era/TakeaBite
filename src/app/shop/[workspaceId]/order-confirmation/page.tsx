@@ -186,7 +186,7 @@ function OrderConfirmationContent() {
             <div className="mt-6 pt-4 border-t border-dashed border-surface-variant flex flex-col gap-3">
               <div className="flex justify-between items-center">
                 <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Payment Method:</span>
-                <span className="font-bold text-primary uppercase">{orderData?.payment_method || '...'}</span>
+                <span className="font-bold text-primary uppercase">{!orderData ? '...' : (orderData.payment_method === 'cash' ? 'Cash at Counter' : 'Online Payment')}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-label-md text-on-surface uppercase tracking-wider text-xs">Status:</span>

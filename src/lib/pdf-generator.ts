@@ -93,7 +93,7 @@ export function generateReceiptPDF(orderData: any, restaurantData: any, tableLab
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   
-  const payMethod = orderData?.payment_method === 'cash' ? 'CASH' : 'ONLINE';
+  const payMethod = orderData?.payment_method === 'cash' ? 'CASH AT COUNTER' : 'ONLINE PAYMENT';
   const payStatus = orderData?.payment_method === 'cash' 
     ? 'PENDING PAYMENT' 
     : (orderData?.payment_status === 'paid' ? 'PAID' : 'PROCESSING');

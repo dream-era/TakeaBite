@@ -162,9 +162,9 @@ export default function CashierBillsPage() {
                 {order.tables && <p>Table: {order.tables.table_number}</p>}
                 {order.customer_name && <p>Customer: {order.customer_name}</p>}
                 {order.payment_status === 'paid' ? (
-                  <p>Payment: {order.payment_method.toUpperCase()} (PAID)</p>
+                  <p>Payment: {order.payment_method === 'cash' ? 'CASH AT COUNTER' : 'ONLINE PAYMENT'} (PAID)</p>
                 ) : (
-                  <p>Payment: {order.payment_method.toUpperCase()} (PENDING)</p>
+                  <p>Payment: {order.payment_method === 'cash' ? 'CASH AT COUNTER' : 'ONLINE PAYMENT'} (PENDING)</p>
                 )}
               </div>
 

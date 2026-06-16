@@ -18,16 +18,20 @@ export default function JuiceDashboardPage() {
   const restaurantId = session?.restaurantId || (session as any)?.workspaceId || "";
   const station = "juice";
 
-  const { orders, isLoading, isConnected, secondsAgo } = useKitchenRealtime(restaurantId, station);
+  const { orders, isLoading, isConnected, secondsAgo, refetch } = useKitchenRealtime(restaurantId, station);
 
-  const handleUpdateItem = async (itemId: string, status: string) => {
+  const handleStatusUpdate = async (itemId: string, status: string) => {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
         body: JSON.stringify({ type: 'item', id: itemId, status, restaurantId })
       });
-      if (!res.ok) throw new Error("Failed to update item");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to update item");
+      }
+      await refetch();
     } catch(err: unknown) {
       toast.error(err instanceof Error ? err.message : "Error updating item");
     }
@@ -35,35 +39,41 @@ export default function JuiceDashboardPage() {
 
   const handleStartPreparing = async (items: any[]) => {
     try {
-      const results = await Promise.all(items.filter(i => i.status === 'pending').map(item => 
-        fetch('/api/update-order-status', {
+      await Promise.all(items.filter(i => i.status === 'pending').map(async (item) => {
+        const res = await fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-          body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId: restaurantId || undefined })
-        })
-      ));
-      const failed = results.filter(r => !r.ok);
-      if (failed.length > 0) throw new Error("Some items failed to update");
+          body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId })
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Failed starting preparation");
+        }
+      }));
+      await refetch();
       toast.success("Started preparation!");
-    } catch(err: any) {
-      toast.error(err.message || "Error starting preparation");
+    } catch(err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Error starting preparation");
     }
   };
 
   const handleMarkReady = async (items: any[]) => {
     try {
-      const results = await Promise.all(items.filter(i => i.status !== 'done').map(item => 
-        fetch('/api/update-order-status', {
+      await Promise.all(items.filter(i => i.status !== 'done').map(async (item) => {
+        const res = await fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
-          body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId: restaurantId || undefined })
-        })
-      ));
-      const failed = results.filter(r => !r.ok);
-      if (failed.length > 0) throw new Error("Some items failed to update");
+          body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId })
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Failed marking as ready");
+        }
+      }));
+      await refetch();
       toast.success("Marked as ready!");
-    } catch(err: any) {
-      toast.error(err.message || "Error marking as ready");
+    } catch(err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Error marking as ready");
     }
   };
 

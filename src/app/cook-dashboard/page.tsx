@@ -18,16 +18,20 @@ export default function CookDashboardPage() {
   const restaurantId = session?.restaurantId || "123";
   const station = "food";
 
-  const { orders, isLoading, isConnected, secondsAgo } = useKitchenRealtime(restaurantId, station);
+  const { orders, isLoading, isConnected, secondsAgo, refetch } = useKitchenRealtime(restaurantId, station);
 
-  const handleUpdateItem = async (itemId: string, status: string) => {
+  const handleStatusUpdate = async (itemId: string, status: string) => {
     try {
       const res = await fetch('/api/update-order-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
         body: JSON.stringify({ type: 'item', id: itemId, status, restaurantId })
       });
-      if (!res.ok) throw new Error("Failed to update item");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to update item");
+      }
+      await refetch();
     } catch(err: unknown) {
       toast.error(err instanceof Error ? err.message : "Error updating item");
     }
@@ -35,29 +39,39 @@ export default function CookDashboardPage() {
 
   const handleStartPreparing = async (items: any[]) => {
     try {
-      await Promise.all(items.filter(i => i.status === 'pending').map(item => 
-        fetch('/api/update-order-status', {
+      await Promise.all(items.filter(i => i.status === 'pending').map(async (item) => {
+        const res = await fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
           body: JSON.stringify({ type: 'item', id: item.id, status: 'preparing', restaurantId })
-        })
-      ));
-    } catch(err) {
-      toast.error("Error starting preparation");
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Failed starting preparation");
+        }
+      }));
+      await refetch();
+    } catch(err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Error starting preparation");
     }
   };
 
   const handleMarkReady = async (items: any[]) => {
     try {
-      await Promise.all(items.filter(i => i.status !== 'done').map(item => 
-        fetch('/api/update-order-status', {
+      await Promise.all(items.filter(i => i.status !== 'done').map(async (item) => {
+        const res = await fetch('/api/update-order-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-kitchen-session': session?.fingerprint || '', 'x-staff-id': session?.staffId || '' },
           body: JSON.stringify({ type: 'item', id: item.id, status: 'done', restaurantId })
-        })
-      ));
-    } catch(err) {
-      toast.error("Error marking as ready");
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Failed marking as ready");
+        }
+      }));
+      await refetch();
+    } catch(err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Error marking as ready");
     }
   };
 
