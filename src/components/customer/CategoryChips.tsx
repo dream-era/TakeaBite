@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const CATEGORY_IMAGES: Record<string, string> = {
   'South Indian': '/food-images/masala-dosa.jpg',
@@ -36,11 +37,13 @@ export function CategoryChips({ categories, activeCategory, onSelect }: Category
               : 'bg-surface-container-lowest border-surface-container text-secondary hover:bg-surface-container-low'
           }`}
         >
-          <div className="w-14 h-14 rounded-xl overflow-hidden bg-surface-variant flex-shrink-0">
-            <img /* eslint-disable-next-line @next/next/no-img-element */
+          <div className="w-14 h-14 rounded-xl overflow-hidden bg-surface-variant flex-shrink-0 relative">
+            <Image
               src={CATEGORY_IMAGES[cat] ?? '/food-images/veg-combo.jpg'}
               alt={cat}
-              className="w-full h-full object-cover"
+              fill
+              sizes="56px"
+              className="object-cover"
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
           </div>

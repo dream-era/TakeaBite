@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { nameToImageSlug } from "@/data/foodLibrary";
 import type { CartItem } from "@/store/useCartStore";
 
@@ -10,7 +11,7 @@ interface CartItemCardProps {
   updateQuantity: (id: string, workspaceId: string, delta: number) => void;
 }
 
-export function CartItemCard({ item, workspaceId, updateQuantity }: CartItemCardProps) {
+export const CartItemCard = React.memo(function CartItemCard({ item, workspaceId, updateQuantity }: CartItemCardProps) {
   const [imgError, setImgError] = useState(false);
 
   const getItemImage = (cartItem: CartItem): string | null => {
@@ -27,9 +28,11 @@ export function CartItemCard({ item, workspaceId, updateQuantity }: CartItemCard
     <div className="flex gap-4">
       <div className="w-20 h-20 rounded-lg bg-surface-container flex items-center justify-center overflow-hidden shrink-0">
         {!imgError && imgSrc ? (
-          <img /* eslint-disable-next-line @next/next/no-img-element */
+          <Image
             src={imgSrc}
             alt={item.name}
+            width={80}
+            height={80}
             onError={() => setImgError(true)}
             className="w-full h-full object-cover"
           />
@@ -72,4 +75,4 @@ export function CartItemCard({ item, workspaceId, updateQuantity }: CartItemCard
       </div>
     </div>
   );
-}
+});

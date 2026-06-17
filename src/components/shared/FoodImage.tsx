@@ -98,7 +98,6 @@ export default function FoodImage({
         }}
         onError={() => setImgError(true)}
         loading="lazy"
-        unoptimized
       />
     </div>
   )

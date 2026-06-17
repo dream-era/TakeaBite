@@ -15,7 +15,7 @@ interface ProductCardProps {
   onUpdateQuantity?: (id: string, delta: number) => void;
 }
 
-export function ProductCard({ 
+export const ProductCard = React.memo(function ProductCard({ 
   id, name, price, imageUrl, isVeg, isAvailable = true, isBestSeller, quantity = 0, onAdd, onUpdateQuantity 
 }: ProductCardProps) {
   const [isAdding, setIsAdding] = useState(false);
@@ -121,4 +121,4 @@ export function ProductCard({
       </div>
     </div>
   );
-}
+});
