@@ -42,7 +42,7 @@ function OrderConfirmationContent() {
     enabled: !!workspaceId,
   });
 
-  const { data: orderData, isLoading: isOrderLoading } = useQuery({
+  const { data: orderData, isLoading: isOrderLoading, refetch } = useQuery({
     queryKey: ['order-status', activeOrderId, token],
     queryFn: async () => {
       if (!activeOrderId) return null;
@@ -51,15 +51,44 @@ function OrderConfirmationContent() {
       return res.data;
     },
     enabled: !!activeOrderId,
-    refetchInterval: (query) => {
-      // Refetch every 3s if it's still pending (webhook might update it)
-      const data = query.state?.data as any;
-      if (data?.status === 'pending' || data?.payment_status === 'pending') {
-        return 3000;
-      }
-      return false;
-    }
+    refetchInterval: false
   });
+
+  useEffect(() => {
+    if (!activeOrderId || !mounted) return;
+
+    const initRealtime = async () => {
+      const { createBrowserSupabase } = await import("@/lib/supabase/client");
+      const supabase = createBrowserSupabase();
+      
+      const channel = supabase
+        .channel(`customer-order-table-${activeOrderId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'orders',
+            filter: `id=eq.${activeOrderId}`,
+          },
+          () => {
+            refetch();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    };
+
+    let cleanupFn: (() => void) | void;
+    initRealtime().then(cleanup => { cleanupFn = cleanup; });
+
+    return () => {
+      if (cleanupFn) cleanupFn();
+    };
+  }, [activeOrderId, mounted, refetch]);
 
   const handleTrackOrder = () => {
     if (token) {
