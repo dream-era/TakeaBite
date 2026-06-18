@@ -14,27 +14,36 @@ export async function POST(request: Request) {
   const supabase = createAdminSupabase()
 
   try {
-    const sessionFingerprint = request.headers.get('x-kitchen-session')
-    let isAuthorized = false
-    let currentStaffName = null
-    let currentStaffId = null
+    const sessionFingerprint = request.headers.get('x-kitchen-session');
+    let isAuthorized = false;
+    let currentStaffName = null;
+    let currentStaffId = null;
 
-    if (sessionFingerprint) {
-      const staffId = request.headers.get('x-staff-id')
-      if (staffId) {
-        const { data: staffData } = await supabase
-          .from('staff')
-          .select('session_expires_at, name, id')
-          .eq('id', staffId)
-          .single()
+    const staffId = request.headers.get('x-staff-id');
 
-        if (staffData) {
-          // Allow if session has not expired. We don't strictly enforce fingerprint match
-          // because multiple tablets might share the same PIN in a kitchen.
-          if (new Date(staffData.session_expires_at) > new Date()) {
-            isAuthorized = true
-            currentStaffName = staffData.name
-            currentStaffId = staffData.id
+    if (staffId) {
+      const { data: staffData } = await supabase
+        .from('staff')
+        .select('session_expires_at, name, id')
+        .eq('id', staffId)
+        .single()
+
+      if (staffData) {
+        // Allow if session has not expired, or if it's a legacy session (null expiry)
+        const isLegacySession = !staffData.session_expires_at;
+        const isNotExpired = staffData.session_expires_at && new Date(staffData.session_expires_at) > new Date();
+
+        if (isLegacySession || isNotExpired) {
+          isAuthorized = true
+          currentStaffName = staffData.name
+          currentStaffId = staffData.id
+
+          // Self-heal the database record if legacy
+          if (isLegacySession && sessionFingerprint) {
+            await supabase.from('staff').update({
+              session_expires_at: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
+              session_fingerprint: sessionFingerprint
+            }).eq('id', staffId);
           }
         }
       }

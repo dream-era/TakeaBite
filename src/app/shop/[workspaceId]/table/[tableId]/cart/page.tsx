@@ -73,7 +73,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex-1 flex flex-col justify-start">
                       <h3 className="font-label-md text-on-surface line-clamp-2 leading-tight mb-1">{item.name}</h3>
-                      <span className="font-price-display text-primary block mb-3">${(item.price || 0).toFixed(2)}</span>
+                      <span className="font-price-display text-primary block mb-3">₹{(item.price || 0).toFixed(2)}</span>
                       
                       <div className="mt-auto">
                         <div className="inline-flex items-center bg-surface-variant rounded-xl h-9 overflow-hidden shadow-sm">
@@ -146,7 +146,7 @@ export default function CartPage() {
           <div className="w-full px-4 py-4 flex items-center gap-4 h-[80px]">
             <div className="flex flex-col flex-1 justify-center">
               <span className="font-label-md text-secondary uppercase tracking-wider text-xs">Total to pay</span>
-              <span className="font-headline-md text-on-surface leading-tight">${total.toFixed(2)}</span>
+              <span className="font-headline-md text-on-surface leading-tight">₹{total.toFixed(2)}</span>
             </div>
             {orderType ? (
               <Link href={checkoutUrl} className="flex-1 flex justify-center items-center h-[48px] bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">

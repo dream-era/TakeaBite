@@ -125,7 +125,7 @@ export default function ServantDashboardPage() {
             />
           </div>
         ) : (
-          orders.map((order: any) => {
+          [...orders].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((order: any) => {
             const parsedOrderType = order.special_instructions?.match(/\[TYPE:(eat_here|takeaway)\]/)?.[1] || (order.tables ? 'eat_here' : 'takeaway');
             const cleanSpecialInstructions = order.special_instructions?.replace(/\[TYPE:(eat_here|takeaway)\]\s*/, '') || null;
 

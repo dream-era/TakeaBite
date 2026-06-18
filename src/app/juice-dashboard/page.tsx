@@ -80,7 +80,7 @@ export default function JuiceDashboardPage() {
     const items = order.order_items.filter((i: any) => i.station === station || i.station === 'both');
     if (items.length === 0) return false;
     return !items.every((i: any) => i.status === 'done');
-  });
+  }).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   
   const newOrdersCount = visibleOrders.filter(o => {
     const items = o.order_items.filter((i: any) => i.station === station || i.station === 'both');

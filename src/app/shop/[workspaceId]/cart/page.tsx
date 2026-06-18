@@ -115,7 +115,7 @@ export default function CartPage() {
           <div className="max-w-md mx-auto p-4 flex items-center gap-4">
             <div className="flex flex-col flex-1">
               <span className="font-label-md text-secondary uppercase tracking-wider text-xs">Total to pay</span>
-              <span className="font-headline-md text-on-surface">${total.toFixed(2)}</span>
+              <span className="font-headline-md text-on-surface">₹{total.toFixed(2)}</span>
             </div>
             {orderType ? (
               <Link href={checkoutUrl} className="flex-1 flex justify-center items-center h-14 bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">

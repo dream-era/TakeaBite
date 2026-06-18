@@ -73,7 +73,7 @@ export const ProductCard = React.memo(function ProductCard({
           )}
         </div>
         <span className="font-price-display text-on-surface font-bold mb-3 mt-auto">
-          ${(price || 0).toFixed(2)}
+          ₹{(price || 0).toFixed(2)}
         </span>
       </div>
 

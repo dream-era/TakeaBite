@@ -50,7 +50,7 @@ export const CartItemCard = React.memo(function CartItemCard({ item, workspaceId
             {item.name}
           </h3>
           <span className="font-price-display text-primary block mt-1">
-            ${(item.price || 0).toFixed(2)}
+            ₹{(item.price || 0).toFixed(2)}
           </span>
         </div>
         <div className="flex items-center justify-between mt-2">

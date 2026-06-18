@@ -807,11 +807,16 @@ export async function verifyCurrentPin(
 // ─────────────────────────────────────────────
 // HELPER — Record last login timestamp
 // ─────────────────────────────────────────────
-function recordLastLogin(staffId: string): void {
+function recordLastLogin(staffId: string, fingerprint: string): void {
   const supabase = createAdminSupabase()
+  const expiresAt = new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString()
   supabase
     .from('staff')
-    .update({ last_login: new Date().toISOString() })
+    .update({ 
+      last_login: new Date().toISOString(),
+      session_expires_at: expiresAt,
+      session_fingerprint: fingerprint
+    })
     .eq('id', staffId)
     .then(({ error }) => {
       if (error) {
@@ -872,8 +877,9 @@ export async function loginStaff(
 
     const activeStaff = matchedStaff;
 
-    // 3. Record last login
-    recordLastLogin(activeStaff.id)
+    // 3. Record last login and session
+    const fingerprint = globalThis.crypto.randomUUID().replace(/-/g, '').substring(0, 16)
+    recordLastLogin(activeStaff.id, fingerprint)
 
     // 4. Determine redirect
     let redirectTo = '/staff'
@@ -883,12 +889,13 @@ export async function loginStaff(
     if (activeStaff.role === 'cashier') redirectTo = '/cashier-dashboard'
     if (activeStaff.role === 'server') redirectTo = '/server-dashboard'
     
-    const session: KitchenSession = {
+    const session: KitchenSession & { fingerprint: string } = {
       staffId: activeStaff.id,
       role: activeStaff.role as StaffRole,
       name: activeStaff.name,
       restaurantId: activeStaff.restaurant_id,
       expiry: Date.now() + 12 * 60 * 60 * 1000,
+      fingerprint,
     }
 
     return { 

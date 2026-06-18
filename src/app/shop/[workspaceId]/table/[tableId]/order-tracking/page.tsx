@@ -239,12 +239,12 @@ export default function OrderTrackingPage() {
                     {order.order_items?.map((item: { id: string; quantity: number; price: number; menu_items: { name: string } }) => (
                       <div key={item.id} className="flex justify-between text-sm">
                         <span className="text-on-surface"><span className="font-bold">{item.quantity}x</span> {item.menu_items?.name}</span>
-                        <span className="text-secondary">${item.price}</span>
+                        <span className="text-secondary">₹{item.price}</span>
                       </div>
                     ))}
                     <div className="pt-2 border-t border-dashed border-surface-variant flex justify-between font-bold text-on-surface">
                       <span>Total</span>
-                      <span>${order.total_amount}</span>
+                      <span>₹{order.total_amount}</span>
                     </div>
                   </div>
 

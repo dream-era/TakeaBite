@@ -47,6 +47,10 @@ export function StaffLayout({ children, allowedRoles, themeColor = "red" }: Staf
   useEffect(() => {
     if (mounted && !currentSession) {
       router.push('/staff-login');
+    } else if (mounted && currentSession && !currentSession.fingerprint) {
+      // Self-heal legacy sessions without forcing logout
+      const newFingerprint = globalThis.crypto.randomUUID().replace(/-/g, '').substring(0, 16);
+      useStaffStore.getState().setSession({ ...currentSession, fingerprint: newFingerprint });
     }
   }, [mounted, currentSession, router]);
 
