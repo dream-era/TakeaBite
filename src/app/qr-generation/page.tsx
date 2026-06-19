@@ -12,6 +12,25 @@ import { getTableList, addTable, deleteTable, deactivateTable } from "@/actions/
 import { getRestaurantProfile } from "@/actions/restaurant";
 import { getAppUrl } from "@/lib/url-config";
 
+const forceDownload = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Network response was not ok");
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+  } catch (error) {
+    console.error('Failed to download image', error);
+    window.open(url, '_blank');
+  }
+};
+
 export default function QRGenerationPage() {
   const restaurantId = useRestaurantId();
   const queryClient = useQueryClient();
@@ -156,12 +175,7 @@ export default function QRGenerationPage() {
               <>
                 <button 
                   onClick={() => {
-                    const link = document.createElement('a');
-                    link.href = universalQrUrl;
-                    link.download = 'Universal_QR.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    forceDownload(universalQrUrl, 'Universal_QR.png');
                   }}
                   className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 border border-neutral-200 rounded-xl text-sm font-medium hover:bg-neutral-50 transition-colors"
                 >
@@ -246,13 +260,7 @@ export default function QRGenerationPage() {
                       <button 
                         onClick={() => {
                           if (!table.qr_code_url) return;
-                          const link = document.createElement('a');
-                          link.href = table.qr_code_url;
-                          link.download = `Table_${table.table_number}_QR.png`;
-                          link.target = '_blank';
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
+                          forceDownload(table.qr_code_url, `Table_${table.table_name || table.table_number}_QR.png`);
                         }}
                         className="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:bg-neutral-50 text-neutral-600 transition-colors"
                       >
