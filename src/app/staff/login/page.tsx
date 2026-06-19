@@ -3,9 +3,10 @@ export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Store, User, ArrowRight, Lock } from "lucide-react";
+import { User, ArrowRight, Lock } from "lucide-react";
 import { loginStaff } from "@/actions/staff";
 import { useStaffStore } from "@/store/useStaffStore";
+import { Logo } from "@/components/shared/Logo";
 
 export default function StaffLoginPage() {
   const router = useRouter();
@@ -57,9 +58,7 @@ export default function StaffLoginPage() {
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-neutral-100">
         <div className="flex justify-center mb-8">
-          <div className="h-16 w-16 bg-neutral-900 text-white rounded-2xl flex items-center justify-center shadow-inner">
-            <Store className="h-8 w-8" />
-          </div>
+          <Logo variant="icon" className="h-16 w-auto" />
         </div>
 
         <div className="text-center mb-8">
