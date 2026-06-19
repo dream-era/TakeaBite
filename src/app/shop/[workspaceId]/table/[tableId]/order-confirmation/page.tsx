@@ -240,6 +240,11 @@ function OrderConfirmationContent() {
                 )}
               </div>
             </div>
+
+            {/* Powered by Footer */}
+            <div className="mt-4 pt-3 border-t border-surface-variant/40 text-center">
+              <span className="text-[11px] font-medium text-[#9CA3AF]">Powered by TakeaBite</span>
+            </div>
           </div>
           
           {/* Receipt Footer Decoration */}
