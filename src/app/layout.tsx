@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     url: SEO_CONFIG.siteUrl,
     images: [
       {
-        url: '/og-image.jpg', // You can add an actual image at public/og-image.jpg
+        url: '/og-image-v2.png', // Busted cache for WhatsApp
         width: 1200,
         height: 630,
         alt: 'TakeaBite Platform',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     title: SEO_CONFIG.defaultTitle,
     description: SEO_CONFIG.defaultDescription,
     creator: SEO_CONFIG.twitterHandle,
-    images: ['/og-image.jpg'],
+    images: ['/og-image-v2.png'],
   },
   robots: {
     index: true,
